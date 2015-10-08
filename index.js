@@ -2,13 +2,9 @@ var app,
     authorization_uri,
     cookieParser,
     express,
-    http,
-    https,
     session,
     oauth2;
 
-http = require('http');
-https = require('https');
 express = require('express');
 cookieParser = require('cookie-parser');
 session = require('express-session');
@@ -64,6 +60,5 @@ app.get('/', function (req, res) {
     }
 });
 
-http.createServer(app).listen(3000);
-https.createServer({}, app).listen(3443);
-console.log('Express server started on port 3000 & 3443');
+app.listen(80);
+console.log('Express server started on port 80');
