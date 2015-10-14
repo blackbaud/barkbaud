@@ -6,16 +6,16 @@
  * Currently passes all info after /api to the RENXT API.  This will be replaced by concrete endpoints.
  * @constructor
  * @param {Object} config
- * @param {string} config.auth_subscription_key
+ * @param {string} config.AUTH_SUBSCRIPTION_KEY
  * @returns {Object}
  *  {@link getApi}
  */
 module.exports = function (config, auth) {
 
     var https = require('request'),
-        Parse = require('parse').Parse;
+        Parse = require('parse/node').Parse;
 
-    Parse.initialize(config.parse_app_id, config.parse_js_key);
+    Parse.initialize(config.PARSE_APP_ID, config.PARSE_JS_KEY);
 
     /**
      * Proxy method to the RENXT api.
@@ -36,7 +36,7 @@ module.exports = function (config, auth) {
                 options = {
                     url: 'https://api.nxt.blackbaud-dev.com' + request.params[0],
                     headers: {
-                        'bb-api-subscription-key': config.auth_subscription_key,
+                        'bb-api-subscription-key': config.AUTH_SUBSCRIPTION_KEY,
                         'Authorization': 'Bearer ' + request.session.ticket.access_token
                     }
                 };

@@ -8,11 +8,14 @@ Feel free to checkout the live demo of our application.  If you wish to run this
 ## Setup
 
 0. Clone this repository.
-0. In `index.js` update the following configuration values:
-  - auth_client_id
-  - auth_client_secret
-  - auth_subscription_key
-  - auth_redirect_uri
+0. Create the following environment variables (process.env) or in `index.js` the configuration object for:
+  - AUTH_CLIENT_ID
+  - AUTH_CLIENT_SECRET
+  - AUTH_SUBSCRIPTION_KEY
+  - AUTH_REDIRECT_URI
+  - PARSE_APP_ID
+  - PARSE_JS_KEY
+  - PETS_KEY
 0. `npm install`
 0. `bower install`
 0. `npm build`

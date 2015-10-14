@@ -5,8 +5,8 @@
  * Class which lightly wraps the Pet Finder API endpoints.
  * @constructor
  * @param {Object} config
- * @param {string} config.pets_key
- * @param {string} config.pets_secret
+ * @param {string} config.PETS_KEY
+ * @param {string} config.PETS_SECRET
  * @returns {Object}
  *  {@link getApi}
  */
@@ -24,7 +24,7 @@ module.exports = function (config) {
         var options = {
             url: 'http://api.petfinder.com/pet.get',
             qs: {
-                key: config.pets_key,
+                key: config.PETS_KEY,
                 id: id,
                 format: 'json'
             }
@@ -44,7 +44,7 @@ module.exports = function (config) {
         var options = {
             url: 'http://api.petfinder.com/pet.getRandom',
             qs: {
-                key: config.pets_key,
+                key: config.PETS_KEY,
                 format: 'json'
             }
         };

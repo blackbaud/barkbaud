@@ -6,9 +6,9 @@
  * Provides the necessary methods for interacting with Blackbaud's OAUTH2 implemenation.
  * @constructor
  * @param {Object} config
- * @param {string} config.auth_client_id
- * @param {string} config.auth_client_secret
- * @param {string} config.auth_redirect_uri
+ * @param {string} config.AUTH_CLIENT_ID
+ * @param {string} config.AUTH_CLIENT_SECRET
+ * @param {string} config.AUTH_REDIRECT_URI
  * @returns {Object}
  *  {@link getAuthenticated}
  *  {@link getLogin}
@@ -19,8 +19,8 @@ module.exports = function (config) {
 
     var crypto = require('crypto'),
         oauth2 = require('simple-oauth2')({
-            clientID: config.auth_client_id,
-            clientSecret: config.auth_client_secret,
+            clientID: config.AUTH_CLIENT_ID,
+            clientSecret: config.AUTH_CLIENT_SECRET,
             authorizationPath: '/renxt/authorization',
             site: 'https://oauth2.apim.blackbaud-dev.com',
             tokenPath: '/token'
@@ -74,7 +74,7 @@ module.exports = function (config) {
         request.session.redirect = request.query.redirect;
         request.session.state = crypto.randomBytes(48).toString('hex');
         response.redirect(oauth2.authCode.authorizeURL({
-            redirect_uri: config.auth_redirect_uri,
+            redirect_uri: config.AUTH_REDIRECT_URI,
             state: request.session.state
         }));
     }
@@ -100,7 +100,7 @@ module.exports = function (config) {
         } else {
             options = {
                 code: request.query.code,
-                redirect_uri: config.auth_redirect_uri
+                redirect_uri: config.AUTH_REDIRECT_URI
             };
             oauth2.authCode.getToken(options, function (error, ticket) {
                 if (error) {
