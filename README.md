@@ -1,4 +1,4 @@
-# barkbaud
+# Barkbaud
 
 Blackbaud NXT API / Sky UX demo application for bbcon 2015.
 
@@ -10,13 +10,13 @@ Feel free to checkout the live demo of our application.  If you wish to run this
 
 0. Clone this repository.
 0. Create the following environment variables (process.env) or in `index.js` the configuration object for:
-  - AUTH_CLIENT_ID
-  - AUTH_CLIENT_SECRET
-  - AUTH_SUBSCRIPTION_KEY
-  - AUTH_REDIRECT_URI
-  - PARSE_APP_ID
-  - PARSE_JS_KEY
-  - PETS_KEY
+  - `AUTH_CLIENT_ID`
+  - `AUTH_CLIENT_SECRET`
+  - `AUTH_SUBSCRIPTION_KEY`
+  - `AUTH_REDIRECT_URI`
+  - `PARSE_APP_ID`
+  - `PARSE_JS_KEY`
+  - `PETS_KEY`
 0. `npm install`
 0. `bower install`
 0. `npm build`
