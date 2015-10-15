@@ -6,6 +6,7 @@ var apiDogs,
     app,
     auth,
     config,
+    cors,
     express,
     pets,
     session;
@@ -31,12 +32,14 @@ config.PARSE_JS_KEY = 'mXBdYlSnBQn1GU71mM4davaSlrbPTYW0kzRa5DjQ';
 auth = require('./server/auth.js')(config);
 apiDogs = require('./server/api-dogs.js')(config);
 apiNxt = require('./server/api-nxt.js')(config, auth);
-pets = require('./server/pets.js')(config);
+cors = require('cors');
 express = require('express');
 session = require('express-session');
+pets = require('./server/pets.js')(config);
 
 // Create our application and register its dependencies
 app = express();
+app.use(cors());
 app.use(session({
     resave: false,
     saveUninitialized: true,
