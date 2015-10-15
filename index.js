@@ -40,6 +40,7 @@ pets = require('./server/pets.js')(config);
 // Create our application and register its dependencies
 app = express();
 app.use(cors({
+    credentials: true,
     origin: [
         'http://localhost:5000',
         'http://localhost:8080',
