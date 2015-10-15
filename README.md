@@ -2,14 +2,33 @@
 
 Blackbaud NXT API / Sky UX demo application for bbcon 2015.
 
-## Prerequisites
+## About
 
-Feel free to checkout the live demo of our application.  If you wish to run this application in your environment, you will need to register an application.  Follow the [registering an application](https://developer.nxt.blackbaud-dev.com/apps) documentation for more information.
+This demo was built to showcase the Blackbaud NXT API and Blackbaud Sky UX.  Both technologies function completely independant of one another.  
 
-## Setup
+The Blackbaud NXT API currently supports the [Authorization Code Flow](https://apidocs.nxt.blackbaud-dev.com/docs/authorization/), which requires us to have a back-end server component where we're able to securely store the client secret.  We've implemented the server component using NodeJS, which we automatically deploy to Heroku.
 
-0. Clone this repository.
-0. Create the following environment variables (process.env) or in `index.js` the configuration object for:
+Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blakbaud/barkbaud-ui).  Using Bower, we consume the built ui and move it to the ui folder during our deployment process.
+
+## See the Demo
+
+[https://glacial-mountain-6366.herokuapp.com](https://glacial-mountain-6366.herokuapp.com)
+
+## Create Your Own
+
+Feel free to checkout the live demo of our application, or if you wish to run this application in your environment, you will need to complete the following steps:
+
+### Prerequisites
+
+0. A server capable of running NodeJS.
+0. [Register your application](https://developer.nxt.blackbaud-dev.com/apps) in order to obtain the client id and client secret.
+0. [Signup (for free)](https://developer.nxt.blackbaud-dev.com/) for the Blackbaud NXT API developer program in order to obtain your subscription key.
+0. [Create a Parse application](https://parse.com) in order to create your parse app id and parse js key.
+
+### Setup
+
+0. Fork or clone this repository.
+0. Create the following environment variables (process.env) or in `index.js` update the configuration object for:
   - `AUTH_CLIENT_ID`
   - `AUTH_CLIENT_SECRET`
   - `AUTH_SUBSCRIPTION_KEY`
@@ -20,8 +39,4 @@ Feel free to checkout the live demo of our application.  If you wish to run this
 0. `npm install`
 0. `bower install`
 0. `npm build`
-0. `npm start`
-
-## Demo
-
-[https://glacial-mountain-6366.herokuapp.com](https://glacial-mountain-6366.herokuapp.com)
+0. Deploy this folder to your server.
