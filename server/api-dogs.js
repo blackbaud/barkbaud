@@ -46,7 +46,7 @@ module.exports = function (config) {
     }
 
     /**
-     * Gets an array of all dogs.
+     * Gets an array of all dogs sorted ascending by name.
      * @name getDogs
      * @param {Object} request
      * @param {Object} response
@@ -54,6 +54,7 @@ module.exports = function (config) {
      */
     function getDogs(request, response) {
         var query = new Parse.Query('Dog');
+        query.ascending('name');
         query.find({
             success: function (dogs) {
                 response.json({
