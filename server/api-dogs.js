@@ -12,7 +12,8 @@
  */
 module.exports = function (config) {
 
-    var Parse = require('parse/node').Parse;
+    var https = require('request'),
+        Parse = require('parse/node').Parse;
 
     // Initialize our connection to parse.
     Parse.initialize(config.PARSE_APP_ID, config.PARSE_JS_KEY);
@@ -30,10 +31,10 @@ module.exports = function (config) {
         var query = new Parse.Query('Dog');
         query.get(request.params.dogId, {
             success: function (dog) {
+                var data = {};
+                data[key] = dog.get(key);
                 response.json({
-                    data: {
-                        key: dog.get(key)
-                    }
+                    data: data
                 });
             },
             error: function (dog, error) {
@@ -96,6 +97,21 @@ module.exports = function (config) {
     }
 
     /**
+     * Gets the notes column for a specific dog.
+     * @name getDogNotes
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} dogId
+     * @returns {Object}
+     */
+    function getDogNotes(request, response) {
+        response.json({
+            data: {
+            }
+        });
+    }
+
+    /**
      * Gets the photo column for a specific dog.
      * @name getDogPhoto
      * @param {Object} request
@@ -104,7 +120,32 @@ module.exports = function (config) {
      * @returns {Object}
      */
     function getDogPhoto(request, response) {
-        getDogColumn(request, response, 'photo');
+        getDogColumn(request, response, 'image');
+    }
+
+    /**
+     * Gets the photo column for a specific dog.
+     * @name getDogPhoto
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.dogId
+     * @returns {Object}
+     */
+    function getDogPhotoData(request, response) {
+        var query = new Parse.Query('Dog');
+        query.get(request.params.dogId, {
+            success: function (dog) {
+                https(dog.get('image').url, function (photoError, photoResponse) {
+                    response.sendFile(photoResponse);
+                });
+            },
+            error: function (dog, error) {
+                response.json({
+                    error: error,
+                    data: dog
+                });
+            }
+        });
     }
 
     /**
@@ -121,26 +162,12 @@ module.exports = function (config) {
         });
     }
 
-    /**
-     * Gets the notes column for a specific dog.
-     * @name getDogNotes
-     * @param {Object} request
-     * @param {Object} response
-     * @param {string} dogId
-     * @returns {Object}
-     */
-    function getDogNotes(request, response) {
-        response.json({
-            data: {
-            }
-        });
-    }
-
     // Expose any methods from our module
     return {
         getDogs: getDogs,
         getDog: getDog,
-        getDogSummary: getDogSummary,
-        getDogNotes: getDogNotes
+        getDogNotes: getDogNotes,
+        getDogPhoto: getDogPhoto,
+        getDogSummary: getDogSummary
     };
 };

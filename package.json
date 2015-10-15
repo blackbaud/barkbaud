@@ -26,5 +26,8 @@
     "renxt",
     "skyux"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  }
 }

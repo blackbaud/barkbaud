@@ -23,11 +23,6 @@ config = {
     PORT: process.env.PORT || 5000
 };
 
-// DEBUGGING.  PlEASE DELETE
-config.PARSE_APP_ID = 'CkFcgnAJEOEWcBSbhrm7MeYUi4lFJqOpLw6xDYj7';
-config.PARSE_JS_KEY = 'mXBdYlSnBQn1GU71mM4davaSlrbPTYW0kzRa5DjQ';
-// DEBUGGING.  PlEASE DELETE
-
 // Application dependencies
 auth = require('./server/auth.js')(config);
 apiDogs = require('./server/api-dogs.js')(config);
@@ -62,6 +57,7 @@ app.get('/auth/logout', auth.getLogout);
 // Register our Dogs API routes
 app.get('/api/dogs', apiDogs.getDogs);
 app.get('/api/dogs/:dogId', apiDogs.getDog);
+app.get('/api/dogs/:dogId/photo', apiDogs.getDogPhoto);
 app.get('/api/dogs/:dogId/summary', apiDogs.getDogSummary);
 app.get('/api/dogs/:dogId/notes', apiDogs.getDogNotes);
 
