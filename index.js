@@ -7,8 +7,6 @@ var apiDogs,
     auth,
     config,
     cors,
-    corsOptions,
-    corsWhitelist,
     express,
     pets,
     session;
@@ -22,7 +20,7 @@ config = {
     PARSE_APP_ID: process.env.PARSE_APP_ID || '<Your-Parse-App-Id>',
     PARSE_JS_KEY: process.env.PARSE_JS_KEY || '<Your-Parse-JS-Key>',
     PETS_KEY: process.env.PETS_KEY || '<Your-PetFinder-Developer-Key>',
-    PORT: process.env.PORT || 9090
+    PORT: process.env.PORT || 5000
 };
 
 // DEBUGGING.  PlEASE DELETE
@@ -41,23 +39,18 @@ pets = require('./server/pets.js')(config);
 
 // Create our application and register its dependencies
 app = express();
+app.use(cors({
+    origin: [
+        'http://localhost:5000',
+        'http://localhost:8080',
+        'https://glacial-mountain-6366.herokuapp.com'
+    ]
+}));
 app.use(session({
     resave: false,
     saveUninitialized: true,
     secret: '+rEchas&-wub24dR'
 }));
-
-// Configure cors to allow credentials and * origin.
-corsWhitelist = [
-    'http://localhost:5000',
-    'http://localhost:8080',
-    'https://glacial-mountain-6366.herokuapp.com'
-];
-corsOptions = {
-    origin: function (origin, callback) {
-        callback(null, corsWhitelist.indexOf(origin) !== -1);
-    }
-};
 
 // Register our OAUTH2 routes
 app.get('/auth/authenticated', auth.getAuthenticated);
@@ -66,10 +59,10 @@ app.get('/auth/callback', auth.getCallback);
 app.get('/auth/logout', auth.getLogout);
 
 // Register our Dogs API routes
-app.get('/api/dogs', cors(corsOptions), apiDogs.getDogs);
-app.get('/api/dogs/:dogId', cors(corsOptions), apiDogs.getDog);
-app.get('/api/dogs/:dogId/summary', cors(corsOptions), apiDogs.getDogSummary);
-app.get('/api/dogs/:dogId/notes', cors(corsOptions), apiDogs.getDogNotes);
+app.get('/api/dogs', apiDogs.getDogs);
+app.get('/api/dogs/:dogId', apiDogs.getDog);
+app.get('/api/dogs/:dogId/summary', apiDogs.getDogSummary);
+app.get('/api/dogs/:dogId/notes', apiDogs.getDogNotes);
 
 // Register our NXT API routes
 //app.get('/api*', apiNxt.getProxy);
