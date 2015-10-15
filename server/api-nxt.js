@@ -12,10 +12,7 @@
  */
 module.exports = function (config, auth) {
 
-    var https = require('request'),
-        Parse = require('parse/node').Parse;
-
-    Parse.initialize(config.PARSE_APP_ID, config.PARSE_JS_KEY);
+    var https = require('request');
 
     /**
      * Proxy method to the RENXT api.
@@ -47,10 +44,7 @@ module.exports = function (config, auth) {
         });
     }
 
-    function getUsers(request, response) {
-
-    }
-
+    // Expose any methods from our module
     return {
         getProxy: getProxy
     };

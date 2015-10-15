@@ -10,11 +10,13 @@ The Blackbaud NXT API currently supports the [Authorization Code Flow](https://a
 
 Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blakbaud/barkbaud-ui).  Using Bower, we consume the built ui and move it to the ui folder during our deployment process.
 
-## See the Demo
+## Try
 
 [https://glacial-mountain-6366.herokuapp.com](https://glacial-mountain-6366.herokuapp.com)
 
-## Create Your Own
+Feel free to leave feedback by filing an issue.
+
+## Run Barkbaud on your server
 
 Feel free to checkout the live demo of our application, or if you wish to run this application in your environment, you will need to complete the following steps:
 
@@ -28,7 +30,7 @@ Feel free to checkout the live demo of our application, or if you wish to run th
 ### Setup
 
 0. Fork or clone this repository.
-0. Create the following environment variables (process.env) or in `index.js` update the configuration object for:
+0. Create the following environment variables or in `index.js` update the configuration object for:
   - `AUTH_CLIENT_ID`
   - `AUTH_CLIENT_SECRET`
   - `AUTH_SUBSCRIPTION_KEY`

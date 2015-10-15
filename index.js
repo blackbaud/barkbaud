@@ -1,7 +1,8 @@
 /*jshint node: true */
 'use strict';
 
-var api,
+var apiDogs,
+    apiNxt,
     app,
     auth,
     config,
@@ -21,9 +22,15 @@ config = {
     PORT: process.env.PORT || 5000
 };
 
+// DEBUGGING.  PlEASE DELETE
+config.PARSE_APP_ID = 'CkFcgnAJEOEWcBSbhrm7MeYUi4lFJqOpLw6xDYj7';
+config.PARSE_JS_KEY = 'mXBdYlSnBQn1GU71mM4davaSlrbPTYW0kzRa5DjQ';
+// DEBUGGING.  PlEASE DELETE
+
 // Application dependencies
 auth = require('./server/auth.js')(config);
-api = require('./server/api.js')(config, auth);
+apiDogs = require('./server/api-dogs.js')(config);
+apiNxt = require('./server/api-nxt.js')(config, auth);
 pets = require('./server/pets.js')(config);
 express = require('express');
 session = require('express-session');
@@ -42,8 +49,14 @@ app.get('/auth/login', auth.getLogin);
 app.get('/auth/callback', auth.getCallback);
 app.get('/auth/logout', auth.getLogout);
 
-// Register our NXT API routes.
-app.get('/api*', api.getProxy);
+// Register our Dogs API routes
+app.get('/api/dogs', apiDogs.getDogs);
+app.get('/api/dogs/:dogId', apiDogs.getDog);
+app.get('/api/dogs/:dogId/summary', apiDogs.getDogSummary);
+app.get('/api/dogs/:dogId/notes', apiDogs.getDogNotes);
+
+// Register our NXT API routes
+//app.get('/api*', apiNxt.getProxy);
 
 // Register our pet API routes
 app.get('/pets/random', pets.getRandom);
