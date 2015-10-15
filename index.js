@@ -39,7 +39,9 @@ pets = require('./server/pets.js')(config);
 
 // Create our application and register its dependencies
 app = express();
-app.use(cors());
+app.use(cors({
+    credentials: true
+}));
 app.use(session({
     resave: false,
     saveUninitialized: true,
