@@ -105,8 +105,24 @@ module.exports = function (config) {
      * @returns {Object}
      */
     function getDogNotes(request, response) {
-        response.json({
-            data: {
+
+        var dog = new Parse.Object.extend('Dog'),
+            query;
+
+        dog.id = request.params.dogId;
+        query = new Parse.Query('DogNotes');
+        query.equalTo('dog', dog);
+        query.find({
+            success: function (notes) {
+                response.json({
+                    data: notes
+                });
+            },
+            error: function (notes, error) {
+                response.json({
+                    error: error,
+                    data: notes
+                });
             }
         });
     }
