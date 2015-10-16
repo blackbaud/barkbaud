@@ -2,50 +2,59 @@
 'use strict';
 
 /**
- * Class which lightly wraps the RENXT API endpoints.
- * Currently passes all info after /api to the RENXT API.  This will be replaced by concrete endpoints.
+ * Class which lightly wraps a few of RENXT API endpoints.
  * @constructor
  * @param {Object} config
  * @param {string} config.AUTH_SUBSCRIPTION_KEY
  * @returns {Object}
- *  {@link getApi}
+ *  {@link getConstituent}
  */
 module.exports = function (config, auth) {
 
-    var https = require('request');
+    var promise = require('request-promise');
 
     /**
      * Proxy method to the RENXT api.
      * Validates the session before initiating request.
-     * @name getConstituents
+     * @private
+     * @name getProxy
      * @param {Object} request
-     * @param {Object} response
+     * @param {String} endpoint
+     * @returns {Promise}
      */
-    function getProxy(request, response) {
+    function get(request, endpoint, callback) {
         var options;
 
         auth.validate(request, function (success) {
             if (!success) {
-                response.status(403).json({
+                callback({
                     error: 'Invalid session.'
                 });
             } else {
                 options = {
-                    url: 'https://api.nxt.blackbaud-dev.com' + request.params[0],
+                    json: true,
+                    url: 'https://api.nxt.blackbaud-dev.com' + endpoint,
                     headers: {
                         'bb-api-subscription-key': config.AUTH_SUBSCRIPTION_KEY,
                         'Authorization': 'Bearer ' + request.session.ticket.access_token
                     }
                 };
-                https(options, function (apiError, apiResponse, apiBody) {
-                    response.json(JSON.parse(apiBody));
-                });
+                promise(options).then(callback);
             }
         });
     }
 
+    /**
+     * Gets the requested constituent
+     * @name getConstituent
+     * @param {string} constituentId Id of the constituent to retrieve
+     */
+    function getConstituent(request, constituentId, callback) {
+        get(request, 'constituents/' + constituentId, callback);
+    }
+
     // Expose any methods from our module
     return {
-        getProxy: getProxy
+        getConstituent: getConstituent
     };
 };

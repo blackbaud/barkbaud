@@ -10,7 +10,7 @@
  * @returns {Object}
  *  {@link getApi}
  */
-module.exports = function (config) {
+module.exports = function (config, apiNxt) {
 
     var https = require('request'),
         Parse = require('parse/node').Parse;
@@ -181,8 +181,54 @@ module.exports = function (config) {
      * @returns {Object}
      */
     function getDogSummary(request, response) {
-        response.json({
-            data: {}
+        var queryDog = new Parse.Query('Dog'),
+            queryOwnerHistory = new Parse.Query('DogOwnerHistory');
+
+        // Get the requested dog
+        queryDog.get(request.params.dogId, {
+            success: function (dog) {
+
+                // Get the owner history tied to this dog
+                queryOwnerHistory.equalTo('dog', dog);
+                queryOwnerHistory.find({
+
+                    // Successfully found the owner history
+                    success: function (history) {
+                        var i = 0,
+                            j = history.length,
+                            responses = 0;
+
+                        // Find the constituent information for each of our owner in this dogs owner history
+                        for (i; i < j; i++) {
+                            apiNxt.getConstituent(request, history[i].get('constituentId'), function (constituent) {
+                                history[i].set('constituent', constituent);
+                                if (history.length === ++responses) {
+                                    response.json({
+                                        data: history
+                                    });
+                                }
+                            });
+                        }
+
+                    },
+
+                    // Error getting the owner history
+                    error: function (history, error) {
+                        response.json({
+                            error: error,
+                            data: history
+                        });
+                    }
+                });
+            },
+
+            // Error getting the requested dog
+            error: function (dog, error) {
+                response.json({
+                    error: error,
+                    data: dog
+                });
+            }
         });
     }
 

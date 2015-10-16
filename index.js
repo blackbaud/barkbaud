@@ -25,8 +25,8 @@ config = {
 
 // Application dependencies
 auth = require('./server/auth.js')(config);
-apiDogs = require('./server/api-dogs.js')(config);
 apiNxt = require('./server/api-nxt.js')(config, auth);
+apiDogs = require('./server/api-dogs.js')(config, apiNxt);
 cors = require('cors');
 express = require('express');
 session = require('express-session');
