@@ -97,7 +97,7 @@ module.exports = function (config) {
     }
 
     /**
-     * Gets the notes column for a specific dog.
+     * Gets all notes for a specific dog.
      * @name getDogNotes
      * @param {Object} request
      * @param {Object} response
@@ -106,22 +106,30 @@ module.exports = function (config) {
      */
     function getDogNotes(request, response) {
 
-        var dog = new Parse.Object.extend('Dog'),
-            query;
+        var queryDog = new Parse.Query('Dog'),
+            queryNotes = new Parse.Query('DogNotes');
 
-        dog.id = request.params.dogId;
-        query = new Parse.Query('DogNotes');
-        query.equalTo('dog', dog);
-        query.find({
-            success: function (notes) {
-                response.json({
-                    data: notes
+        queryDog.get(request.params.dogId, {
+            success: function (dog) {
+                queryNotes.equalTo('dog', dog);
+                queryNotes.find({
+                    success: function (notes) {
+                        response.json({
+                            data: notes
+                        });
+                    },
+                    error: function (notes, error) {
+                        response.json({
+                            error: error,
+                            data: notes
+                        });
+                    }
                 });
             },
-            error: function (notes, error) {
+            error: function (dog, error) {
                 response.json({
                     error: error,
-                    data: notes
+                    data: dog
                 });
             }
         });
