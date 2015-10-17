@@ -9,17 +9,17 @@
 
     function config($locationProvider, $urlRouterProvider, $stateProvider, bbWindowConfig) {
         $locationProvider.html5Mode(false);
-        $urlRouterProvider.otherwise('/home');
+        $urlRouterProvider.otherwise('/dashboard');
         $stateProvider
             .state('login', {
                 controller: 'LoginPageController as loginPage',
                 templateUrl: 'pages/login/loginpage.html',
                 url: '/login'
             })
-            .state('home', {
+            .state('dashboard', {
                 controller: 'DashboardPageController as dashboardPage',
                 templateUrl: 'pages/dashboard/dashboardpage.html',
-                url: '/home'
+                url: '/dashboard'
             })
             .state('dog', {
                 abstract: true,
