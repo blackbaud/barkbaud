@@ -106,7 +106,7 @@ module.exports = function (config) {
                 if (error) {
                     response.send('Invalid request.  ' + error.message);
                 } else {
-                    redirect = request.session.redirect || '/';
+                    redirect = request.session.redirect || '/#/dashboard';
                     request.session.redirect = '';
                     request.session.ticket = ticket;
                     response.redirect(redirect);
