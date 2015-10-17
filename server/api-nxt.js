@@ -33,7 +33,7 @@ module.exports = function (config, auth) {
             } else {
                 options = {
                     json: true,
-                    url: 'https://api.nxt.blackbaud-dev.com' + endpoint,
+                    url: 'https://api.nxt.blackbaud-dev.com/' + endpoint,
                     headers: {
                         'bb-api-subscription-key': config.AUTH_SUBSCRIPTION_KEY,
                         'Authorization': 'Bearer ' + request.session.ticket.access_token
