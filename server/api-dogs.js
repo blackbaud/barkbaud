@@ -196,20 +196,22 @@ module.exports = function (config, apiNxt) {
                     success: function (history) {
                         var i = 0,
                             j = history.length,
-                            responses = 0;
+                            responses = [];
 
-                        // Find the constituent information for each of our owner in this dogs owner history
-                        for (i; i < j; i++) {
-                            apiNxt.getConstituent(request, history[i].get('constituentId'), function (constituent) {
-                                if (history[i]) {
-                                    history[i].set('constituent', constituent);
-                                }
+                        function buildConstituent(index) {
+                            apiNxt.getConstituent(request, history[index].get('constituentId'), function (constituent) {
+                                history[index].set('constituent', constituent);
                                 if (history.length === ++responses) {
                                     response.json({
                                         data: history
                                     });
                                 }
                             });
+                        }
+
+                        // Find the constituent information for each of our owner in this dogs owner history
+                        for (i; i < j; i++) {
+                            buildConstituent(i);
                         }
 
                     },
