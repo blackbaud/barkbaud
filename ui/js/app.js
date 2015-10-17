@@ -7,9 +7,9 @@
         apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
     };
 
-    function config($locationProvider, $stateProvider, bbWindowConfig) {
+    function config($locationProvider, $urlRouterProvider, $stateProvider, bbWindowConfig) {
         $locationProvider.html5Mode(false);
-
+        $urlRouterProvider.otherwise('/home');
         $stateProvider
             .state('login', {
                 controller: 'LoginPageController as loginPage',
@@ -19,7 +19,7 @@
             .state('home', {
                 controller: 'DashboardPageController as dashboardPage',
                 templateUrl: 'pages/dashboard/dashboardpage.html',
-                url: ''
+                url: '/home'
             })
             .state('dog', {
                 abstract: true,
@@ -49,9 +49,17 @@
         bbWindowConfig.productName = 'Barkbaud';
     }
 
-    config.$inject = ['$locationProvider', '$stateProvider', 'bbWindowConfig'];
+    config.$inject = ['$locationProvider', '$urlRouterProvider', '$stateProvider', 'bbWindowConfig'];
 
-    function run(bbDataConfig) {
+    function run(bbDataConfig, barkbaudAuthService, $rootScope, $state) {
+
+        $rootScope.$on('$stateChangeStart', function (event, toState) {
+            if (!barkbaudAuthService.authenticated && toState.name !== 'login') {
+                event.preventDefault();
+                $state.go('login');
+            }
+        });
+
         function addBaseUrl(url) {
             return barkbaudConfig.apiUrl + url;
         }
@@ -60,7 +68,7 @@
         bbDataConfig.resourceUrlFilter = addBaseUrl;
     }
 
-    run.$inject = ['bbDataConfig'];
+    run.$inject = ['bbDataConfig', 'barkbaudAuthService', '$rootScope', '$state'];
 
     angular.module('barkbaud', ['sky', 'ui.bootstrap', 'ui.router', 'ngAnimate', 'barkbaud.templates'])
         .constant('barkbaudConfig', barkbaudConfig)
@@ -295,6 +303,7 @@
             bbData.load({
                 data: 'auth/authenticated'
             }).then(function (result) {
+                service.authenticated = result.data.authenticated;
                 deferred.resolve(result.data.authenticated);
             });
             return deferred.promise;
@@ -308,6 +317,7 @@
             $window.location.href = barkbaudConfig.apiUrl + 'auth/logout';
         };
 
+        service.isAuthenticated();
         return service;
     }
 
@@ -454,16 +464,16 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  <h1>Login</h1>\n' +
         '  <div class="panel">\n' +
         '    <div class="panel-body">\n' +
-        '      <div ng-switch="loginPage.isAuthenticated">\n' +
-        '        <div ng-switch-when="\'true\'">\n' +
-        '          Welcome\n' +
-        '        </div>\n' +
-        '        <div ng-switch-default>\n' +
-        '          <button type="button" class="btn btn-primary" ng-click="loginPage.login()">\n' +
-        '            Login with Blackbaud\n' +
-        '          </button>\n' +
-        '        <div>\n' +
+        '      <div ng-if="loginPage.isAuthenticated">\n' +
+        '        <button type="button" class="btn btn-primary" ng-click="loginPage.logout()">\n' +
+        '          Logout\n' +
+        '        </button>\n' +
         '      </div>\n' +
+        '      <div ng-if="!loginPage.isAuthenticated">\n' +
+        '        <button type="button" class="btn btn-primary" ng-click="loginPage.login()">\n' +
+        '          Login with Blackbaud\n' +
+        '        </button>\n' +
+        '      <div>\n' +
         '    </div>\n' +
         '  </div>\n' +
         '</div>\n' +
