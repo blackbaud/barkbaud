@@ -39,7 +39,7 @@ module.exports = function (config, auth) {
                     url: 'https://api.nxt.blackbaud-dev.com/' + endpoint,
                     headers: {
                         'bb-api-subscription-key': config.AUTH_SUBSCRIPTION_KEY,
-                        'Authorization': 'Bearer ' + process.env.AUTH_ACCESS_TOKEN || request.session.ticket.access_token
+                        'Authorization': 'Bearer ' + request.session.ticket.access_token
                     }
                 };
                 promise(options).then(callback);
