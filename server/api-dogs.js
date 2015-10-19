@@ -19,34 +19,6 @@ module.exports = function (config, apiNxt) {
     Parse.initialize(config.PARSE_APP_ID, config.PARSE_JS_KEY);
 
     /**
-     * Gets a specific column of the request dog.
-     * @private
-     * @name getDogColumn
-     * @param {Object} request
-     * @param {Object} response
-     * @param {string} request.params.dogId
-     * @returns {Object}
-     */
-    function getDogColumn(request, response, key) {
-        var query = new Parse.Query('Dog');
-        query.get(request.params.dogId, {
-            success: function (dog) {
-                var data = {};
-                data[key] = dog.get(key);
-                response.json({
-                    data: data
-                });
-            },
-            error: function (dog, error) {
-                response.json({
-                    error: error,
-                    data: dog
-                });
-            }
-        });
-    }
-
-    /**
      * Gets an array of all dogs sorted ascending by name.
      * @name getDogs
      * @param {Object} request
@@ -98,13 +70,13 @@ module.exports = function (config, apiNxt) {
 
     /**
      * Gets all notes for a specific dog.
-     * @name getDogNotes
+     * @name getNotes
      * @param {Object} request
      * @param {Object} response
-     * @param {string} dogId
+     * @param {string} request.params.dogId
      * @returns {Object}
      */
-    function getDogNotes(request, response) {
+    function getNotes(request, response) {
 
         var queryDog = new Parse.Query('Dog'),
             queryNotes = new Parse.Query('DogNotes');
@@ -136,31 +108,35 @@ module.exports = function (config, apiNxt) {
     }
 
     /**
-     * Gets the photo column for a specific dog.
-     * @name getDogPhoto
+     * Gets the current home for a specific dog.
+     * @name getCurrentHome
      * @param {Object} request
      * @param {Object} response
      * @param {string} request.params.dogId
      * @returns {Object}
      */
-    function getDogPhoto(request, response) {
-        getDogColumn(request, response, 'image');
-    }
+    function getCurrentHome(request, response) {
+        var queryDog = new Parse.Query('Dog'),
+            queryOwnerHistory = new Parse.Query('DogOwnerHistory');
 
-    /**
-     * Gets the photo column for a specific dog.
-     * @name getDogPhoto
-     * @param {Object} request
-     * @param {Object} response
-     * @param {string} request.params.dogId
-     * @returns {Object}
-     */
-    function getDogPhotoData(request, response) {
-        var query = new Parse.Query('Dog');
-        query.get(request.params.dogId, {
+        // Get the requested dog
+        queryDog.get(request.params.dogId, {
             success: function (dog) {
-                https(dog.get('image').url, function (photoError, photoResponse) {
-                    response.sendFile(photoResponse);
+                queryOwnerHistory.get(dog.currentOwner, {
+                    success: function (owner) {
+                        apiNxt.getConstituent(request, owner.get('constituentId'), function (constituent) {
+                            owner.set('constituent', constituent);
+                            response.json({
+                                data: owner
+                            });
+                        });
+                    },
+                    error: function (history, error) {
+                        response.json({
+                            error: error,
+                            data: history
+                        });
+                    }
                 });
             },
             error: function (dog, error) {
@@ -173,14 +149,14 @@ module.exports = function (config, apiNxt) {
     }
 
     /**
-     * Gets the summary column for a specific dog.
-     * @name getDogSummary
+     * Gets the previous homes for a specific dog, excluding the current home.
+     * @name getPreviousHomes
      * @param {Object} request
      * @param {Object} response
      * @param {string} request.params.dogId
      * @returns {Object}
      */
-    function getDogSummary(request, response) {
+    function getPreviousHomes(request, response) {
         var queryDog = new Parse.Query('Dog'),
             queryOwnerHistory = new Parse.Query('DogOwnerHistory');
 
@@ -190,6 +166,7 @@ module.exports = function (config, apiNxt) {
 
                 // Get the owner history tied to this dog
                 queryOwnerHistory.equalTo('dog', dog);
+                queryOwnerHistory.notEqualTo('objectId', dog.currentOwner);
                 queryOwnerHistory.find({
 
                     // Successfully found the owner history
@@ -236,12 +213,86 @@ module.exports = function (config, apiNxt) {
         });
     }
 
+    /**
+     * Posts a note for a specific dog.
+     * @name postNotes
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.dogId
+     * @param {string} request.body.constituentId
+     * @param {string} request.body.title
+     * @param {string} request.body.description
+     * @param {string} request.body.addToOwner
+     * @returns {Object}
+     */
+    function postNotes(request, response) {
+        var query = new Parse.Query('Dog'),
+            DogNote = new Parse.Object.extend('DogNotes'),
+            date = new Date(),
+            dogBodyNxt,
+            dogBodyParse,
+            dogDate,
+            dogNote;
+
+        query.get(request.params.dogId, {
+            success: function (dog) {
+                dogNote = new DogNote();
+                dogDate = new Date();
+                dogBodyParse = {
+                    dog: dog,
+                    date: dogDate,
+                    title: request.body.title,
+                    description: request.body.description
+                };
+
+                dogNote.save(dogBodyParse, {
+                    success: function (dogNote) {
+                        if (request.body.addConstituentNote) {
+                            dogBodyNxt = JSON.stringify({
+                                type: 'Barkbaud',
+                                date: {
+                                    y: dogDate.getYear(),
+                                    m: dogDate.getMonth(),
+                                    d: dogDate.getDay()
+                                },
+                                summary: request.body.title,
+                                text: request.body.description
+                            });
+                            apiNxt.postNotes(request, request.body.constituentId, dogBodyNxt, function (apiDogNote) {
+                                response.json({
+                                    data: apiDogNote
+                                });
+                            });
+                        } else {
+                            response.json({
+                                data: dogNote
+                            });
+                        }
+                    },
+                    error: function (dogNote, error) {
+                        response.json({
+                            error: error,
+                            dogNote: dogNote
+                        });
+                    }
+                });
+            },
+            error: function (dog, error) {
+                response.json({
+                    error: error,
+                    data: dog
+                });
+            }
+        });
+    }
+
     // Expose any methods from our module
     return {
         getDogs: getDogs,
         getDog: getDog,
-        getDogNotes: getDogNotes,
-        getDogPhoto: getDogPhoto,
-        getDogSummary: getDogSummary
+        getDogNotes: getNotes,
+        getCurrentHome: getCurrentHome,
+        getPreviousHomes: getPreviousHomes,
+        postNotes: postNotes
     };
 };

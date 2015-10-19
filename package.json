@@ -8,6 +8,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "body-parser": "^1.14.1",
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "express-session": "^1.11.3",

@@ -19,10 +19,11 @@ module.exports = function (config, auth) {
      * @private
      * @name getProxy
      * @param {Object} request
-     * @param {String} endpoint
-     * @returns {Promise}
+     * @param {string} method
+     * @param {string} endpoint
+     * @param {Function} callback
      */
-    function get(request, endpoint, callback) {
+    function proxy(request, method, endpoint, body, callback) {
         var options;
 
         auth.validate(request, function (success) {
@@ -33,10 +34,12 @@ module.exports = function (config, auth) {
             } else {
                 options = {
                     json: true,
+                    method: method,
+                    body: body,
                     url: 'https://api.nxt.blackbaud-dev.com/' + endpoint,
                     headers: {
                         'bb-api-subscription-key': config.AUTH_SUBSCRIPTION_KEY,
-                        'Authorization': 'Bearer ' + request.session.ticket.access_token
+                        'Authorization': 'Bearer ' + process.env.AUTH_ACCESS_TOKEN || request.session.ticket.access_token
                     }
                 };
                 promise(options).then(callback);
@@ -45,16 +48,54 @@ module.exports = function (config, auth) {
     }
 
     /**
+     * Wrap all GET proxy calls.
+     * @private
+     * @name get
+     * @param {Object} request
+     * @param {String} endpoint
+     * @param {Function} callback
+     */
+    function get(request, endpoint, callback) {
+        return proxy(request, 'GET', endpoint, '', callback);
+    }
+
+    /**
+     * Wrap all POST proxy calls.
+     * @private
+     * @name get
+     * @param {Object} request
+     * @param {String} endpoint
+     * @param {Function} callback
+     */
+    function post(request, endpoint, body, callback) {
+        return proxy(request, 'POST', endpoint, body, callback);
+    }
+
+    /**
      * Gets the requested constituent
      * @name getConstituent
+     * @param {Object} request
      * @param {string} constituentId Id of the constituent to retrieve
+     * @param {Function} callback
      */
     function getConstituent(request, constituentId, callback) {
         get(request, 'constituents/' + constituentId, callback);
     }
 
+    /**
+     * Posts a note to the specified constituent
+     * @name postNotes
+     * @param {Object} request
+     * @param {string} constituentId Id of the constituent to retrieve
+     * @param {Function} callback
+     */
+    function postNotes(request, constituentId, body, callback) {
+        post(request, 'constituents/' + constituentId + '/notes', body, callback);
+    }
+
     // Expose any methods from our module
     return {
-        getConstituent: getConstituent
+        getConstituent: getConstituent,
+        postNotes: postNotes
     };
 };

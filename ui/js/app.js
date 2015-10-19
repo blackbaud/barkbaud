@@ -7,49 +7,15 @@
         apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
     };
 
-    function config($locationProvider, $urlRouterProvider, $stateProvider, bbWindowConfig) {
+    function config($locationProvider, $urlRouterProvider, bbWindowConfig) {
         $locationProvider.html5Mode(false);
+
         $urlRouterProvider.otherwise('/dashboard');
-        $stateProvider
-            .state('login', {
-                controller: 'LoginPageController as loginPage',
-                templateUrl: 'pages/login/loginpage.html',
-                url: '/login'
-            })
-            .state('dashboard', {
-                controller: 'DashboardPageController as dashboardPage',
-                templateUrl: 'pages/dashboard/dashboardpage.html',
-                url: '/dashboard'
-            })
-            .state('dog', {
-                abstract: true,
-                controller: 'DogPageController as dogPage',
-                templateUrl: 'pages/dogs/dogpage.html',
-                url: '/dogs/:dogId',
-                resolve: {
-                    dogId: ['$stateParams', function ($stateParams) {
-                        return $stateParams.dogId;
-                    }]
-                }
-            })
-            .state('dog.views', {
-                url: '',
-                views: {
-                    'summary': {
-                        controller: 'DogSummaryTileController as dogSummaryTile',
-                        templateUrl: 'pages/dogs/summary/summarytile.html'
-                    },
-                    'notes': {
-                        controller: 'DogNotesTileController as dogNotesTile',
-                        templateUrl: 'pages/dogs/notes/notestile.html'
-                    }
-                }
-            });
 
         bbWindowConfig.productName = 'Barkbaud';
     }
 
-    config.$inject = ['$locationProvider', '$urlRouterProvider', '$stateProvider', 'bbWindowConfig'];
+    config.$inject = ['$locationProvider', '$urlRouterProvider', 'bbWindowConfig'];
 
     function run(bbDataConfig, barkbaudAuthService, $rootScope, $state) {
 
@@ -108,6 +74,17 @@
 (function () {
     'use strict';
 
+    function dashboardPageConfig($stateProvider) {
+        $stateProvider
+            .state('dashboard', {
+                controller: 'DashboardPageController as dashboardPage',
+                templateUrl: 'pages/dashboard/dashboardpage.html',
+                url: 'dashboard'
+            });
+    }
+
+    dashboardPageConfig.$inject = ['$stateProvider'];
+
     function DashboardPageController($stateParams, bbData, bbWindow) {
         var self = this;
 
@@ -123,6 +100,7 @@
     DashboardPageController.$inject = ['$stateParams', 'bbData', 'bbWindow'];
 
     angular.module('barkbaud')
+        .config(dashboardPageConfig)
         .controller('DashboardPageController', DashboardPageController);
 }());
 
@@ -131,13 +109,74 @@
 (function () {
     'use strict';
 
+    function DogCurrentHomeTileController($timeout, bbData, dogId) {
+        var self = this;
+
+        bbData.load({
+            data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
+        }).then(function (result) {
+            self.currentHome = result.data;
+        });
+    }
+
+    DogCurrentHomeTileController.$inject = ['$timeout', 'bbData', 'dogId'];
+
+    angular.module('barkbaud')
+        .controller('DogCurrentHomeTileController', DogCurrentHomeTileController);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
+
+    function dogPageConfig($stateProvider) {
+        $stateProvider
+            .state('dog', {
+                abstract: true,
+                controller: 'DogPageController as dogPage',
+                templateUrl: 'pages/dogs/dogpage.html',
+                url: '/dogs/:dogId',
+                resolve: {
+                    dogId: ['$stateParams', function ($stateParams) {
+                        return $stateParams.dogId;
+                    }]
+                }
+            })
+            .state('dog.views', {
+                url: '',
+                views: {
+                    'currenthome': {
+                        controller: 'DogCurrentHomeTileController as dogCurrentHomeTile',
+                        templateUrl: 'pages/dogs/currenthome/currenthometile.html'
+                    },
+                    'previoushomes': {
+                        controller: 'DogPreviousHomesTileController as dogPreviousHomesTile',
+                        templateUrl: 'pages/dogs/previoushomes/previoushomestile.html'
+                    },
+                    'notes': {
+                        controller: 'DogNotesTileController as dogNotesTile',
+                        templateUrl: 'pages/dogs/notes/notestile.html'
+                    }
+                }
+            });
+    }
+
+    dogPageConfig.$inject = ['$stateProvider'];
+
     function DogPageController($stateParams, bbData, bbWindow, dogId) {
         var self = this;
 
         self.tiles = [
             {
-                id: 'DogSummaryTile',
-                view_name: 'summary',
+                id: 'DogCurrentHomeTile',
+                view_name: 'currenthome',
+                collapsed: false,
+                collapsed_small: false
+            },
+            {
+                id: 'DogPreviousHomesTile',
+                view_name: 'previoushomes',
                 collapsed: false,
                 collapsed_small: false
             },
@@ -151,12 +190,14 @@
 
         self.layout = {
             one_column_layout: [
-                'DogSummaryTile',
+                'DogCurrentHomeTile',
+                'DogPreviousHomesTile',
                 'DogNotesTile'
             ],
             two_column_layout: [
                 [
-                    'DogSummaryTile'
+                    'DogCurrentHomeTile',
+                    'DogPreviousHomesTile'
                 ],
                 [
                     'DogNotesTile'
@@ -175,6 +216,7 @@
     DogPageController.$inject = ['$stateParams', 'bbData', 'bbWindow', 'dogId'];
 
     angular.module('barkbaud')
+        .config(dogPageConfig)
         .controller('DogPageController', DogPageController);
 }());
 
@@ -240,6 +282,33 @@
 (function () {
     'use strict';
 
+    function DogPreviousHomesTileController($timeout, bbData, dogId) {
+        var self = this;
+
+        bbData.load({
+            data: 'api/dogs/' + encodeURIComponent(dogId) + '/previoushomes'
+        }).then(function (result) {
+            self.previousHomes = result.data.data;
+        });
+
+        self.getSummaryDate = function (date) {
+            if (date && date.iso) {
+                return bbMoment(date.iso).format('MMM Do YY');
+            }
+        };
+    }
+
+    DogPreviousHomesTileController.$inject = ['$timeout', 'bbData', 'dogId'];
+
+    angular.module('barkbaud')
+        .controller('DogPreviousHomesTileController', DogPreviousHomesTileController);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
+
     function DogSummaryTileController($timeout, bbData, bbMoment, dogId) {
         var self = this;
 
@@ -267,6 +336,17 @@
 (function () {
     'use strict';
 
+    function loginPageConfig($stateProvider) {
+        $stateProvider
+            .state('login', {
+                controller: 'LoginPageController as loginPage',
+                templateUrl: 'pages/login/loginpage.html',
+                url: '/login'
+            });
+    }
+
+    loginPageConfig.$inject = ['$stateProvider'];
+
     function LoginPageController(bbWindow, barkbaudAuthService) {
         var self = this;
 
@@ -287,6 +367,7 @@
     ];
 
     angular.module('barkbaud')
+        .config(loginPageConfig)
         .controller('LoginPageController', LoginPageController);
 }());
 
@@ -357,6 +438,13 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    </div>\n' +
         '  </section>\n' +
         '</div>\n' +
+        '');
+    $templateCache.put('pages/dogs/currenthome/currenthometile.html',
+        '<bb-tile bb-tile-header="\'Current home\'">\n' +
+        '    <div bb-tile-section>\n' +
+        '        {{dogCurrentHomeTile.currentHome.constituent.name}}\n' +
+        '    </div>\n' +
+        '</bb-tile>\n' +
         '');
     $templateCache.put('pages/dogs/dogpage.html',
         '<div class="bb-page-header">\n' +
@@ -435,21 +523,21 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  </div>\n' +
         '</bb-tile>\n' +
         '');
-    $templateCache.put('pages/dogs/summary/summarytile.html',
-        '<bb-tile bb-tile-header="\'Summary\'">\n' +
+    $templateCache.put('pages/dogs/previoushomes/previoushomestile.html',
+        '<bb-tile bb-tile-header="\'Previous homes\'">\n' +
         '  <div>\n' +
-        '    <div ng-show="dogSummaryTile.summary">\n' +
-        '      <div ng-switch="dogSummaryTile.summary.length || 0">\n' +
+        '    <div ng-show="dogSummaryTile.previousHomes">\n' +
+        '      <div ng-switch="dogSummaryTile.previousHomes.length || 0">\n' +
         '        <div bb-tile-section ng-switch-when="0" class="bb-no-records">\n' +
-        '          This dog has no summary.\n' +
+        '          This dog has no previous homes.\n' +
         '        </div>\n' +
         '        <div ng-switch-default class="bb-repeater">\n' +
-        '          <div ng-repeat="summary in dogSummaryTile.summary" class="bb-repeater-item">\n' +
-        '            <h4 class="bb-repeater-item-title">{{ summary.constituent.name }}</h4>\n' +
+        '          <div ng-repeat="previousHome in dogSummaryTile.previousHomes" class="bb-repeater-item">\n' +
+        '            <h4 class="bb-repeater-item-title">{{ previousHome.constituent.name }}</h4>\n' +
         '            <h5>\n' +
-        '              {{ dogSummaryTile.getSummaryDate(summary.fromDate) }}\n' +
-        '              <span ng-show="summary.toDate">\n' +
-        '                to {{ dogSummaryTile.getSummaryDate(summary.toDate) }}\n' +
+        '              {{ dogSummaryTile.getSummaryDate(previousHome.fromDate) }}\n' +
+        '              <span ng-show="previousHome.toDate">\n' +
+        '                to {{ dogSummaryTile.getSummaryDate(previousHome.toDate) }}\n' +
         '              </span>\n' +
         '            </h5>\n' +
         '          </div>\n' +

@@ -5,6 +5,7 @@ var apiDogs,
     apiNxt,
     app,
     auth,
+    bodyParser,
     config,
     cors,
     express,
@@ -27,6 +28,7 @@ config = {
 auth = require('./server/auth.js')(config);
 apiNxt = require('./server/api-nxt.js')(config, auth);
 apiDogs = require('./server/api-dogs.js')(config, apiNxt);
+bodyParser = require('body-parser');
 cors = require('cors');
 express = require('express');
 session = require('express-session');
@@ -34,6 +36,7 @@ pets = require('./server/pets.js')(config);
 
 // Create our application and register its dependencies
 app = express();
+app.use(bodyParser.json());
 app.use(cors({
     credentials: true,
     origin: [
@@ -54,15 +57,15 @@ app.get('/auth/login', auth.getLogin);
 app.get('/auth/callback', auth.getCallback);
 app.get('/auth/logout', auth.getLogout);
 
-// Register our Dogs API routes
+// Register our Dogs API GET routes
 app.get('/api/dogs', apiDogs.getDogs);
 app.get('/api/dogs/:dogId', apiDogs.getDog);
-app.get('/api/dogs/:dogId/photo', apiDogs.getDogPhoto);
-app.get('/api/dogs/:dogId/summary', apiDogs.getDogSummary);
-app.get('/api/dogs/:dogId/notes', apiDogs.getDogNotes);
+app.get('/api/dogs/:dogId/notes', apiDogs.getNotes);
+app.get('/api/dogs/:dogId/currenthome', apiDogs.getCurrentHome);
+app.get('/api/dogs/:dogId/previoushomes', apiDogs.getPreviousHomes);
 
-// Register our NXT API routes
-//app.get('/api*', apiNxt.getProxy);
+// Register our Dogs API POST routes
+app.post('/api/dogs/:dogId/notes', apiDogs.postNotes);
 
 // Register our pet API routes
 app.get('/pets/random', pets.getRandom);
