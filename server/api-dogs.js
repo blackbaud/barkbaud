@@ -290,7 +290,7 @@ module.exports = function (config, apiNxt) {
     return {
         getDogs: getDogs,
         getDog: getDog,
-        getDogNotes: getNotes,
+        getNotes: getNotes,
         getCurrentHome: getCurrentHome,
         getPreviousHomes: getPreviousHomes,
         postNotes: postNotes
