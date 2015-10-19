@@ -187,8 +187,14 @@ module.exports = function (config, apiNxt) {
                         }
 
                         // Find the constituent information for each of our owner in this dogs owner history
-                        for (i; i < j; i++) {
-                            buildConstituent(i);
+                        if (j === 0) {
+                            response.json({
+                                data: []
+                            });
+                        } else {
+                            for (i; i < j; i++) {
+                                buildConstituent(i);
+                            }
                         }
 
                     },
