@@ -6,33 +6,25 @@ var apiDogs,
     app,
     auth,
     bodyParser,
-    config,
     cors,
     express,
-    pets,
+    fs,
+    http,
+    https,
+    httpsOptions,
     session;
 
-// Application configuration
-config = {
-    AUTH_CLIENT_ID: process.env.AUTH_CLIENT_ID || '<Your-Client-Id>',
-    AUTH_CLIENT_SECRET: process.env.AUTH_CLIENT_SECRET || '<Your-Client-Secret>',
-    AUTH_SUBSCRIPTION_KEY: process.env.AUTH_SUBSCRIPTION_KEY || '<Your-Subscription-Key>',
-    AUTH_REDIRECT_URI: process.env.AUTH_REDIRECT_URI || '<Your-Redirect-Uri>',
-    PARSE_APP_ID: process.env.PARSE_APP_ID || '<Your-Parse-App-Id>',
-    PARSE_JS_KEY: process.env.PARSE_JS_KEY || '<Your-Parse-JS-Key>',
-    PETS_KEY: process.env.PETS_KEY || '<Your-PetFinder-Developer-Key>',
-    PORT: process.env.PORT || 5000
-};
-
 // Application dependencies
-auth = require('./server/auth.js')(config);
-apiNxt = require('./server/api-nxt.js')(config, auth);
-apiDogs = require('./server/api-dogs.js')(config, apiNxt);
+auth = require('./server/auth.js')();
+apiNxt = require('./server/api-nxt.js')(auth);
+apiDogs = require('./server/api-dogs.js')(apiNxt);
 bodyParser = require('body-parser');
 cors = require('cors');
 express = require('express');
+fs = require('fs');
+http = require('http');
+https = require('https');
 session = require('express-session');
-pets = require('./server/pets.js')(config);
 
 // Create our application and register its dependencies
 app = express();
@@ -67,13 +59,21 @@ app.get('/api/dogs/:dogId/previoushomes', apiDogs.getPreviousHomes);
 // Register our Dogs API POST routes
 app.post('/api/dogs/:dogId/notes', apiDogs.postNotes);
 
-// Register our pet API routes
-app.get('/pets/random', pets.getRandom);
-
 // Register our UI routes
 app.use('/', express.static(__dirname + '/ui'));
 
-// Create our server
-app.listen(config.PORT, function () {
-    console.log('Node app is running on port', config.PORT);
-});
+function onListen() {
+    console.log('Barkbaud app running for %s on port %s', process.env.DEPLOY_REMOTE, process.env.DEPLOY_PORT);
+}
+
+// Create our server.
+// For production we don't need to worry about using https as Heroku handles this for us.
+if (process.env.DEPLOY_REMOTE === 'production') {
+    http.createServer(app).listen(process.env.DEPLOY_PORT, onListen);
+} else {
+    httpsOptions = {
+        key: fs.readFileSync('sslcerts/server.key', 'utf8'),
+        cert: fs.readFileSync('sslcerts/server.crt', 'utf8')
+    };
+    https.createServer(httpsOptions, app).listen(process.env.DEPLOY_PORT, onListen);
+}

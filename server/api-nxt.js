@@ -4,12 +4,10 @@
 /**
  * Class which lightly wraps a few of RENXT API endpoints.
  * @constructor
- * @param {Object} config
- * @param {string} config.AUTH_SUBSCRIPTION_KEY
  * @returns {Object}
  *  {@link getConstituent}
  */
-module.exports = function (config, auth) {
+module.exports = function (auth) {
 
     var promise = require('request-promise');
 
@@ -38,7 +36,7 @@ module.exports = function (config, auth) {
                     body: body,
                     url: 'https://api.nxt.blackbaud-dev.com/' + endpoint,
                     headers: {
-                        'bb-api-subscription-key': config.AUTH_SUBSCRIPTION_KEY,
+                        'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
                         'Authorization': 'Bearer ' + request.session.ticket.access_token
                     }
                 };

@@ -30,15 +30,11 @@ Feel free to checkout the live demo of our application, or if you wish to run th
 ### Setup
 
 0. Fork or clone this repository.
-0. Create the following environment variables or in `index.js` update the configuration object for:
-  - `AUTH_CLIENT_ID`
-  - `AUTH_CLIENT_SECRET`
-  - `AUTH_SUBSCRIPTION_KEY`
-  - `AUTH_REDIRECT_URI`
-  - `PARSE_APP_ID`
-  - `PARSE_JS_KEY`
-  - `PETS_KEY`
-0. `npm install`
-0. `bower install`
-0. `npm build`
+0. Prepare environment by:
+  0. Copy `.env.sample` to `.env`
+  0. Update with the necessary values
+  0. Run `source .env`
+0. Run `npm install`
+0. Run `bower install`
+0. Run `npm build`
 0. Deploy this folder to your server.

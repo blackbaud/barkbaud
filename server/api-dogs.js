@@ -4,19 +4,17 @@
 /**
  * Class which lightly wraps the Parse.com objects.
  * @constructor
- * @param {Object} config
- * @param {string} config.PARSE_APP_ID
- * @param {string} config.PARSE_JS_KEY
+ * @param {Object} apiNxt
  * @returns {Object}
  *  {@link getApi}
  */
-module.exports = function (config, apiNxt) {
+module.exports = function (apiNxt) {
 
     var https = require('request'),
         Parse = require('parse/node').Parse;
 
     // Initialize our connection to parse.
-    Parse.initialize(config.PARSE_APP_ID, config.PARSE_JS_KEY);
+    Parse.initialize(process.env.PARSE_APP_ID, process.env.PARSE_JS_KEY);
 
     /**
      * Gets an array of all dogs sorted ascending by name.
@@ -116,28 +114,25 @@ module.exports = function (config, apiNxt) {
      * @returns {Object}
      */
     function getCurrentHome(request, response) {
-        var queryDog = new Parse.Query('Dog'),
-            queryOwnerHistory = new Parse.Query('DogOwnerHistory');
+        var query = new Parse.Query('Dog'),
+            owner;
 
-        // Get the requested dog
-        queryDog.get(request.params.dogId, {
+        query.include('currentOwner');
+        query.get(request.params.dogId, {
             success: function (dog) {
-                queryOwnerHistory.get(dog.get('currentOwner').id, {
-                    success: function (owner) {
-                        apiNxt.getConstituent(request, owner.get('constituentId'), function (constituent) {
-                            owner.set('constituent', constituent);
-                            response.json({
-                                data: owner
-                            });
-                        });
-                    },
-                    error: function (history, error) {
+                owner = dog.get('currentOwner');
+                if (!owner) {
+                    response.json({
+                        data: {}
+                    });
+                } else {
+                    apiNxt.getConstituent(request, owner.get('constituentId'), function (constituent) {
+                        owner.set('constituent', constituent);
                         response.json({
-                            error: error,
-                            data: history
+                            data: owner
                         });
-                    }
-                });
+                    });
+                }
             },
             error: function (dog, error) {
                 response.json({
