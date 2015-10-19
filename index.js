@@ -63,17 +63,17 @@ app.post('/api/dogs/:dogId/notes', apiDogs.postNotes);
 app.use('/', express.static(__dirname + '/ui'));
 
 function onListen() {
-    console.log('Barkbaud app running for %s on port %s', process.env.DEPLOY_REMOTE, process.env.DEPLOY_PORT);
+    console.log('Barkbaud app running for %s on port %s', process.env.DEPLOY_REMOTE, process.env.PORT);
 }
 
 // Create our server.
 // For production we don't need to worry about using https as Heroku handles this for us.
 if (process.env.DEPLOY_REMOTE === 'production') {
-    http.createServer(app).listen(process.env.DEPLOY_PORT, onListen);
+    http.createServer(app).listen(process.env.PORT, onListen);
 } else {
     httpsOptions = {
         key: fs.readFileSync('sslcerts/server.key', 'utf8'),
         cert: fs.readFileSync('sslcerts/server.crt', 'utf8')
     };
-    https.createServer(httpsOptions, app).listen(process.env.DEPLOY_PORT, onListen);
+    https.createServer(httpsOptions, app).listen(process.env.PORT, onListen);
 }
