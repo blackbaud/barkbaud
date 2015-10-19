@@ -122,7 +122,7 @@ module.exports = function (config, apiNxt) {
         // Get the requested dog
         queryDog.get(request.params.dogId, {
             success: function (dog) {
-                queryOwnerHistory.get(dog.currentOwner, {
+                queryOwnerHistory.get(dog.get('currentOwner').id, {
                     success: function (owner) {
                         apiNxt.getConstituent(request, owner.get('constituentId'), function (constituent) {
                             owner.set('constituent', constituent);
