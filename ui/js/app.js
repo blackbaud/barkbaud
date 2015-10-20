@@ -20,28 +20,47 @@
 
     config.$inject = ['$locationProvider', '$urlRouterProvider', 'bbWindowConfig'];
 
-    function run(bbDataConfig, barkbaudAuthService, $rootScope, $state) {
-
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-            var redirect;
-            if (!barkbaudAuthService.authenticated) {
-                event.preventDefault();
-                redirect = $state.href(toState, toParams, { absolute: true });
-                barkbaudAuthService.modal(redirect).then(function () {
-                    return $state.go(toState.name, toParams);
-                });
-            }
-        });
+    function run(bbDataConfig, bbWait, barkbaudAuthService, $rootScope, $state) {
 
         function addBaseUrl(url) {
             return barkbaudConfig.apiUrl + url;
         }
 
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+            var redirect;
+            if (!barkbaudAuthService.authenticated) {
+                event.preventDefault();
+                $rootScope.$emit('bbBeginWait');
+
+                redirect = $state.href(toState, toParams, { absolute: true });
+                barkbaudAuthService.isAuthenticated().then(function (authenticated) {
+                    $rootScope.$emit('bbEndWait');
+                    if (authenticated) {
+                        $state.go(toState, toParams);
+                    } else {
+                        barkbaudAuthService.modal(redirect).then(function () {
+                            return $state.go(toState.name, toParams);
+                        });
+                    }
+                });
+            }
+        });
+
+        $rootScope.$on('bbBeginWait', function (e, opts) {
+            e.stopPropagation();
+            bbWait.beginPageWait(opts);
+        });
+
+        $rootScope.$on('bbEndWait', function (e, opts) {
+            e.stopPropagation();
+            bbWait.endPageWait(opts);
+        });
+
         bbDataConfig.dataUrlFilter = addBaseUrl;
         bbDataConfig.resourceUrlFilter = addBaseUrl;
     }
 
-    run.$inject = ['bbDataConfig', 'barkbaudAuthService', '$rootScope', '$state'];
+    run.$inject = ['bbDataConfig', 'bbWait', 'barkbaudAuthService', '$rootScope', '$state'];
 
     function MainController(barkbaudAuthService) {
         var self = this;
@@ -99,19 +118,25 @@
 
     dashboardPageConfig.$inject = ['$stateProvider'];
 
-    function DashboardPageController($stateParams, bbData, bbWindow) {
+    function DashboardPageController($scope, $stateParams, bbData, bbWindow) {
         var self = this;
 
+        $scope.$emit('bbBeginWait');
         bbWindow.setWindowTitle('Dashboard');
-
         bbData.load({
             data: 'api/dogs'
         }).then(function (result) {
             self.dogs = result.data.data;
+            $scope.$emit('bbEndWait');
         });
     }
 
-    DashboardPageController.$inject = ['$stateParams', 'bbData', 'bbWindow'];
+    DashboardPageController.$inject = [
+        '$scope',
+        '$stateParams',
+        'bbData',
+        'bbWindow'
+    ];
 
     angular.module('barkbaud')
         .config(dashboardPageConfig)
@@ -178,7 +203,7 @@
 
     dogPageConfig.$inject = ['$stateProvider'];
 
-    function DogPageController($stateParams, bbData, bbWindow, dogId) {
+    function DogPageController($scope, $stateParams, bbData, bbWindow, dogId) {
         var self = this;
 
         self.tiles = [
@@ -219,15 +244,23 @@
             ]
         };
 
+        $scope.$emit('bbBeginWait');
         bbData.load({
             data: 'api/dogs/' + encodeURIComponent(dogId)
         }).then(function (result) {
             self.dog = result.data.data;
             bbWindow.setWindowTitle(self.dog.name);
+            $scope.$emit('bbEndWait');
         });
     }
 
-    DogPageController.$inject = ['$stateParams', 'bbData', 'bbWindow', 'dogId'];
+    DogPageController.$inject = [
+        '$scope',
+        '$stateParams',
+        'bbData',
+        'bbWindow',
+        'dogId'
+    ];
 
     angular.module('barkbaud')
         .config(dogPageConfig)
@@ -404,8 +437,6 @@
             ].join('');
         }
 
-        service.authenticated = false;
-
         service.isAuthenticated = function () {
             var deferred = $q.defer();
             bbData.load({
@@ -472,7 +503,9 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    <div class="panel-body">\n' +
         '      <div class="row">\n' +
         '          <div class="col-md-3 col-lg-2">\n' +
+        '            <a ui-sref="dog.views({dogId: dog.objectId})">\n' +
         '              <bark-photo bark-photo-url="dog.image.url"></bark-photo>\n' +
+        '            </a>\n' +
         '          </div>\n' +
         '          <div class="col-md-9 col-lg-10">\n' +
         '              <h1>\n' +
@@ -596,7 +629,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '');
     $templateCache.put('pages/login/loginpage.html',
         '<bb-modal>\n' +
-        '  <div class="modal-form">\n' +
+        '  <div class="modal-form modal-authorize">\n' +
         '    <bb-modal-header>Barkbaud</bb-modal-header>\n' +
         '    <div bb-modal-body>\n' +
         '      <p class="alert alert-danger" ng-if="loginPage.error" ng-switch="loginPage.error">\n' +
