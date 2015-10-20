@@ -4,8 +4,7 @@
     'use strict';
 
     var barkbaudConfig = {
-        apiUrl: 'https://localhost:5000/'
-        //apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
+        apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
     };
 
     function config($locationProvider, $urlRouterProvider, bbWindowConfig) {
@@ -24,9 +23,7 @@
     function run(bbDataConfig, barkbaudAuthService, $rootScope, $state) {
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-            console.log('state change');
             if (!barkbaudAuthService.authenticated) {
-                console.log('user is unathenticated');
                 event.preventDefault();
                 barkbaudAuthService.modal().then(function () {
                     return $state.go(toState.name, toParams);
@@ -403,7 +400,6 @@
         };
 
         service.update = function () {
-            console.log('updated');
             modal.close(service.authenticated);
         };
 
