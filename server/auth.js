@@ -33,7 +33,11 @@ module.exports = function () {
         if (request.session.ticket) {
             oauth2.accessToken.create(request.session.ticket);
             if (oauth2.accessToken.expired()) {
+                console.log('BARKBAUD - Token expired');
                 oauth2.accessToken.refresh(function (error, ticket) {
+                    console.log('BARKBAUD - Token refresh request');
+                    console.log(error);
+                    console.log(ticket);
                     request.session.ticket = ticket;
                     return callback(!error);
                 });
