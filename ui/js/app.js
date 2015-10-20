@@ -792,15 +792,38 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function NoteAddController() {
+    function NoteAddController($modalInstance, bbData, dogId) {
+        var self = this;
+
+        self.note = {};
+        self.saveData = function () {
+            bbData.save({
+                url: 'api/dogs/' + dogId + '/notes',
+                data: self.note,
+                type: 'POST'
+            }).then(function (result) {
+                $modalInstance.close(result.data);
+            });
+        };
     }
+
+    NoteAddController.$inject = [
+        '$modalInstance',
+        'bbData',
+        'dogId'
+    ];
 
     function barkNoteAdd(bbModal) {
         return {
-            open: function () {
+            open: function (dogId) {
                 return bbModal.open({
                     controller: 'NoteAddController as noteAdd',
-                    templateUrl: 'pages/dogs/notes/noteadd.html'
+                    templateUrl: 'pages/dogs/notes/noteadd.html',
+                    resolve: {
+                        dogId: function () {
+                            return dogId;
+                        }
+                    }
                 });
             }
         };
@@ -834,7 +857,7 @@ angular.module('md5', []).constant('md5', (function() {
         };
 
         self.addNote = function () {
-            barkNoteAdd.open();
+            barkNoteAdd.open(dogId);
         };
     }
 
@@ -1104,34 +1127,31 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '');
     $templateCache.put('pages/dogs/notes/noteadd.html',
         '<bb-modal>\n' +
-        '  <div class="modal-form">\n' +
-        '    <bb-modal-header>Add note</bb-modal-header>\n' +
-        '    <div bb-modal-body>\n' +
-        '      <form>\n' +
+        '  <form name="noteAdd.formAdd" ng-submit="noteAdd.saveData()">\n' +
+        '    <div class="modal-form">\n' +
+        '      <bb-modal-header>Add note</bb-modal-header>\n' +
+        '      <div bb-modal-body>\n' +
         '        <div class="form-group">\n' +
-        '          <label class="control-label">Date</label>\n' +
-        '          <bb-datepicker type="text" ng-model="noteAdd.date"></bb-date-picker>\n' +
+        '          <label class="control-label">Title</label>\n' +
+        '          <input type="text" class="form-control" ng-model="noteAdd.note.title" />\n' +
         '        </div>\n' +
         '        <div class="form-group">\n' +
-        '          <label class="control-label">Note</label>\n' +
-        '          <input type="text" class="form-control" ng-model="noteAdd.title" />\n' +
-        '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '          <textarea class="form-control" ng-model="noteAdd.description"></textarea>\n' +
+        '          <label class="control-label">Description</label>\n' +
+        '          <textarea class="form-control" ng-model="noteAdd.note.description"></textarea>\n' +
         '        </div>\n' +
         '        <div class="form-group">\n' +
         '          <label class="control-label">\n' +
-        '            <input type="checkbox" bb-check ng-model="noteAdd.addConstituentNote" />\n' +
+        '            <input type="checkbox" bb-check ng-model="noteAdd.note.addConstituentNote" />\n' +
         '            Also add this note to the dog\'s current owner\n' +
         '          </label>\n' +
         '        </div>\n' +
-        '      </form>\n' +
+        '      </div>\n' +
+        '      <bb-modal-footer>\n' +
+        '        <bb-modal-footer-button-primary></bb-modal-footer-button-primary>\n' +
+        '        <bb-modal-footer-button-cancel></bb-modal-footer-button-cancel>\n' +
+        '      </bb-modal-footer>\n' +
         '    </div>\n' +
-        '    <bb-modal-footer>\n' +
-        '      <bb-modal-footer-button-primary></bb-modal-footer-button-primary>\n' +
-        '      <bb-modal-footer-button-cancel></bb-modal-footer-button-cancel>\n' +
-        '    </bb-modal-footer>\n' +
-        '  </div>\n' +
+        '  </form>\n' +
         '</bb-modal>\n' +
         '');
     $templateCache.put('pages/dogs/notes/notestile.html',

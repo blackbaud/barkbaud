@@ -40,7 +40,9 @@ module.exports = function (auth) {
                         'Authorization': 'Bearer ' + request.session.ticket.access_token
                     }
                 };
-                promise(options).then(callback);
+                promise(options).then(callback).catch(function (err) {
+                    console.log(err);
+                });
             }
         });
     }
