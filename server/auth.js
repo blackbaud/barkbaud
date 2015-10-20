@@ -84,17 +84,22 @@ module.exports = function () {
      * @param {Object} response
      */
     function getCallback(request, response) {
-        var options,
+        var error,
+            options,
             redirect;
 
         if (request.query.error) {
-            response.redirect('/#?error=' + request.query.error);
+            error = request.query.error;
         } else if (!request.query.code) {
-            response.send('Invalid response.  Code is required.');
+            error = 'auth_missing_code';
         } else if (!request.query.state) {
-            response.send('Invalid response.  State is required.');
+            error = 'auth_missing_state';
         } else if (request.session.state !== request.query.state) {
-            response.send('Invalid response.  States do not match.');
+            error = 'auth_invalid_state';
+        }
+
+        if (error) {
+            response.redirect('/#?error=' + error);
         } else {
             options = {
                 code: request.query.code,
