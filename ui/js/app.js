@@ -4,13 +4,17 @@
     'use strict';
 
     var barkbaudConfig = {
-        apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
+        apiUrl: 'https://localhost:5000/'
+        //apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
     };
 
     function config($locationProvider, $urlRouterProvider, bbWindowConfig) {
         $locationProvider.html5Mode(false);
 
-        $urlRouterProvider.otherwise('/dashboard');
+        $urlRouterProvider.otherwise(function ($injector) {
+            var $state = $injector.get('$state');
+            $state.go('dashboard');
+        });
 
         bbWindowConfig.productName = 'Barkbaud';
     }
@@ -19,10 +23,14 @@
 
     function run(bbDataConfig, barkbaudAuthService, $rootScope, $state) {
 
-        $rootScope.$on('$stateChangeStart', function (event, toState) {
-            if (!barkbaudAuthService.authenticated && toState.name !== 'login') {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+            console.log('state change');
+            if (!barkbaudAuthService.authenticated) {
+                console.log('user is unathenticated');
                 event.preventDefault();
-                $state.go('login');
+                barkbaudAuthService.modal().then(function () {
+                    return $state.go(toState.name, toParams);
+                });
             }
         });
 
@@ -79,7 +87,7 @@
             .state('dashboard', {
                 controller: 'DashboardPageController as dashboardPage',
                 templateUrl: 'pages/dashboard/dashboardpage.html',
-                url: 'dashboard'
+                url: '/dashboard'
             });
     }
 
@@ -336,38 +344,31 @@
 (function () {
     'use strict';
 
-    function loginPageConfig($stateProvider) {
-        $stateProvider
-            .state('login', {
-                controller: 'LoginPageController as loginPage',
-                templateUrl: 'pages/login/loginpage.html',
-                url: '/login'
-            });
-    }
-
-    loginPageConfig.$inject = ['$stateProvider'];
-
-    function LoginPageController(bbWindow, barkbaudAuthService) {
+    function LoginPageController(bbWait, bbWindow, barkbaudAuthService) {
         var self = this;
 
-        self.isAuthenticated = false;
         self.login = barkbaudAuthService.login;
         self.logout = barkbaudAuthService.logout;
 
-        barkbaudAuthService.isAuthenticated().then(function (r) {
-            self.isAuthenticated = r;
+        bbWindow.setWindowTitle('Login');
+
+        self.waitingForAuth = true;
+        barkbaudAuthService.isAuthenticated().then(function (authenticated) {
+            self.waitingForAuth = false;
+            if (authenticated) {
+                barkbaudAuthService.update(authenticated);
+            }
         });
 
-        bbWindow.setWindowTitle('Login');
     }
 
     LoginPageController.$inject = [
+        'bbWait',
         'bbWindow',
         'barkbaudAuthService'
     ];
 
     angular.module('barkbaud')
-        .config(loginPageConfig)
         .controller('LoginPageController', LoginPageController);
 }());
 
@@ -376,8 +377,11 @@
 (function () {
     'use strict';
 
-    function barkbaudAuthService(barkbaudConfig, bbData, $q, $window) {
-        var service = {};
+    function barkbaudAuthService(barkbaudConfig, bbData, bbModal, $q, $window) {
+        var modal,
+            service = {};
+
+        service.authenticated = false;
 
         service.isAuthenticated = function () {
             var deferred = $q.defer();
@@ -398,13 +402,29 @@
             $window.location.href = barkbaudConfig.apiUrl + 'auth/logout';
         };
 
-        service.isAuthenticated();
+        service.update = function () {
+            console.log('updated');
+            modal.close(service.authenticated);
+        };
+
+        service.modal = function () {
+            if (!modal) {
+                modal = bbModal.open({
+                    controller: 'LoginPageController as loginPage',
+                    templateUrl: 'pages/login/loginpage.html'
+                });
+            }
+
+            return modal.result;
+        };
+
         return service;
     }
 
     barkbaudAuthService.$inject = [
         'barkbaudConfig',
         'bbData',
+        'bbModal',
         '$q',
         '$window'
     ];
@@ -548,23 +568,26 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '</bb-tile>\n' +
         '');
     $templateCache.put('pages/login/loginpage.html',
-        '<div class="container-fluid">\n' +
-        '  <h1>Login</h1>\n' +
-        '  <div class="panel">\n' +
-        '    <div class="panel-body">\n' +
-        '      <div ng-if="loginPage.isAuthenticated">\n' +
-        '        <button type="button" class="btn btn-primary" ng-click="loginPage.logout()">\n' +
-        '          Logout\n' +
-        '        </button>\n' +
-        '      </div>\n' +
-        '      <div ng-if="!loginPage.isAuthenticated">\n' +
-        '        <button type="button" class="btn btn-primary" ng-click="loginPage.login()">\n' +
-        '          Login with Blackbaud\n' +
-        '        </button>\n' +
-        '      <div>\n' +
+        '<bb-modal>\n' +
+        '  <div class="modal-form">\n' +
+        '    <bb-modal-header>Barkbaud</bb-modal-header>\n' +
+        '    <div bb-modal-body>\n' +
+        '      <p>Welcome to the Barkbaud Sample App.  This demo was built to showcase the Blackbaud NXT API and Blackbaud Sky UX.</p>\n' +
+        '      <p>Click the Login button below to view the demo, or click the Learn More button below to visit the GitHub repo.</p>\n' +
         '    </div>\n' +
+        '    <bb-modal-footer>\n' +
+        '      <div ng-show="loginPage.waitingForAuth">\n' +
+        '        <i class="fa fa-2x fa-spin fa-spinner" ></i> Checking authentication...\n' +
+        '      </div>\n' +
+        '      <div ng-hide="loginPage.waitingForAuth">\n' +
+        '        <bb-modal-footer-button-primary  ng-click="loginPage.login()">\n' +
+        '          Login with Blackbaud\n' +
+        '        </bb-modal-footer-button-primary>\n' +
+        '        <bb-modal-footer-button>Learn More</bb-modal-footer-button>\n' +
+        '      </div>\n' +
+        '    </bb-modal-footer>\n' +
         '  </div>\n' +
-        '</div>\n' +
+        '</bb-modal>\n' +
         '');
 }]);
 
