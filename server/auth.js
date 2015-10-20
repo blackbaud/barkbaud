@@ -88,7 +88,7 @@ module.exports = function () {
             redirect;
 
         if (request.query.error) {
-            response.send(request.query.error);
+            response.redirect('/?error=' + request.query.error);
         } else if (!request.query.code) {
             response.send('Invalid response.  Code is required.');
         } else if (!request.query.state) {
