@@ -23,9 +23,11 @@
     function run(bbDataConfig, barkbaudAuthService, $rootScope, $state) {
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+            var redirect;
             if (!barkbaudAuthService.authenticated) {
                 event.preventDefault();
-                barkbaudAuthService.modal($state.href(toState, toParams)).then(function () {
+                redirect = $state.href(toState, toParams, { absolute: true });
+                barkbaudAuthService.modal(redirect).then(function () {
                     return $state.go(toState.name, toParams);
                 });
             }
@@ -388,6 +390,16 @@
         var modal,
             service = {};
 
+        function go(action, redirect) {
+            $window.location.href = [
+                barkbaudConfig.apiUrl,
+                'auth/',
+                action,
+                '?redirect=',
+                encodeURIComponent(redirect)
+            ].join('');
+        }
+
         service.authenticated = false;
 
         service.isAuthenticated = function () {
@@ -402,21 +414,11 @@
         };
 
         service.login = function (redirect) {
-            $window.location.href = [
-                barkbaudConfig.apiUrl,
-                'auth/login',
-                '?redirect=',
-                redirect
-            ].join('');
+            go('login', redirect);
         };
 
         service.logout = function (redirect) {
-            $window.location.href = [
-                barkbaudConfig.apiUrl,
-                'auth/logout',
-                '?redirect=',
-                redirect
-            ].join('');
+            go('logout', redirect);
         };
 
         service.update = function () {
