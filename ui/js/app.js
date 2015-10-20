@@ -154,7 +154,8 @@
         bbData.load({
             data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
         }).then(function (result) {
-            self.currentHome = result.data;
+            console.log(result.data);
+            self.currentHome = result.data.data;
         });
     }
 
@@ -521,9 +522,26 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '');
     $templateCache.put('pages/dogs/currenthome/currenthometile.html',
         '<bb-tile bb-tile-header="\'Current home\'">\n' +
-        '    <div bb-tile-section>\n' +
-        '        {{dogCurrentHomeTile.currentHome.constituent.name}}\n' +
+        '  <div ng-show="dogCurrentHomeTile.currentHome">\n' +
+        '    <div ng-switch="dogCurrentHomeTile.currentHome.constituentId || 0">\n' +
+        '      <div bb-tile-section ng-switch-when="0" class="bb-no-records">\n' +
+        '        This dog has no current home.\n' +
+        '      </div>\n' +
+        '      <div ng-switch-default>\n' +
+        '        <div ng-switch="dogCurrentHomeTile.currentHome.constituent.error || \'\'">\n' +
+        '          <div bb-tile-section ng-switch-when="\'\'" class="bb-no-records">\n' +
+        '            Error reading current home.\n' +
+        '          </div>\n' +
+        '          <div bb-tile-section ng-switch-default>\n' +
+        '            <h4>\n' +
+        '              {{:: dogCurrentHomeTile.currentHome.constituent.first }}\n' +
+        '              {{:: dogCurrentHomeTile.currentHome.constituent.last }}\n' +
+        '            </h4>\n' +
+        '          </div>\n' +
+        '        </div>\n' +
+        '      </div>\n' +
         '    </div>\n' +
+        '  </div>\n' +
         '</bb-tile>\n' +
         '');
     $templateCache.put('pages/dogs/dogpage.html',
