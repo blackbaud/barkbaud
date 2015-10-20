@@ -350,11 +350,10 @@
 (function () {
     'use strict';
 
-    function LoginPageController($location, bbWait, bbWindow, barkbaudAuthService, barkbaudRedirect) {
+    function LoginPageController($location, $window, bbWait, bbWindow, barkbaudAuthService, barkbaudRedirect) {
         var self = this;
 
         self.error = $location.search().error;
-
         self.logout = barkbaudAuthService.logout;
 
         self.login = function () {
@@ -375,6 +374,7 @@
 
     LoginPageController.$inject = [
         '$location',
+        '$window',
         'bbWait',
         'bbWindow',
         'barkbaudAuthService',
@@ -599,8 +599,13 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  <div class="modal-form">\n' +
         '    <bb-modal-header>Barkbaud</bb-modal-header>\n' +
         '    <div bb-modal-body>\n' +
-        '      <p class="alert alert-danger" ng-if="loginPage.error">\n' +
-        '        {{:: loginPage.error }}\n' +
+        '      <p class="alert alert-danger" ng-if="loginPage.error" ng-switch="loginPage.error">\n' +
+        '        <span ng-switch-when="access_denied">\n' +
+        '          Barkbaud requires access to RENXT.\n' +
+        '        </span>\n' +
+        '        <span ng-switch-default>\n' +
+        '          An unknown error has occurred.\n' +
+        '        </span>\n' +
         '      </p>\n' +
         '      <p>Welcome to the Barkbaud Sample App.  This demo was built to showcase the Blackbaud NXT API and Blackbaud Sky UX.</p>\n' +
         '      <p>Click the Login button below to view the demo, or click the Learn More button below to visit the GitHub repo.</p>\n' +
@@ -611,9 +616,11 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '      </div>\n' +
         '      <div ng-hide="loginPage.waitingForAuth">\n' +
         '        <bb-modal-footer-button-primary  ng-click="loginPage.login()">\n' +
-        '          Login with Blackbaud\n' +
+        '          Authorize Barkbaud\n' +
         '        </bb-modal-footer-button-primary>\n' +
-        '        <bb-modal-footer-button>Learn More</bb-modal-footer-button>\n' +
+        '        <a href="https://github.com/blackbaud/barkbaud" target="_blank" class="btn bb-btn-secondary">\n' +
+        '          Learn More\n' +
+        '        </a>\n' +
         '      </div>\n' +
         '    </bb-modal-footer>\n' +
         '  </div>\n' +
