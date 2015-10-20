@@ -67,6 +67,7 @@ app.get('/auth/logout', auth.getLogout);
 app.get('/api/dogs', requireSession, apiDogs.getDogs);
 app.get('/api/dogs/:dogId', requireSession, apiDogs.getDog);
 app.get('/api/dogs/:dogId/notes', requireSession, apiDogs.getNotes);
+app.get('/api/dogs/:dogId/photo', apiDogs.getPhoto);
 app.get('/api/dogs/:dogId/currenthome', requireSession, apiDogs.getCurrentHome);
 app.get('/api/dogs/:dogId/previoushomes', requireSession, apiDogs.getPreviousHomes);
 app.post('/api/dogs/:dogId/notes', requireSession, apiDogs.postNotes);
