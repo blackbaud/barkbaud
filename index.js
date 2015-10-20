@@ -26,6 +26,20 @@ http = require('http');
 https = require('https');
 session = require('express-session');
 
+function requireSession(request, response, next) {
+    auth.validate(request, function (valid) {
+        if (valid) {
+            next();
+        } else {
+            response.sendStatus(401);
+        }
+    });
+}
+
+function onListen() {
+    console.log('Barkbaud app running for %s on port %s', process.env.NODE_ENV, process.env.PORT);
+}
+
 // Create our application and register its dependencies
 app = express();
 app.use(bodyParser.json());
@@ -49,26 +63,20 @@ app.get('/auth/login', auth.getLogin);
 app.get('/auth/callback', auth.getCallback);
 app.get('/auth/logout', auth.getLogout);
 
-// Register our Dogs API GET routes
-app.get('/api/dogs', apiDogs.getDogs);
-app.get('/api/dogs/:dogId', apiDogs.getDog);
-app.get('/api/dogs/:dogId/notes', apiDogs.getNotes);
-app.get('/api/dogs/:dogId/currenthome', apiDogs.getCurrentHome);
-app.get('/api/dogs/:dogId/previoushomes', apiDogs.getPreviousHomes);
+// Register our Dogs API routes
+app.get('/api/dogs', requireSession, apiDogs.getDogs);
+app.get('/api/dogs/:dogId', requireSession, apiDogs.getDog);
+app.get('/api/dogs/:dogId/notes', requireSession, apiDogs.getNotes);
+app.get('/api/dogs/:dogId/currenthome', requireSession, apiDogs.getCurrentHome);
+app.get('/api/dogs/:dogId/previoushomes', requireSession, apiDogs.getPreviousHomes);
+app.post('/api/dogs/:dogId/notes', requireSession, apiDogs.postNotes);
 
-// Register our Dogs API POST routes
-app.post('/api/dogs/:dogId/notes', apiDogs.postNotes);
-
-// Register our UI routes
+// Register our front-end UI routes
 app.use('/', express.static(__dirname + '/ui'));
-
-function onListen() {
-    console.log('Barkbaud app running for %s on port %s', process.env.DEPLOY_REMOTE, process.env.PORT);
-}
 
 // Create our server.
 // For production we don't need to worry about using https as Heroku handles this for us.
-if (process.env.DEPLOY_REMOTE === 'production') {
+if (process.env.NODE_ENV === 'production') {
     http.createServer(app).listen(process.env.PORT, onListen);
 } else {
     httpsOptions = {
