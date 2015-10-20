@@ -1,2 +1,2 @@
-.bark-dog-bio{white-space:pre-wrap}.bark-dog-photo{height:150px;width:150px;background-position:50%;margin-top:10px}.bark-dog-photo{background-size:cover}a:hover .bark-dog-photo,a:hover .bark-dog-photo{border:solid 4px #1c84c6;transition:border-width 0.2s ease-in-out}.modal-authorize .close{display:none}
+.bark-dog-bio{white-space:pre-wrap}.bark-photo{height:150px;width:150px;background-position:50%;background-size:cover;margin-top:10px}.bark-photo.bark-photo-small{height:100px;width:100px}.bark-home-address{white-space:pre-wrap}a:hover .bark-dog-photo,a:hover .bark-dog-photo{border:solid 4px #1c84c6;transition:border-width 0.2s ease-in-out}.modal-authorize .close{display:none}
 /*# sourceMappingURL=app.css.map */
