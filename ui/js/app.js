@@ -25,7 +25,7 @@
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
             if (!barkbaudAuthService.authenticated) {
                 event.preventDefault();
-                barkbaudAuthService.modal().then(function () {
+                barkbaudAuthService.modal($state.href(toState, toParams)).then(function () {
                     return $state.go(toState.name, toParams);
                 });
             }
@@ -41,11 +41,18 @@
 
     run.$inject = ['bbDataConfig', 'barkbaudAuthService', '$rootScope', '$state'];
 
+    function MainController(barkbaudAuthService) {
+        var self = this;
+        self.logout = barkbaudAuthService.logout;
+    }
+
+    MainController.$inject = ['barkbaudAuthService'];
+
     angular.module('barkbaud', ['sky', 'ui.bootstrap', 'ui.router', 'ngAnimate', 'barkbaud.templates'])
         .constant('barkbaudConfig', barkbaudConfig)
         .config(config)
         .run(run)
-        .controller('MainController', angular.noop);
+        .controller('MainController', MainController);
 }());
 
 /*global angular */
@@ -341,11 +348,13 @@
 (function () {
     'use strict';
 
-    function LoginPageController(bbWait, bbWindow, barkbaudAuthService) {
+    function LoginPageController(bbWait, bbWindow, barkbaudAuthService, barkbaudRedirect) {
         var self = this;
 
-        self.login = barkbaudAuthService.login;
         self.logout = barkbaudAuthService.logout;
+        self.login = function () {
+            barkbaudAuthService.login(barkbaudRedirect);
+        };
 
         bbWindow.setWindowTitle('Login');
 
@@ -362,7 +371,8 @@
     LoginPageController.$inject = [
         'bbWait',
         'bbWindow',
-        'barkbaudAuthService'
+        'barkbaudAuthService',
+        'barkbaudRedirect'
     ];
 
     angular.module('barkbaud')
@@ -391,23 +401,38 @@
             return deferred.promise;
         };
 
-        service.login = function () {
-            $window.location.href = barkbaudConfig.apiUrl + 'auth/login';
+        service.login = function (redirect) {
+            $window.location.href = [
+                barkbaudConfig.apiUrl,
+                'auth/login',
+                '?redirect=',
+                redirect
+            ].join('');
         };
 
-        service.logout = function () {
-            $window.location.href = barkbaudConfig.apiUrl + 'auth/logout';
+        service.logout = function (redirect) {
+            $window.location.href = [
+                barkbaudConfig.apiUrl,
+                'auth/logout',
+                '?redirect=',
+                redirect
+            ].join('');
         };
 
         service.update = function () {
             modal.close(service.authenticated);
         };
 
-        service.modal = function () {
+        service.modal = function (redirect) {
             if (!modal) {
                 modal = bbModal.open({
                     controller: 'LoginPageController as loginPage',
-                    templateUrl: 'pages/login/loginpage.html'
+                    templateUrl: 'pages/login/loginpage.html',
+                    resolve: {
+                        barkbaudRedirect: function () {
+                            return redirect;
+                        }
+                    }
                 });
             }
 

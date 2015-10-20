@@ -9,12 +9,17 @@
   <link rel="stylesheet" type="text/css" href="css/app.css" />
 </head>
 
-<body ng-controller="MainController">
+<body ng-controller="MainController as mainController">
   <bb-navbar>
     <div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
         <li ui-sref-active="bb-navbar-active">
           <a ui-sref="dashboard">Dashboard</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a ng-click="mainController.logout()">Logout</a>
         </li>
       </ul>
     </div>
