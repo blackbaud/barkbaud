@@ -554,7 +554,7 @@ angular.module('md5', []).constant('md5', (function() {
 
     MainController.$inject = ['barkbaudAuthService'];
 
-    angular.module('barkbaud', ['sky', 'ui.bootstrap', 'ui.router', 'ngAnimate', 'barkbaud.templates', 'ui.gravatar'])
+    angular.module('barkbaud', ['sky', 'ui.select', 'ui.bootstrap', 'ui.router', 'ngAnimate', 'barkbaud.templates', 'ui.gravatar'])
         .constant('barkbaudConfig', barkbaudConfig)
         .config(config)
         .run(run)
@@ -662,14 +662,19 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function DogCurrentHomeTileController($timeout, bbData, bbMoment, barkFindHome, dogId) {
+    function DogCurrentHomeTileController($scope, bbData, bbMoment, barkFindHome, dogId) {
         var self = this;
 
         self.load = function () {
+            $scope.$emit('bbBeginWait', { nonblocking: true });
             bbData.load({
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
             }).then(function (result) {
                 self.currentHome = result.data.data;
+            }).catch(function () {
+                self.error = true;
+                console.log('ERROR');
+                $scope.$emit('bbEndWait', { nonblocking: true });
             });
         };
 
@@ -686,7 +691,13 @@ angular.module('md5', []).constant('md5', (function() {
         self.load();
     }
 
-    DogCurrentHomeTileController.$inject = ['$timeout', 'bbData', 'bbMoment', 'barkFindHome', 'dogId'];
+    DogCurrentHomeTileController.$inject = [
+        '$scope',
+        'bbData',
+        'bbMoment',
+        'barkFindHome',
+        'dogId'
+    ];
 
     angular.module('barkbaud')
         .controller('DogCurrentHomeTileController', DogCurrentHomeTileController);
@@ -833,13 +844,11 @@ angular.module('md5', []).constant('md5', (function() {
             ]
         };
 
-        $scope.$emit('bbBeginWait');
         bbData.load({
             data: 'api/dogs/' + encodeURIComponent(dogId)
         }).then(function (result) {
             self.dog = result.data.data;
             bbWindow.setWindowTitle(self.dog.name);
-            $scope.$emit('bbEndWait');
         });
     }
 
@@ -945,24 +954,33 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function DogPreviousHomesTileController($timeout, bbData, bbMoment, dogId) {
+    function DogPreviousHomesTileController($scope, bbData, bbMoment, dogId) {
         var self = this;
 
-        bbData.load({
-            data: 'api/dogs/' + encodeURIComponent(dogId) + '/previoushomes'
-        }).then(function (result) {
-            self.previousHomes = result.data.data;
-        });
+        self.load = function () {
+            $scope.$emit('bbBeginWait', { nonblocking: true });
+            bbData.load({
+                data: 'api/dogs/' + encodeURIComponent(dogId) + '/previoushomes'
+            }).then(function (result) {
+                self.previousHomes = result.data.data;
+                $scope.$emit('bbEndWait', { nonblocking: true });
+            }).catch(function () {
+                self.error = true;
+                $scope.$emit('bbEndWait', { nonblocking: true });
+            });
+        };
 
         self.getSummaryDate = function (date) {
             if (date && date.iso) {
                 return bbMoment(date.iso).format('MMM Do YY');
             }
         };
+
+        self.load();
     }
 
     DogPreviousHomesTileController.$inject = [
-        '$timeout',
+        '$scope',
         'bbData',
         'bbMoment',
         'dogId'
@@ -1178,12 +1196,15 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '                <p ng-show="dogCurrentHomeTile.currentHome.constituent.email.address">\n' +
         '                  <a ng-href="mailto:{{:: dogCurrentHomeTile.currentHome.constituent.email.address }}">{{:: dogCurrentHomeTile.currentHome.constituent.email.address }}</a>\n' +
         '                </p>\n' +
-        '              <div>\n' +
+        '              </div>\n' +
         '            </div>\n' +
         '          </div>\n' +
         '        </div>\n' +
         '      </div>\n' +
         '    </div>\n' +
+        '  </div>\n' +
+        '  <div bb-tile-section class="text-danger" ng-show="dogCurrentHomeTile.error">\n' +
+        '    Error loading current home.\n' +
         '  </div>\n' +
         '</bb-tile>\n' +
         '');
@@ -1315,6 +1336,9 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '        </div>\n' +
         '      </div>\n' +
         '    </div>\n' +
+        '  </div>\n' +
+        '  <div bb-tile-section class="text-danger" ng-show="dogPreviousHomesTile.error">\n' +
+        '    Error loading previous homes.\n' +
         '  </div>\n' +
         '</bb-tile>\n' +
         '');
