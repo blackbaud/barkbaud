@@ -12,7 +12,8 @@ var apiDogs,
     http,
     https,
     httpsOptions,
-    session;
+    session,
+    timeout;
 
 // Application dependencies
 auth = require('./server/auth.js')();
@@ -25,6 +26,7 @@ fs = require('fs');
 http = require('http');
 https = require('https');
 session = require('express-session');
+timeout = require('connect-timeout');
 
 function requireSession(request, response, next) {
     auth.validate(request, function (valid) {
@@ -56,6 +58,7 @@ app.use(session({
     saveUninitialized: true,
     secret: '+rEchas&-wub24dR'
 }));
+app.use(timeout('30s'));
 
 // Register our OAUTH2 routes
 app.get('/auth/authenticated', auth.getAuthenticated);
