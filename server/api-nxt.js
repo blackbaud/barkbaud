@@ -83,6 +83,17 @@ module.exports = function (auth) {
     }
 
     /**
+     * Searches for a constituent.
+     * @name getConstituent
+     * @param {Object} request
+     * @param {string} name Name of the constituent to search for.
+     * @param {Function} callback
+     */
+    function getConstituentSearch(request, name, callback) {
+        get(request, 'constituents/search?searchText=' + name, callback);
+    }
+
+    /**
      * Posts a note to the specified constituent
      * @name postNotes
      * @param {Object} request
@@ -96,6 +107,7 @@ module.exports = function (auth) {
     // Expose any methods from our module
     return {
         getConstituent: getConstituent,
+        getConstituentSearch: getConstituentSearch,
         postNotes: postNotes
     };
 };

@@ -662,8 +662,16 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function DogCurrentHomeTileController($timeout, bbData, bbMoment, dogId) {
+    function DogCurrentHomeTileController($timeout, bbData, bbMoment, barkFindHome, dogId) {
         var self = this;
+
+        self.load = function () {
+            bbData.load({
+                data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
+            }).then(function (result) {
+                self.currentHome = result.data.data;
+            });
+        };
 
         self.getTimeInHome = function (fromDate) {
             var fromDateMoment = bbMoment(fromDate.iso);
@@ -671,17 +679,78 @@ angular.module('md5', []).constant('md5', (function() {
             return 'since ' + fromDateMoment.format('L') + ' (' + fromDateMoment.startOf('month').fromNow(true) + ')';
         };
 
-        bbData.load({
-            data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
-        }).then(function (result) {
-            self.currentHome = result.data.data;
-        });
+        self.findHome = function () {
+            barkFindHome.open(dogId).result.then(self.load);
+        }
+
+        self.load();
     }
 
-    DogCurrentHomeTileController.$inject = ['$timeout', 'bbData', 'bbMoment', 'dogId'];
+    DogCurrentHomeTileController.$inject = ['$timeout', 'bbData', 'bbMoment', 'barkFindHome', 'dogId'];
 
     angular.module('barkbaud')
         .controller('DogCurrentHomeTileController', DogCurrentHomeTileController);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
+
+    function FindHomeController($modalInstance, bbData, uiSelect, dogId) {
+        var self = this;
+
+        self.results = [
+            {
+                name: 'Bobby'
+            },
+            {
+                name: 'Ashley'
+            }
+        ];
+
+        self.search = function () {
+            console.log('searching');
+        };
+
+        self.saveData = function () {
+            bbData.save({
+                url: 'api/dogs/' + dogId + '/notes',
+                data: self.note,
+                type: 'POST'
+            }).then(function (result) {
+                $modalInstance.close(result.data);
+            });
+        };
+    }
+
+    FindHomeController.$inject = [
+        '$modalInstance',
+        'bbData',
+        'dogId'
+    ];
+
+    function barkFindHome(bbModal) {
+        return {
+            open: function (dogId) {
+                return bbModal.open({
+                    controller: 'FindHomeController as findHome',
+                    templateUrl: 'pages/dogs/currenthome/findhome.html',
+                    resolve: {
+                        dogId: function () {
+                            return dogId;
+                        }
+                    }
+                });
+            }
+        };
+    }
+
+    barkFindHome.$inject = ['bbModal'];
+
+    angular.module('barkbaud')
+        .controller('FindHomeController', FindHomeController)
+        .factory('barkFindHome', barkFindHome);
 }());
 
 /*global angular */
@@ -876,7 +945,7 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function DogPreviousHomesTileController($timeout, bbData, dogId) {
+    function DogPreviousHomesTileController($timeout, bbData, bbMoment, dogId) {
         var self = this;
 
         bbData.load({
@@ -892,7 +961,12 @@ angular.module('md5', []).constant('md5', (function() {
         };
     }
 
-    DogPreviousHomesTileController.$inject = ['$timeout', 'bbData', 'dogId'];
+    DogPreviousHomesTileController.$inject = [
+        '$timeout',
+        'bbData',
+        'bbMoment',
+        'dogId'
+    ];
 
     angular.module('barkbaud')
         .controller('DogPreviousHomesTileController', DogPreviousHomesTileController);
@@ -1068,6 +1142,12 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '');
     $templateCache.put('pages/dogs/currenthome/currenthometile.html',
         '<bb-tile bb-tile-header="\'Current home\'">\n' +
+        '  <bb-tile-header-content ng-show="dogCurrentHomeTile.currentHome.constituentId">\n' +
+        '      <bb-tile-header-check></bb-tile-header-check>\n' +
+        '  </bb-tile-header-content>\n' +
+        '  <div class="toolbar bb-tile-toolbar">\n' +
+        '    <button type="button" class="btn bb-btn-secondary" ng-click="dogCurrentHomeTile.findHome()"><i class="fa fa-plus-circle"></i> Find Home</button>\n' +
+        '  </div>\n' +
         '  <div ng-show="dogCurrentHomeTile.currentHome">\n' +
         '    <div ng-switch="dogCurrentHomeTile.currentHome.constituentId || 0">\n' +
         '      <div bb-tile-section ng-switch-when="0" class="bb-no-records">\n' +
@@ -1106,6 +1186,30 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    </div>\n' +
         '  </div>\n' +
         '</bb-tile>\n' +
+        '');
+    $templateCache.put('pages/dogs/currenthome/findhome.html',
+        '<bb-modal>\n' +
+        '  <form name="findHome.formFind" ng-submit="findHome.saveData()">\n' +
+        '    <div class="modal-form">\n' +
+        '      <bb-modal-header>Find a home</bb-modal-header>\n' +
+        '      <div bb-modal-body>\n' +
+        '        <div class="form-group">\n' +
+        '          <label class="control-label">Search By Name</label>\n' +
+        '          <ui-select ng-model="findHome.name">\n' +
+        '            <ui-select-match allow-clear placeholder="Search by Name">{{$select.selected.name}}</ui-select-match>\n' +
+        '            <ui-select-choices repeat="constituent in findHome.results" refresh="findHome.search($select.search, \'single\')" refresh-delay="250">\n' +
+        '              <span>{{constituent.name}}</span>\n' +
+        '            </ui-select-choices>\n' +
+        '          </ui-select>\n' +
+        '        </div>\n' +
+        '      </div>\n' +
+        '      <bb-modal-footer>\n' +
+        '        <bb-modal-footer-button-primary></bb-modal-footer-button-primary>\n' +
+        '        <bb-modal-footer-button-cancel></bb-modal-footer-button-cancel>\n' +
+        '      </bb-modal-footer>\n' +
+        '    </div>\n' +
+        '  </form>\n' +
+        '</bb-modal>\n' +
         '');
     $templateCache.put('pages/dogs/dogpage.html',
         '<div class="bb-page-header">\n' +
@@ -1185,19 +1289,26 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '');
     $templateCache.put('pages/dogs/previoushomes/previoushomestile.html',
         '<bb-tile bb-tile-header="\'Previous homes\'">\n' +
+        '  <bb-tile-header-content ng-show="dogPreviousHomesTile.previousHomes.length">\n' +
+        '      {{ dogPreviousHomesTile.previousHomes.length }}\n' +
+        '  </bb-tile-header-content>\n' +
         '  <div>\n' +
-        '    <div ng-show="dogSummaryTile.previousHomes">\n' +
-        '      <div ng-switch="dogSummaryTile.previousHomes.length || 0">\n' +
+        '    <div ng-show="dogPreviousHomesTile.previousHomes">\n' +
+        '      <div ng-switch="dogPreviousHomesTile.previousHomes.length || 0">\n' +
         '        <div bb-tile-section ng-switch-when="0" class="bb-no-records">\n' +
         '          This dog has no previous homes.\n' +
         '        </div>\n' +
         '        <div ng-switch-default class="bb-repeater">\n' +
-        '          <div ng-repeat="previousHome in dogSummaryTile.previousHomes" class="bb-repeater-item">\n' +
-        '            <h4 class="bb-repeater-item-title">{{ previousHome.constituent.name }}</h4>\n' +
-        '            <h5>\n' +
-        '              {{ dogSummaryTile.getSummaryDate(previousHome.fromDate) }}\n' +
+        '          <div ng-repeat="previousHome in dogPreviousHomesTile.previousHomes" class="clearfix bb-repeater-item">\n' +
+        '            <h4 class="pull-left">\n' +
+        '              <a ng-href="{{previousHome.constituentId | barkConstituentUrl}}">\n' +
+        '                {{ previousHome.constituent.name }}\n' +
+        '              </a>\n' +
+        '            </h4>\n' +
+        '            <h5 class="pull-right">\n' +
+        '              {{ dogPreviousHomesTile.getSummaryDate(previousHome.fromDate) }}\n' +
         '              <span ng-show="previousHome.toDate">\n' +
-        '                to {{ dogSummaryTile.getSummaryDate(previousHome.toDate) }}\n' +
+        '                to {{ dogPreviousHomesTile.getSummaryDate(previousHome.toDate) }}\n' +
         '              </span>\n' +
         '            </h5>\n' +
         '          </div>\n' +

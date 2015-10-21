@@ -242,6 +242,12 @@ module.exports = function (apiNxt) {
         });
     }
 
+    function getFindHome(request, response) {
+        apiNxt.getConstituentSearch(request, request.query.searchText, function (results) {
+            response.json(results);
+        });
+    }
+
     /**
      * Posts a note for a specific dog.
      * @name postNotes
@@ -333,6 +339,7 @@ module.exports = function (apiNxt) {
         getPhoto: getPhoto,
         getCurrentHome: getCurrentHome,
         getPreviousHomes: getPreviousHomes,
+        getFindHome: getFindHome,
         postNotes: postNotes
     };
 };
