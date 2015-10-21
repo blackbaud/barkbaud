@@ -1159,6 +1159,9 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '');
     $templateCache.put('pages/dogs/notes/notestile.html',
         '<bb-tile bb-tile-header="\'Medical History\'">\n' +
+        '  <bb-tile-header-content ng-show="dogNotesTile.notes.length">\n' +
+        '      {{ dogNotesTile.notes.length }}\n' +
+        '  </bb-tile-header-content>\n' +
         '  <div>\n' +
         '    <div class="toolbar bb-tile-toolbar">\n' +
         '      <button type="button" class="btn bb-btn-secondary" ng-click="dogNotesTile.addNote()"><i class="fa fa-plus-circle"></i> Add History</button>\n' +
