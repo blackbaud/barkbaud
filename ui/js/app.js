@@ -642,6 +642,8 @@ angular.module('md5', []).constant('md5', (function() {
         }).then(function (result) {
             self.dogs = result.data.data;
             $scope.$emit('bbEndWait');
+        }).catch(function () {
+            self.error = true;
         });
     }
 
@@ -671,9 +673,9 @@ angular.module('md5', []).constant('md5', (function() {
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
             }).then(function (result) {
                 self.currentHome = result.data.data;
+                $scope.$emit('bbEndWait', { nonblocking: true });
             }).catch(function () {
                 self.error = true;
-                console.log('ERROR');
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
         };
@@ -711,17 +713,15 @@ angular.module('md5', []).constant('md5', (function() {
     function FindHomeController($modalInstance, bbData, uiSelect, dogId) {
         var self = this;
 
-        self.results = [
-            {
-                name: 'Bobby'
-            },
-            {
-                name: 'Ashley'
-            }
-        ];
-
-        self.search = function () {
-            console.log('searching');
+        self.search = function (searchText) {
+            return bbData.query('api/dogs/' + dogId + '/findhome?searchText=', {
+                searchText: searchText
+            }).then(function (results) {
+                console.log(results);
+                self.results = results.data.results;
+            }).catch(function () {
+                self.error = true;
+            });
         };
 
         self.saveData = function () {
@@ -919,14 +919,19 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function DogNotesTileController($timeout, bbData, bbMoment, barkNoteAdd, dogId) {
+    function DogNotesTileController($scope, bbData, bbMoment, barkNoteAdd, dogId) {
         var self = this;
 
         self.load = function () {
+            $scope.$emit('bbBeginWait', { nonblocking: true });
             bbData.load({
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/notes'
             }).then(function (result) {
                 self.notes = result.data.data;
+                $scope.$emit('bbEndWait', { nonblocking: true });
+            }).catch(function () {
+                self.error = true;
+                $scope.$emit('bbEndWait', { nonblocking: true });
             });
         };
 
@@ -943,7 +948,13 @@ angular.module('md5', []).constant('md5', (function() {
         self.load();
     }
 
-    DogNotesTileController.$inject = ['$timeout', 'bbData', 'bbMoment', 'barkNoteAdd', 'dogId'];
+    DogNotesTileController.$inject = [
+        '$scope',
+        'bbData',
+        'bbMoment',
+        'barkNoteAdd',
+        'dogId'
+    ];
 
     angular.module('barkbaud')
         .controller('DogNotesTileController', DogNotesTileController);
@@ -1156,6 +1167,9 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '      </div>\n' +
         '    </div>\n' +
         '  </section>\n' +
+        '  <div bb-tile-section class="text-danger" ng-show="dashboardPage.error">\n' +
+        '    Error loading dogs.\n' +
+        '  </div>\n' +
         '</div>\n' +
         '');
     $templateCache.put('pages/dogs/currenthome/currenthometile.html',
@@ -1305,6 +1319,9 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '        </div>\n' +
         '      </div>\n' +
         '    </div>\n' +
+        '  </div>\n' +
+        '  <div bb-tile-section class="text-danger" ng-show="dogNotesTile.error">\n' +
+        '    Error loading notes.\n' +
         '  </div>\n' +
         '</bb-tile>\n' +
         '');
