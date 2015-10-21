@@ -256,55 +256,65 @@ module.exports = function (apiNxt) {
      */
     function postNotes(request, response) {
         var query = new Parse.Query('Dog'),
-            DogNote = new Parse.Object.extend('DogNotes'),
-            date = new Date(),
-            dogBodyNxt,
-            dogBodyParse,
-            dogDate,
-            dogNote;
+            DogNote = new Parse.Object.extend('DogNotes');
 
+        query.include('currentOwner');
         query.get(request.params.dogId, {
             success: function (dog) {
-                dogNote = new DogNote();
-                dogDate = new Date();
-                dogBodyParse = {
-                    dog: dog,
-                    date: dogDate,
-                    title: request.body.title,
-                    description: request.body.description
-                };
+                var currentOwner = dog.get('currentOwner'),
+                    constituentId = currentOwner.get('constituentId'),
+                    dogNote = new DogNote(),
+                    dogDate = new Date(),
+                    dogBodyParse = {
+                        dog: dog,
+                        date: dogDate,
+                        title: request.body.title,
+                        description: request.body.description
+                    };
 
-                dogNote.save(dogBodyParse, {
-                    success: function (dogNote) {
-                        if (request.body.addConstituentNote) {
-                            dogBodyNxt = JSON.stringify({
-                                type: 'Barkbaud',
-                                date: {
-                                    y: dogDate.getYear(),
-                                    m: dogDate.getMonth(),
-                                    d: dogDate.getDay()
-                                },
-                                summary: request.body.title,
-                                text: request.body.description
-                            });
-                            apiNxt.postNotes(request, request.body.constituentId, dogBodyNxt, function (apiDogNote) {
-                                response.json({
-                                    data: apiDogNote
+                // Validate current owner if requesting to addConstituentNote
+                if (request.body.addConstituentNote && !constituentId) {
+                    response.json({
+                        error: {
+                            message: 'Dog does not have a current owner to save the note to.'
+                        }
+                    });
+                } else {
+
+                    dogNote.save(dogBodyParse, {
+                        success: function (dogNote) {
+                            var dogBodyNxt;
+
+                            if (request.body.addConstituentNote) {
+                                dogBodyNxt = {
+                                    type: 'Barkbaud',
+                                    date: {
+                                        y: dogDate.getFullYear(),
+                                        m: dogDate.getMonth() + 1,
+                                        d: dogDate.getDate()
+                                    },
+                                    summary: request.body.title,
+                                    text: request.body.description
+                                };
+                                apiNxt.postNotes(request, constituentId, dogBodyNxt, function (apiDogNote) {
+                                    response.json({
+                                        data: apiDogNote
+                                    });
                                 });
-                            });
-                        } else {
+                            } else {
+                                response.json({
+                                    data: dogNote
+                                });
+                            }
+                        },
+                        error: function (dogNote, error) {
                             response.json({
-                                data: dogNote
+                                error: error,
+                                dogNote: dogNote
                             });
                         }
-                    },
-                    error: function (dogNote, error) {
-                        response.json({
-                            error: error,
-                            dogNote: dogNote
-                        });
-                    }
-                });
+                    });
+                }
             },
             error: function (dog, error) {
                 response.json({

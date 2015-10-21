@@ -844,11 +844,13 @@ angular.module('md5', []).constant('md5', (function() {
     function DogNotesTileController($timeout, bbData, bbMoment, barkNoteAdd, dogId) {
         var self = this;
 
-        bbData.load({
-            data: 'api/dogs/' + encodeURIComponent(dogId) + '/notes'
-        }).then(function (result) {
-            self.notes = result.data.data;
-        });
+        self.load = function () {
+            bbData.load({
+                data: 'api/dogs/' + encodeURIComponent(dogId) + '/notes'
+            }).then(function (result) {
+                self.notes = result.data.data;
+            });
+        };
 
         self.getNoteDate = function (date) {
             if (date && date.iso) {
@@ -857,8 +859,10 @@ angular.module('md5', []).constant('md5', (function() {
         };
 
         self.addNote = function () {
-            barkNoteAdd.open(dogId);
+            barkNoteAdd.open(dogId).result.then(self.load);
         };
+
+        self.load();
     }
 
     DogNotesTileController.$inject = ['$timeout', 'bbData', 'bbMoment', 'barkNoteAdd', 'dogId'];
@@ -1129,20 +1133,19 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '<bb-modal>\n' +
         '  <form name="noteAdd.formAdd" ng-submit="noteAdd.saveData()">\n' +
         '    <div class="modal-form">\n' +
-        '      <bb-modal-header>Add note</bb-modal-header>\n' +
+        '      <bb-modal-header>Add medical history</bb-modal-header>\n' +
         '      <div bb-modal-body>\n' +
         '        <div class="form-group">\n' +
-        '          <label class="control-label">Title</label>\n' +
+        '          <label class="control-label">History</label>\n' +
         '          <input type="text" class="form-control" ng-model="noteAdd.note.title" />\n' +
         '        </div>\n' +
         '        <div class="form-group">\n' +
-        '          <label class="control-label">Description</label>\n' +
         '          <textarea class="form-control" ng-model="noteAdd.note.description"></textarea>\n' +
         '        </div>\n' +
         '        <div class="form-group">\n' +
         '          <label class="control-label">\n' +
         '            <input type="checkbox" bb-check ng-model="noteAdd.note.addConstituentNote" />\n' +
-        '            Also add this note to the dog\'s current owner\n' +
+        '            Add as note on current owner\'s Raisers Edge NXT record.\n' +
         '          </label>\n' +
         '        </div>\n' +
         '      </div>\n' +
@@ -1155,15 +1158,15 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '</bb-modal>\n' +
         '');
     $templateCache.put('pages/dogs/notes/notestile.html',
-        '<bb-tile bb-tile-header="\'Notes\'">\n' +
+        '<bb-tile bb-tile-header="\'Medical History\'">\n' +
         '  <div>\n' +
         '    <div class="toolbar bb-tile-toolbar">\n' +
-        '      <button type="button" class="btn bb-btn-secondary" ng-click="dogNotesTile.addNote()"><i class="fa fa-plus-circle"></i> Add Note</button>\n' +
+        '      <button type="button" class="btn bb-btn-secondary" ng-click="dogNotesTile.addNote()"><i class="fa fa-plus-circle"></i> Add History</button>\n' +
         '    </div>\n' +
         '    <div ng-show="dogNotesTile.notes">\n' +
         '      <div ng-switch="dogNotesTile.notes.length || 0">\n' +
         '        <div bb-tile-section ng-switch-when="0" class="bb-no-records">\n' +
-        '          This dog has no notes.\n' +
+        '          This dog has no medical history.\n' +
         '        </div>\n' +
         '        <div ng-switch-default class="bb-repeater">\n' +
         '          <div ng-repeat="note in dogNotesTile.notes" class="bb-repeater-item">\n' +
