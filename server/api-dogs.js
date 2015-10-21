@@ -184,12 +184,12 @@ module.exports = function (apiNxt) {
             queryOwnerHistory = new Parse.Query('DogOwnerHistory');
 
         // Get the requested dog
+        queryDog.include('currentOwner');
         queryDog.get(request.params.dogId, {
             success: function (dog) {
 
                 // Get the owner history tied to this dog
                 queryOwnerHistory.equalTo('dog', dog);
-                queryOwnerHistory.notEqualTo('objectId', dog.currentOwner);
                 queryOwnerHistory.find({
 
                     // Successfully found the owner history
