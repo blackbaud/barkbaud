@@ -1090,7 +1090,7 @@ angular.module('md5', []).constant('md5', (function() {
         service.isAuthenticated = function () {
             var deferred = $q.defer();
             bbData.load({
-                data: 'auth/authenticated'
+                data: 'auth/authenticated?' + (new Date().getTime())
             }).then(function (result) {
                 service.authenticated = result.data.authenticated;
                 deferred.resolve(result.data.authenticated);
