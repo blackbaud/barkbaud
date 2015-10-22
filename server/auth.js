@@ -131,13 +131,17 @@ module.exports = function () {
      */
     function getLogout(request, response) {
         var redirect = request.session.redirect || '/';
-        oauth2.accessToken.create(request.session.ticket);
-        oauth2.accessToken.revoke('access_token', function () {
-            oauth2.accessToken.revoke('refresh_token', function () {
-                request.session.destroy();
-                response.redirect(redirect);
+        if (!request.session.ticket) {
+            response.redirect(redirect);
+        } else {
+            oauth2.accessToken.create(request.session.ticket);
+            oauth2.accessToken.revoke('access_token', function () {
+                oauth2.accessToken.revoke('refresh_token', function () {
+                    request.session.destroy();
+                    response.redirect(redirect);
+                });
             });
-        });
+        }
     }
 
     return {
