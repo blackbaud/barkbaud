@@ -66,7 +66,7 @@ app.get('/auth/login', auth.getLogin);
 app.get('/auth/callback', auth.getCallback);
 app.get('/auth/logout', auth.getLogout);
 
-// Register our Dogs API routes
+// Register our Dogs GET API routes
 app.get('/api/dogs', requireSession, apiDogs.getDogs);
 app.get('/api/dogs/:dogId', requireSession, apiDogs.getDog);
 app.get('/api/dogs/:dogId/notes', requireSession, apiDogs.getNotes);
@@ -74,6 +74,9 @@ app.get('/api/dogs/:dogId/photo', requireSession, apiDogs.getPhoto);
 app.get('/api/dogs/:dogId/currenthome', requireSession, apiDogs.getCurrentHome);
 app.get('/api/dogs/:dogId/previoushomes', requireSession, apiDogs.getPreviousHomes);
 app.get('/api/dogs/:dogId/findhome', requireSession, apiDogs.getFindHome);
+
+// Register our Dogs POST API routes
+app.post('/api/dogs/:dogId/currenthome', requireSession, apiDogs.postCurrentHome);
 app.post('/api/dogs/:dogId/notes', requireSession, apiDogs.postNotes);
 
 // Register our front-end UI routes

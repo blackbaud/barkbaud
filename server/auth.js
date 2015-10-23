@@ -20,8 +20,19 @@ module.exports = function () {
             authorizationPath: '/renxt/authorization',
             site: 'https://oauth2.apim.blackbaud-dev.com',
             tokenPath: '/token'
-        }),
-        user;
+        });
+
+    /**
+     * Internal function for saving ticket + expiration.
+     * @internal
+     * @name saveTicket
+     * @param {Object} request
+     * @param {Object} ticket
+     */
+    function saveTicket(request, ticket) {
+        request.session.ticket = ticket;
+        request.session.expires = (new Date().getTime() + (1000 * ticket.expires_in));
+    }
 
     /**
      * An interface for our front-end to see if we're authenticated.
@@ -30,15 +41,21 @@ module.exports = function () {
      * @param {Object} response
      */
     function validate(request, callback) {
-        if (request.session.ticket) {
-            oauth2.accessToken.create(request.session.ticket);
-            if (oauth2.accessToken.expired()) {
+        var dtCurrent,
+            dtExpires,
+            token;
+
+        if (request.session.ticket && request.session.expires) {
+
+            dtCurrent = new Date();
+            dtExpires = new Date(request.session.expires);
+
+            if (dtCurrent >= dtExpires) {
                 console.log('BARKBAUD - Token expired');
-                oauth2.accessToken.refresh(function (error, ticket) {
-                    console.log('BARKBAUD - Token refresh request');
-                    console.log(error);
-                    console.log(ticket);
-                    request.session.ticket = ticket;
+
+                token = oauth2.accessToken.create(request.session.ticket);
+                token.refresh(function (error, ticket) {
+                    saveTicket(request, ticket.token);
                     return callback(!error);
                 });
             } else {
@@ -102,23 +119,28 @@ module.exports = function () {
             error = 'auth_invalid_state';
         }
 
-        if (error) {
-            response.redirect('/#?error=' + error);
-        } else {
+        if (!error) {
             options = {
                 code: request.query.code,
                 redirect_uri: process.env.AUTH_REDIRECT_URI
             };
-            oauth2.authCode.getToken(options, function (error, ticket) {
-                if (error) {
-                    response.send('Invalid request.  ' + error.message);
+            oauth2.authCode.getToken(options, function (errorToken, ticket) {
+                if (errorToken) {
+                    error = errorToken.message;
                 } else {
                     redirect = request.session.redirect || '/';
+
                     request.session.redirect = '';
-                    request.session.ticket = ticket;
+                    request.session.state = '';
+
+                    saveTicket(request, ticket);
                     response.redirect(redirect);
                 }
             });
+        }
+
+        if (error) {
+            response.redirect('/#?error=' + error);
         }
     }
 
@@ -130,16 +152,20 @@ module.exports = function () {
      * @param {Object} response
      */
     function getLogout(request, response) {
-        var redirect = request.session.redirect || '/';
-        if (!request.session.ticket) {
+        var redirect = request.session.redirect || '/',
+            token;
+
+        function go() {
+            request.session.destroy();
             response.redirect(redirect);
+        }
+
+        if (!request.session.ticket) {
+            go();
         } else {
-            oauth2.accessToken.create(request.session.ticket);
-            oauth2.accessToken.revoke('access_token', function () {
-                oauth2.accessToken.revoke('refresh_token', function () {
-                    request.session.destroy();
-                    response.redirect(redirect);
-                });
+            token = oauth2.accessToken.create(request.session.ticket);
+            token.revoke('access_token', function () {
+                token.revoke('refresh_token', go);
             });
         }
     }

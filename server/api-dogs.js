@@ -33,10 +33,7 @@ module.exports = function (apiNxt) {
                 });
             },
             error: function (error, dogs) {
-                response.json({
-                    error: error,
-                    data: dogs
-                });
+                onParseError(response, error);
             }
         });
     }
@@ -58,10 +55,7 @@ module.exports = function (apiNxt) {
                 });
             },
             error: function (dog, error) {
-                response.json({
-                    error: error,
-                    data: dog
-                });
+                onParseError(response, error);
             }
         });
     }
@@ -89,18 +83,12 @@ module.exports = function (apiNxt) {
                         });
                     },
                     error: function (notes, error) {
-                        response.json({
-                            error: error,
-                            data: notes
-                        });
+                        onParseError(response, error);
                     }
                 });
             },
             error: function (dog, error) {
-                response.json({
-                    error: error,
-                    data: dog
-                });
+                onParseError(response, error);
             }
         });
     }
@@ -163,10 +151,7 @@ module.exports = function (apiNxt) {
                 }
             },
             error: function (dog, error) {
-                response.json({
-                    error: error,
-                    data: dog
-                });
+                onParseError(response, error);
             }
         });
     }
@@ -190,6 +175,7 @@ module.exports = function (apiNxt) {
 
                 // Get the owner history tied to this dog
                 queryOwnerHistory.equalTo('dog', dog);
+                queryOwnerHistory.descending('fromDate');
                 queryOwnerHistory.find({
 
                     // Successfully found the owner history
@@ -224,20 +210,14 @@ module.exports = function (apiNxt) {
 
                     // Error getting the owner history
                     error: function (history, error) {
-                        response.json({
-                            error: error,
-                            data: history
-                        });
+                        onParseError(response, error);
                     }
                 });
             },
 
             // Error getting the requested dog
             error: function (dog, error) {
-                response.json({
-                    error: error,
-                    data: dog
-                });
+                onParseError(response, error);
             }
         });
     }
@@ -245,6 +225,73 @@ module.exports = function (apiNxt) {
     function getFindHome(request, response) {
         apiNxt.getConstituentSearch(request, request.query.searchText, function (results) {
             response.json(results);
+        });
+    }
+
+    /**
+     * Sets the current home of the specified dog.
+     * Sets the toDate of the previous currentHome first.
+     * @name postCurrentHome
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.dogId
+     * @param {string} request.body.id
+     */
+    function postCurrentHome(request, response) {
+        var query = new Parse.Query('Dog');
+
+        function createNewCurrentOwner(dog, currentDate) {
+            var DogOwnerHistory = new Parse.Object.extend('DogOwnerHistory'),
+                newCurrentOwner = new DogOwnerHistory();
+
+            newCurrentOwner.save({
+                dog: dog,
+                constituentId: request.body.id,
+                fromDate: currentDate
+            }, {
+                success: function (owner) {
+                    dog.set('currentOwner', owner);
+                    dog.save(null, {
+                        success: function (dog) {
+                            response.json({
+                                data: dog
+                            });
+                        },
+                        error: function (dog, error) {
+                            onParseError(response, error);
+                        }
+                    });
+                },
+                error: function (owner, error) {
+                    onParseError(response, error);
+                }
+            });
+        }
+
+        query.include('currentOwner');
+        query.get(request.params.dogId, {
+            success: function (dog) {
+
+                var currentOwner = dog.get('currentOwner'),
+                    currentDate = new Date();
+
+                if (!currentOwner) {
+                    createNewCurrentOwner(dog, currentDate);
+                } else {
+                    currentOwner.set('toDate', currentDate);
+                    currentOwner.save(null, {
+                        success: function () {
+                            createNewCurrentOwner(dog, currentDate);
+                        },
+                        error: function (currentOwner, error) {
+                            onParseError(response, error);
+                        }
+                    });
+                }
+            },
+            error: function (dog, error) {
+                onParseError(response, error);
+            }
         });
     }
 
@@ -314,20 +361,27 @@ module.exports = function (apiNxt) {
                             }
                         },
                         error: function (dogNote, error) {
-                            response.json({
-                                error: error,
-                                dogNote: dogNote
-                            });
+                            onParseError(response, error);
                         }
                     });
                 }
             },
             error: function (dog, error) {
-                response.json({
-                    error: error,
-                    data: dog
-                });
+                onParseError(response, error);
             }
+        });
+    }
+
+    /**
+     * Handles parse errors
+     * @internal
+     * @name handleError
+     * @param {Object} response
+     * @param {Object} error
+    */
+    function onParseError(response, error) {
+        response.json({
+            error: error
         });
     }
 
@@ -340,6 +394,7 @@ module.exports = function (apiNxt) {
         getCurrentHome: getCurrentHome,
         getPreviousHomes: getPreviousHomes,
         getFindHome: getFindHome,
+        postCurrentHome: postCurrentHome,
         postNotes: postNotes
     };
 };

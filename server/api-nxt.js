@@ -22,28 +22,19 @@ module.exports = function (auth) {
      * @param {Function} callback
      */
     function proxy(request, method, endpoint, body, callback) {
-        var options;
-
-        auth.validate(request, function (success) {
-            if (!success) {
-                callback({
-                    error: 'Invalid session.'
-                });
-            } else {
-                options = {
-                    json: true,
-                    method: method,
-                    body: body,
-                    url: 'https://api.nxt.blackbaud-dev.com/' + endpoint,
-                    headers: {
-                        'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
-                        'Authorization': 'Bearer ' + request.session.ticket.access_token
-                    }
-                };
-                promise(options).then(callback).catch(function (err) {
-                    console.log(err);
-                });
+        var options = {
+            json: true,
+            method: method,
+            body: body,
+            url: 'https://api.nxt.blackbaud-dev.com/' + endpoint,
+            headers: {
+                'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
+                'Authorization': 'Bearer ' + request.session.ticket.access_token
             }
+        };
+
+        promise(options).then(callback).catch(function (err) {
+            console.log(err);
         });
     }
 
