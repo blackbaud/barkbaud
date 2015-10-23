@@ -326,10 +326,12 @@ module.exports = function (apiNxt) {
 
                 // Validate current owner if requesting to addConstituentNote
                 if (request.body.addConstituentNote && !currentOwner) {
-                    response.json({
-                        error: {
-                            message: 'Dog does not have a current owner to save the note to.'
-                        }
+                    onParseError(response, {
+                        message: 'Dog does not have a current owner to save the note to.'
+                    });
+                } else if (!request.body.title || !request.body.description || request.body.title === '' || request.body.description === '') {
+                    onParseError(response, {
+                        message: 'Title and description are required.'
                     });
                 } else {
 
@@ -379,7 +381,7 @@ module.exports = function (apiNxt) {
      * @param {Object} error
     */
     function onParseError(response, error) {
-        response.json({
+        response.status(500).json({
             error: error
         });
     }

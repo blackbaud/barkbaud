@@ -643,8 +643,8 @@ angular.module('md5', []).constant('md5', (function() {
         }).then(function (result) {
             self.dogs = result.data.data;
             $scope.$emit('bbEndWait');
-        }).catch(function () {
-            self.error = true;
+        }).catch(function (result) {
+            self.error = result.data.error;
         });
     }
 
@@ -675,8 +675,8 @@ angular.module('md5', []).constant('md5', (function() {
             }).then(function (result) {
                 self.currentHome = result.data.data;
                 $scope.$emit('bbEndWait', { nonblocking: true });
-            }).catch(function () {
-                self.error = true;
+            }).catch(function (result) {
+                self.error = result.data.error;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
         };
@@ -724,10 +724,9 @@ angular.module('md5', []).constant('md5', (function() {
                 return bbData.load({
                     data: 'api/dogs/' + dogId + '/findhome?searchText=' + searchText
                 }).then(function (results) {
-                    console.log(results);
                     self.results = results.data.results;
-                }).catch(function () {
-                    self.error = true;
+                }).catch(function (result) {
+                    self.error = result.data.error;
                 });
             }
         };
@@ -740,6 +739,8 @@ angular.module('md5', []).constant('md5', (function() {
                     type: 'POST'
                 }).then(function (result) {
                     $modalInstance.close(result.data);
+                }).catch(function (result) {
+                    self.error = result.data.error;
                 });
             }
         };
@@ -891,6 +892,8 @@ angular.module('md5', []).constant('md5', (function() {
                 type: 'POST'
             }).then(function (result) {
                 $modalInstance.close(result.data);
+            }).catch(function (result) {
+                self.error = result.data.error;
             });
         };
     }
@@ -939,8 +942,8 @@ angular.module('md5', []).constant('md5', (function() {
             }).then(function (result) {
                 self.notes = result.data.data;
                 $scope.$emit('bbEndWait', { nonblocking: true });
-            }).catch(function () {
-                self.error = true;
+            }).catch(function (result) {
+                self.error = result.data.error;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
         };
@@ -985,8 +988,8 @@ angular.module('md5', []).constant('md5', (function() {
             }).then(function (result) {
                 self.previousHomes = result.data.data;
                 $scope.$emit('bbEndWait', { nonblocking: true });
-            }).catch(function () {
-                self.error = true;
+            }).catch(function (result) {
+                self.error = result.data.error;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
         };
@@ -1256,6 +1259,9 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '      <bb-modal-footer>\n' +
         '        <bb-modal-footer-button-primary></bb-modal-footer-button-primary>\n' +
         '        <bb-modal-footer-button-cancel></bb-modal-footer-button-cancel>\n' +
+        '        <span ng-show="noteAdd.error" class="text-danger">\n' +
+        '          Error saving home.\n' +
+        '        </span>\n' +
         '      </bb-modal-footer>\n' +
         '    </div>\n' +
         '  </form>\n' +
@@ -1306,6 +1312,10 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '      <bb-modal-footer>\n' +
         '        <bb-modal-footer-button-primary></bb-modal-footer-button-primary>\n' +
         '        <bb-modal-footer-button-cancel></bb-modal-footer-button-cancel>\n' +
+        '        <span ng-show="noteAdd.error" class="text-danger">\n' +
+        '          <span ng-show="noteAdd.error.message">{{ noteAdd.error.message }}</span>\n' +
+        '          <span ng-hide="noteAdd.error.message">Unknown error occured.</span>\n' +
+        '        </span>\n' +
         '      </bb-modal-footer>\n' +
         '    </div>\n' +
         '  </form>\n' +
