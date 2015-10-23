@@ -315,7 +315,6 @@ module.exports = function (apiNxt) {
         query.get(request.params.dogId, {
             success: function (dog) {
                 var currentOwner = dog.get('currentOwner'),
-                    constituentId = currentOwner.get('constituentId'),
                     dogNote = new DogNote(),
                     dogDate = new Date(),
                     dogBodyParse = {
@@ -326,7 +325,7 @@ module.exports = function (apiNxt) {
                     };
 
                 // Validate current owner if requesting to addConstituentNote
-                if (request.body.addConstituentNote && !constituentId) {
+                if (request.body.addConstituentNote && !currentOwner) {
                     response.json({
                         error: {
                             message: 'Dog does not have a current owner to save the note to.'
@@ -349,7 +348,7 @@ module.exports = function (apiNxt) {
                                     summary: request.body.title,
                                     text: request.body.description
                                 };
-                                apiNxt.postNotes(request, constituentId, dogBodyNxt, function (apiDogNote) {
+                                apiNxt.postNotes(request, currentOwner.get('constituentId'), dogBodyNxt, function (apiDogNote) {
                                     response.json({
                                         data: apiDogNote
                                     });
