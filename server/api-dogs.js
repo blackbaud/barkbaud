@@ -331,7 +331,7 @@ module.exports = function (apiNxt) {
                     });
                 } else if (!request.body.title || !request.body.description || request.body.title === '' || request.body.description === '') {
                     onParseError(response, {
-                        message: 'Title and description are required.'
+                        message: 'Title and description are required'
                     });
                 } else {
 

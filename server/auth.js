@@ -74,9 +74,13 @@ module.exports = function () {
      */
     function getAuthenticated(request, response) {
         validate(request, function (success) {
-            response.json({
+            var json = {
                 authenticated: success
-            });
+            };
+            if (success) {
+                json.tenant_id = request.session.ticket.tenant_id;
+            }
+            response.json(json);
         });
     }
 
