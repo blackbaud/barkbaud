@@ -489,8 +489,7 @@ angular.module('md5', []).constant('md5', (function() {
     'use strict';
 
     var barkbaudConfig = {
-        //apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
-        apiUrl: 'https://localhost:5000/'
+        apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
     };
 
     function config($locationProvider, $urlRouterProvider, bbWindowConfig) {
@@ -1406,7 +1405,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '      </div>\n' +
         '      <div ng-hide="loginPage.waitingForAuth">\n' +
         '        <bb-modal-footer-button-primary  ng-click="loginPage.login()">\n' +
-        '          Authorize Barkbaud\n' +
+        '          Login with Blackbaud\n' +
         '        </bb-modal-footer-button-primary>\n' +
         '        <a href="https://github.com/blackbaud/barkbaud" target="_blank" class="btn bb-btn-secondary">\n' +
         '          Learn More\n' +
