@@ -166,16 +166,21 @@ module.exports = function (apiNxt) {
      */
     function getPreviousHomes(request, response) {
         var queryDog = new Parse.Query('Dog'),
-            queryOwnerHistory = new Parse.Query('DogOwnerHistory');
+            queryOwnerHistory = new Parse.Query('DogOwnerHistory'),
+            currentOwner;
 
         // Get the requested dog
         queryDog.include('currentOwner');
         queryDog.get(request.params.dogId, {
             success: function (dog) {
 
+                currentOwner = dog.get('currentOwner');
+                if (currentOwner) {
+                    queryOwnerHistory.notEqualTo('objectId', currentOwner.id);
+                }
+
                 // Get the owner history tied to this dog
                 queryOwnerHistory.equalTo('dog', dog);
-                queryOwnerHistory.notEqualTo('objectId', dog.get('currentOwner').id);
                 queryOwnerHistory.descending('fromDate');
                 queryOwnerHistory.find({
 
