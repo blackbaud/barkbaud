@@ -12,7 +12,9 @@ var apiDogs,
     http,
     https,
     httpsOptions,
+    RedisStore,
     session,
+    sessionConfig,
     timeout;
 
 // Application dependencies
@@ -26,20 +28,21 @@ fs = require('fs');
 http = require('http');
 https = require('https');
 session = require('express-session');
+RedisStore = require('connect-redis')(session);
 timeout = require('connect-timeout');
 
-function requireSession(request, response, next) {
-    auth.validate(request, function (valid) {
-        if (valid) {
-            next();
-        } else {
-            response.sendStatus(401);
-        }
-    });
-}
+// If deployed in our demo site, we store the sessions using Redis
+// Locally we store the sessions in memory
+sessionConfig = {
+    resave: false,
+    saveUninitialized: true,
+    secret: '+rEchas&-wub24dR'
+};
 
-function onListen() {
-    console.log('Barkbaud app running for %s on port %s', process.env.NODE_ENV, process.env.PORT);
+if (process.env.NODE_ENV === 'production') {
+    sessionConfig.store = new RedisStore({
+        url: process.env.REDIS_URL
+    });
 }
 
 // Create our application and register its dependencies
@@ -50,14 +53,10 @@ app.use(cors({
     origin: [
         'http://localhost:5000',
         'http://localhost:8080',
-        'https://glacial-mountain-6366.herokuapp.com'
+        'https://' + process.env.HEROKU_APP_NAME
     ]
 }));
-app.use(session({
-    resave: false,
-    saveUninitialized: true,
-    secret: '+rEchas&-wub24dR'
-}));
+app.use(session(sessionConfig));
 app.use(timeout('30s'));
 
 // Register our OAUTH2 routes
@@ -81,6 +80,20 @@ app.post('/api/dogs/:dogId/notes', requireSession, apiDogs.postNotes);
 
 // Register our front-end UI routes
 app.use('/', express.static(__dirname + '/ui'));
+
+function requireSession(request, response, next) {
+    auth.validate(request, function (valid) {
+        if (valid) {
+            next();
+        } else {
+            response.sendStatus(401);
+        }
+    });
+}
+
+function onListen() {
+    console.log('Barkbaud app running for %s on port %s', process.env.NODE_ENV, process.env.PORT);
+}
 
 // Create our server.
 // For production we don't need to worry about using https as Heroku handles this for us.
