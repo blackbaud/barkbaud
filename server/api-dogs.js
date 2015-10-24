@@ -175,6 +175,7 @@ module.exports = function (apiNxt) {
 
                 // Get the owner history tied to this dog
                 queryOwnerHistory.equalTo('dog', dog);
+                queryOwnerHistory.notEqualTo('objectId', dog.get('currentOwner').id);
                 queryOwnerHistory.descending('fromDate');
                 queryOwnerHistory.find({
 
