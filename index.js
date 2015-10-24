@@ -81,6 +81,7 @@ app.post('/api/dogs/:dogId/notes', requireSession, apiDogs.postNotes);
 // Register our front-end UI routes
 app.use('/', express.static(__dirname + '/ui'));
 
+// Validates all requests
 function requireSession(request, response, next) {
     auth.validate(request, function (valid) {
         if (valid) {
@@ -91,6 +92,7 @@ function requireSession(request, response, next) {
     });
 }
 
+// Displays the startup message
 function onListen() {
     console.log('Barkbaud app running for %s on port %s', process.env.NODE_ENV, process.env.PORT);
 }
