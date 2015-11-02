@@ -1,14 +1,14 @@
 # Barkbaud
 
-Blackbaud NXT API / Sky UX demo application for bbcon 2015.
+Blackbaud SKY API / SKY UX demo application for bbcon 2015.
 
 ## About
 
-This demo was built to showcase the Blackbaud NXT API and Blackbaud Sky UX.  Both technologies function completely independant of one another.  
+This demo was built to showcase the Blackbaud SKY API and Blackbaud Sky UX.  Both technologies function completely independant of one another.  
 
-The Blackbaud NXT API currently supports the [Authorization Code Flow](https://apidocs.nxt.blackbaud-dev.com/docs/authorization/), which requires us to have a back-end server component where we're able to securely store the client secret.  We've implemented the server component using NodeJS, which we automatically deploy to Heroku.
+The Blackbaud SKY API currently supports the [Authorization Code Flow](https://apidocs.nxt.blackbaud-dev.com/docs/authorization/), which requires us to have a back-end server component where we're able to securely store the client secret.  We've implemented the server component using NodeJS, which we automatically deploy to Heroku.
 
-Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blakbaud/barkbaud-ui).  Using Bower, we consume the built ui and move it to the ui folder during our deployment process.
+Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui).  Using Bower, we consume the built ui and move it to the ui folder during our deployment process.
 
 ## Try
 
@@ -24,7 +24,7 @@ Feel free to checkout the live demo of our application, or if you wish to run th
 
 0. A server capable of running NodeJS.
 0. [Register your application](https://developer.nxt.blackbaud-dev.com/apps) in order to obtain the client id and client secret.
-0. [Signup (for free)](https://developer.nxt.blackbaud-dev.com/) for the Blackbaud NXT API developer program in order to obtain your subscription key.
+0. [Signup (for free)](https://developer.nxt.blackbaud-dev.com/) for the Blackbaud SKY API developer program in order to obtain your subscription key.
 0. [Create a Parse application](https://parse.com) in order to create your parse app id and parse js key.
 
 ### Setup
