@@ -12,7 +12,7 @@ Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/b
 
 ## Try
 
-[https://glacial-mountain-6366.herokuapp.com](https://glacial-mountain-6366.herokuapp.com)
+[https://barkbaud.herokuapp.com](https://barkbaud.herokuapp.com)
 
 Feel free to leave feedback by filing an issue.
 
