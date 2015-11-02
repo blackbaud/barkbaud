@@ -23,7 +23,7 @@ Feel free to checkout the live demo of our application, or if you wish to run th
 ### Prerequisites
 
 0. A server capable of running NodeJS.
-0. [Register your application](https://developer.nxt.blackbaud-dev.com/apps) in order to obtain the client id and client secret.
+0. [Register your application](https://developer.nxt.blackbaud-dev.com/comingsoon) in order to obtain the client id and client secret.
 0. [Signup (for free)](https://developer.nxt.blackbaud-dev.com/) for the Blackbaud SKY API developer program in order to obtain your subscription key.
 0. [Create a Parse application](https://parse.com) in order to create your parse app id and parse js key.
 
