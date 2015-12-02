@@ -1,0 +1,117 @@
+{ "results": [
+	{
+        "bio": "Hi there! I’m Red Baron. The nice folks at CBR have helped me out of a bad situation and I intend to take advantage of my second chance. No looking back. No more being chained outside. No more sleeping on the cold, hard ground. No more going to sleep hungry. That’s the best part, cause I really like food! At my foster home, I have my own soft bed and my own den, they call a crate. It’s pretty nice I guess, as long as I can have my Nylabone to chew on! It’s a pretty nice place to sleep in at night. It beats sleeping outside, I can tell you that! I go for leisurely walks every day. I like that too! I went to a clinic yesterday and they gave me some medicine to get rid of the worms in my belly.",
+        "breed": "Boxer",
+        "createdAt": "2015-10-16T19:18:12.685Z",
+        "currentOwner": {
+            "__type": "Pointer",
+            "className": "DogOwnerHistory",
+            "objectId": "h2lcTezWDP"
+        },
+        "gender": "Male",
+        "name": "Baron",
+        "objectId": "1skbFpx1N2",
+        "updatedAt": "2015-11-24T22:20:50.767Z"
+    },
+	{
+        "bio": "Hi! My name is Pebbles. I am about 6-7 months old and I weigh around 3 pounds. I am spayed/neutered, current on vaccines and microchipped.",
+        "breed": "Yorkshire Terrier",
+        "createdAt": "2015-10-15T17:24:13.642Z",
+        "currentOwner": {
+            "__type": "Pointer",
+            "className": "DogOwnerHistory",
+            "objectId": "swxOFt73tt"
+        },
+        "gender": "Female",
+        "name": "Pebbles",
+        "objectId": "4mVuFNjeVE",
+        "updatedAt": "2015-10-27T00:20:12.717Z"
+    },
+	{
+        "bio": "Dash is my name.  I am very active and love to play. I can sleep in a crate and eat snacks.  I'm about 25 pounds but If I eat snacks, then maybe 26 pounds.  I love other dogs.  The dog park is the best.  I think I’m fast but my friend Tucker is even faster.  Did I mention that I like to play?  I’d rather play with a tennis ball or chew toy than your shoes.  I realize that’s a no-no.  I’m not a bad dog, I'm a good dog.  While I have white fur that shows dirt, this does not mean that I am a bad dog.  I’m happy outside or inside.  I will let others know not to mess with my family with my powerful bark!  ARF!!",
+        "breed": "Terrier",
+        "createdAt": "2015-10-16T20:54:25.364Z",
+        "currentOwner": {
+            "__type": "Pointer",
+            "className": "DogOwnerHistory",
+            "objectId": "8DKEypLML6"
+        },
+        "gender": "Male",
+        "name": "Dash",
+        "objectId": "4yUMypH6vL",
+        "updatedAt": "2015-10-24T15:13:37.766Z"
+    },
+	{
+        "bio": "Hi! My name is Boo. I like taking long walks on the beach. If you throw a stick I will run and get it. I also like to bring people newspapers. I grew up in Philadelphia but somehow found myself in Charleston after I hopped into the back of a pickup truck. I now have Southern accent and am looking for me a great home!",
+        "breed": "Retriever Mix",
+        "createdAt": "2015-10-15T17:56:55.193Z",
+        "gender": "Female",
+        "name": "Boo",
+        "objectId": "7vkjl43d3h",
+        "updatedAt": "2015-10-16T20:08:26.359Z"
+    },
+	{
+        "bio": "Meet Lilly. Lilly is about 4 years old and around 80 pounds. This girl is VERY shy. Lilly is well mannered but a quiet, shy girl learning to trust again. She is house, crate and leash trained. In fact she loves to go on walks. She knows some basic commands. Lilly’s coat seems to be darkening as she gets fitter. She is great with other dogs, but probably best with older children given her shyness. Lilly would be best in a quiet home with other dogs and a patient, loving owner.",
+        "breed": "Labrador Retriever",
+        "createdAt": "2015-10-15T18:03:41.918Z",
+        "currentOwner": {
+            "__type": "Pointer",
+            "className": "DogOwnerHistory",
+            "objectId": "QmUQHyz438"
+        },
+        "gender": "Female",
+        "name": "Lilly",
+        "objectId": "GGOIImK3zd",
+        "updatedAt": "2015-10-16T20:07:49.224Z"
+    },
+	{
+        "bio": "Komeki is a calm and quiet girl who turns funny once she warms up to you. She somehow became separated from her family and was found wandering around. She’d like a new family to hang out with. She likes sunbaths, going for walks, and relaxing at home. She has been fine with other dogs but is unknown with cats or children. She is estimated to be 5-6 years old.",
+        "breed": "Akita",
+        "createdAt": "2015-10-16T19:44:00.123Z",
+        "gender": "Female",
+        "name": "Komeki",
+        "objectId": "GeiRcDGHlB",
+        "updatedAt": "2015-10-16T20:10:17.977Z"
+    },
+	{
+        "bio": "Eva is 3 years old and weighs about 66 pounds. She is waiting patiently for a loving home. She is heartworm negative, has been dewormed, received a DAPP, Bordatella and Rabies Vaccines, and has been spayed. ",
+        "breed": "Labrador Retriever",
+        "createdAt": "2015-10-15T18:01:27.831Z",
+        "gender": "Female",
+        "name": "Eva",
+        "objectId": "O6IlZUgjwd",
+        "updatedAt": "2015-10-16T20:07:55.658Z"
+    },
+	{
+        "bio": "Meet Jeb. Jeb is 8 years old and working to lose a little weight. This fellow is good with dogs, cats, and kids. He loves to be inside or outside and is perfectly house-trained. Jeb is good on leash and knows basic commands. This guy really wants to please his people. Jeb needs a family willing to take him on walks to help him lose some weight and improve his fitness. He really is the perfect dog to have for anyone at any age.",
+        "breed": "Black Labrador Retriever",
+        "createdAt": "2015-10-15T18:02:44.400Z",
+        "gender": "Male",
+        "name": "Jeb",
+        "objectId": "TxF7F34lXa",
+        "updatedAt": "2015-10-16T20:10:44.989Z"
+    },
+	{
+        "bio": "Hi! My name is Elsa. I am a very sweet, friendly and well socialized baby girl that is just waiting for my *furever* home. My approximate date of birth is 7/10/15 and I weigh just around 15 pounds. My breeds are a 100% guess as my mother was not found with me... I am spayed, current on vaccines and microchipped.",
+        "breed": "Labrador Retriever/Hound Mix",
+        "createdAt": "2015-10-16T19:50:20.836Z",
+        "currentOwner": {
+            "__type": "Pointer",
+            "className": "DogOwnerHistory",
+            "objectId": "kPdgy4N01z"
+        },
+        "gender": "Female",
+        "name": "Elsa",
+        "objectId": "VQ58XAclBt",
+        "updatedAt": "2015-10-27T03:46:02.044Z"
+    },
+	{
+        "bio": "They call me Boomer. Yea, that's right Boomer. My new family says it is a perfect name for me, I guess I don't do anything quietly even sleep. I love my new crate I sleep in it every night and take most of my naps in it with the door open. Don't be fooled though I dream a lot...my crates rocks and rolls all night and I wake myself up howling softly at the moon. (Side note, from Boomer's foster mom: I just wanted to describe what a sweet and haunting sound his little howl is. It does not wake anyone up, we have just heard it when he goes to sleep while we are still awake.) Boomer here again, yeah see these new people right? Well they got something called A/C. Yeah, yeah I heard of it before, but never had much experience with being outside a lot and all. I got it made in the shade now, hehehe, I'm kind of on the funny side.",
+        "breed": "Boxer",
+        "createdAt": "2015-10-16T19:15:10.076Z",
+        "gender": "Male",
+        "name": "Boomer",
+        "objectId": "h09fR80QWC",
+        "updatedAt": "2015-10-16T20:07:44.656Z"
+    }
+] }
