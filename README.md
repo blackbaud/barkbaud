@@ -20,31 +20,58 @@ Feel free to leave feedback by filing an [issue](https://github.com/blackbaud/ba
 
 To run this application in your environment, you will need to complete the following steps:
 
-### Prerequisites
+## Prerequisites
 
-0. A server, such as your local machine, capable of running [NodeJS](https://nodejs.org/).
-0. A reliable internet connection for cloning the repo and installing this project's dependencies.
-0. If you have not already done so, be sure to complete the <a href="https://apidocs.nxt.blackbaud-dev.com/docs/getting-started/">Getting started guide</a>.  This will guide you through the process of signing up for a Blackbaud developer account and requesting a subscription to an API product.  Once approved, your subscription will contain a **Primary key** and a **Secondary key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header in calls to the API. You can view your subscription keys within your [profile](https://developer.nxt.blackbaud-dev.com/developer). 
-0. [Register your application](https://developer.nxt.blackbaud-dev.com/comingsoon) in order to obtain the **Application ID** (client id) and **Application secret** (client secret).  If you plan on running this sample on your local machine, be sure to supply a **Redirect URI** of `https://localhost:5000/auth/callback`.
-0. We assume you know how to clone a repo and use a command line interface (CLI) such as Terminal or the Windows Command Prompt.  
-0. Sign up for [Parse](https://parse.com) account and create a Parse application.  You will use Parse to store the data for Dogs, DogNotes, and DogOwnerHistory while the data for constituents and notes will be stored in RE NXT and accessed via Blackbaud SKY API.
-0. Grab your Parse **Application ID** and your **JavaScript Key**.  The Parse **Application ID** is the main identifier that uniquely specifies your application. This is paired with one of the keys below to provide your clients access to your application's data.  The Parse **JavaScript Key** is used access your Parse data via the Parse JavaScript SDK.  
+-  A server, such as your local machine, capable of running [NodeJS](https://nodejs.org/).
+-  A reliable internet connection for cloning the repo and installing this project's dependencies.
+-  If you have not already done so, be sure to complete the <a href="https://apidocs.nxt.blackbaud-dev.com/docs/getting-started/">Getting started guide</a>.  This will guide you through the process of signing up for a Blackbaud developer account and requesting a subscription to an API product.  Once approved, your subscription will contain a **Primary key** and a **Secondary key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header in calls to the API. You can view your subscription keys within your [profile](https://developer.nxt.blackbaud-dev.com/developer). 
+-  [Register your application](https://developer.nxt.blackbaud-dev.com/comingsoon) in order to obtain the **Application ID** (client id) and **Application secret** (client secret).  If you plan on running this sample on your local machine, be sure to supply a **Redirect URI** of `https://localhost:5000/auth/callback`.
+-  We assume you know how to clone a repo and use a command line interface (CLI) such as Terminal or the Windows Command Prompt.  
+
+## Setup Parse
+0. Sign up for a [Parse](https://parse.com) account and create a Parse application.  You will use Parse to store the data for Dogs, DogNotes, and DogOwnerHistory while the data for constituents and notes will be stored in RE NXT and accessed via Blackbaud SKY API.
+0.  Copy and store your Parse **Application ID** and your **JavaScript Key**. 
 
 ![Parse Keys][parse-keys]
 [parse-keys]: /setup/images/parsekeys.png
 
+## Import Dog data and images
 
+TO DO
 
-  -  parse app id and parse js key.
+- List the steps to import json files from the repo's **/setup/data** folder into Parse.
+- List the steps to add dog images from the repo's **/setup/images**
 
-### Setup
-
+## Clone repo and prep environment
 0. Fork or clone this repository.
-0. Prepare environment by:
-  0. Copy `.env.sample` to `.env`
-  0. Update with the necessary values
-  0. Run `source .env`
-0. Run `npm install`
-0. Run `bower install`
-0. Run `npm build`
-0. Deploy this folder to your server.
+0. Copy the environment file named **.env.sample** as **.env**.
+0. Provide environment variable values by updating the **.env** file with the following values:
+    * `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
+    * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
+    * `AUTH_SUBSCRIPTION_KEY` = Provide your **Subscription key**.  Use either the **primary key** or **secondary key**.  See your [profile](https://developer.nxt.blackbaud-dev.com/developer).
+    * `AUTH_REDIRECT_URI` = One of your registered application's **Redirect URIs**. As you try out this sample locally, use `https://localhost:5000/auth/callback`.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
+    * `PARSE_APP_ID` = Parse **Application ID** 
+    * `PARSE_JS_KEY` = Parse **JavaScript Key**
+    
+0. Review the **.gitignore** file which specifies untracked files to ignore within git.  Note how the **.env** file is ignored. This prevents your registered application's keys from being exposed to everyone else on GitHub. 
+
+## Install dependencies and run the application   
+ 
+0. Using Terminal/Command Prompt, change to the working directory: `cd barkbaud`
+0. Run `npm install`.  **npm** is the package manager for **nodejs**.  `npm install` installs all modules that are listed within the **package.json** file and their dependencies into the local **node_modules** directory. 
+0. Optional.  Run `bower install`.  **bower** helps manage UI dependencies. Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using `bower install`, we pull down the ui components from the barkbaud-ui repo into this project's **bower_components** folder.
+0. Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
+0. Run `source .env` to load the environment variables from the **.env** file into your node app. 
+0. Run node index.js to start the application.  
+0. Open your browser to [https://localhost:5000](https://localhost:5000).
+  
+<pre><code>$ cd barkbaud
+barkbaud $ npm install
+barkbaud $ bower install
+barkbaud $ npm build
+barkbaud $ source .env 
+barkbaud $ node index.js
+
+==>  Now browse to https://localhost:5000/
+</code></pre>
+
