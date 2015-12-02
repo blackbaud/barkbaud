@@ -12,20 +12,30 @@ Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/b
 
 ## Try
 
-[https://barkbaud.herokuapp.com](https://barkbaud.herokuapp.com)
+We've deployed Barkbaud to heroku. Feel free to checkout the live demo of our application at [https://barkbaud.herokuapp.com](https://barkbaud.herokuapp.com).
 
-Feel free to leave feedback by filing an issue.
+Feel free to leave feedback by filing an [issue](https://github.com/blackbaud/barkbaud/issues).
 
 ## Run Barkbaud on your server
 
-Feel free to checkout the live demo of our application, or if you wish to run this application in your environment, you will need to complete the following steps:
+To run this application in your environment, you will need to complete the following steps:
 
 ### Prerequisites
 
-0. A server capable of running NodeJS.
-0. [Register your application](https://developer.nxt.blackbaud-dev.com/comingsoon) in order to obtain the client id and client secret.
-0. [Signup (for free)](https://developer.nxt.blackbaud-dev.com/) for the Blackbaud SKY API developer program in order to obtain your subscription key.
-0. [Create a Parse application](https://parse.com) in order to create your parse app id and parse js key.
+0. A server, such as your local machine, capable of running [NodeJS](https://nodejs.org/).
+0. A reliable internet connection for cloning the repo and installing this project's dependencies.
+0. If you have not already done so, be sure to complete the <a href="https://apidocs.nxt.blackbaud-dev.com/docs/getting-started/">Getting started guide</a>.  This will guide you through the process of signing up for a Blackbaud developer account and requesting a subscription to an API product.  Once approved, your subscription will contain a **Primary key** and a **Secondary key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header in calls to the API. You can view your subscription keys within your [profile](https://developer.nxt.blackbaud-dev.com/developer). 
+0. [Register your application](https://developer.nxt.blackbaud-dev.com/comingsoon) in order to obtain the **Application ID** (client id) and **Application secret** (client secret).  If you plan on running this sample on your local machine, be sure to supply a **Redirect URI** of `https://localhost:5000/auth/callback`.
+0. We assume you know how to clone a repo and use a command line interface (CLI) such as Terminal or the Windows Command Prompt.  
+0. Sign up for [Parse](https://parse.com) account and create a Parse application.  You will use Parse to store the data for Dogs, DogNotes, and DogOwnerHistory while the data for constituents and notes will be stored in RE NXT and accessed via Blackbaud SKY API.
+0. Grab your Parse **Application ID** and your **JavaScript Key**.  The Parse **Application ID** is the main identifier that uniquely specifies your application. This is paired with one of the keys below to provide your clients access to your application's data.  The Parse **JavaScript Key** is used access your Parse data via the Parse JavaScript SDK.  
+
+![Parse Keys][parse-keys]
+[parse-keys]: /setup/images/parsekeys.png
+
+
+
+  -  parse app id and parse js key.
 
 ### Setup
 
