@@ -1,14 +1,14 @@
 # Barkbaud
 
-Blackbaud SKY API / SKY UX demo application for bbcon 2015.
+Blackbaud SKY API / SKY UX sample application.
 
 ## About
 
-This demo was built to showcase the Blackbaud SKY API and Blackbaud Sky UX.  Both technologies function completely independant of one another.  
+This sample application was built to showcase the Blackbaud SKY API and Blackbaud SKY UX. Both technologies function completely independant of one another.  
 
-The Blackbaud SKY API currently supports the [Authorization Code Flow](https://apidocs.nxt.blackbaud-dev.com/docs/authorization/), which requires us to have a back-end server component where we're able to securely store the client secret.  We've implemented the server component using NodeJS, which we automatically deploy to Heroku.
+The Blackbaud SKY API currently supports the [Authorization Code Flow](https://apidocs.nxt.blackbaud-dev.com/docs/authorization/auth-code-flow/), which requires us to have a back-end server component where we're able to securely store the client secret. We've implemented the server component using NodeJS, which we automatically deploy to Heroku.
 
-Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui).  Using Bower, we consume the built ui and move it to the ui folder during our deployment process.
+Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using Bower, we consume the built ui and move it to the ui folder during our deployment process.
 
 ## Try
 
