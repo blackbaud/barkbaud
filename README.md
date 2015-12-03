@@ -39,13 +39,39 @@ Let's populate Parse with the data necessary to power the app.  Parse allows you
 
 ### Import json files as Parse data classes
 
+- Login to Parse.  Click the **Core** menu item followed by the **Data** tab on the left hand side of the app.  
+- Locate the json files on your file system.  These files can be found within the barkbaud repo's **setup/data** folder.
+- Click the **Import** button located under the **Data** tab.
+
+![Import Class][import-class]
+[import-class]: /setup/images/importclass.png
+
+- Drag the **Dog.json** file to the **Import Data** screen.  Accept the defaults for **Collection Type** and **Collection Name**. Click the **Finish Import** button.
+
+![Import Data][import-data]
+[import-data]: /setup/images/importdata.png
+
+- Repeat the process to import the data from the **DogNotes.json** and **DowOwnerHistory.json** files.
 
 
-- List the steps to import json files from the repo's **/setup/data** folder into Parse.
+### Upload dog images
 
-### Upload images
+With the json data imported, its time to add a new column to the **Dog** class (table).  This column will hold the images for each dog.
 
-- List the steps to add dog images from the repo's **/setup/images**
+- Click the **Core** menu item followed by the **Data** tab on the left hand side of the app.  
+- Click the **Dog** class under the **Data** tab. 
+- Select the **+ Col** button.  The **Add a Column** dialog window will be displayed.
+- For the **Select a type* drop down, select **File** as the column type.
+- Enter **image** as the column name. 
+- Click the **Create Column** button. 
+
+![Add column][add-col]
+[add-col]: /setup/images/addcol.png
+
+With the new **image** column added to the **Dog** class, let's upload an image for each dog.
+
+- 
+
 
 ## Clone repo and prep environment
 0. Fork or clone this repository.
