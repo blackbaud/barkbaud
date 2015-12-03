@@ -31,7 +31,7 @@ To run this application in your environment, you will need to complete the follo
 - Fork or clone this repository.
 
 <pre><code>https://github.com/blackbaud/barkbaud.git
-</code><pre>
+</code></pre>
 
 ## Setup Parse
 - Sign up for a [Parse](https://parse.com) account and create a Parse application.  You will use Parse to store the data for Dogs, DogNotes, and DogOwnerHistory while the data for constituents and notes will be stored in RE NXT and accessed via Blackbaud SKY API.
