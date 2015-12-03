@@ -23,7 +23,7 @@ To run this application in your environment, you will need to complete the follo
 -  A server, such as your local machine, capable of running [NodeJS](https://nodejs.org/).
 -  A reliable internet connection for cloning the repo and installing this project's dependencies.
 -  If you have not already done so, be sure to complete the <a href="https://apidocs.nxt.blackbaud-dev.com/docs/getting-started/">Getting started guide</a>.  This will guide you through the process of signing up for a Blackbaud developer account and requesting a subscription to an API product.  Once approved, your subscription will contain a **Primary key** and a **Secondary key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header in calls to the API. You can view your subscription keys within your [profile](https://developer.nxt.blackbaud-dev.com/developer). 
--  [Register your application](https://developer.nxt.blackbaud-dev.com/comingsoon) in order to obtain the **Application ID** (client id) and **Application secret** (client secret).  If you plan on running this sample on your local machine, be sure to supply a **Redirect URI** of `https://localhost:5000/auth/callback`.
+-  [Register your application](https://developerapp.apim.blackbaud-dev.com/applications) in order to obtain the **Application ID** (client id) and **Application secret** (client secret).  If you plan on running this sample on your local machine, be sure to supply a **Redirect URI** of `https://localhost:5000/auth/callback`.
 -  We assume you know how to clone a repo and use a command line interface (CLI) such as Terminal or the Windows Command Prompt.  
 
 ## Setup Parse
