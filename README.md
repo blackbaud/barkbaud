@@ -4,11 +4,9 @@ Blackbaud SKY API / SKY UX sample application.
 
 ## About
 
-This sample application was built to showcase the Blackbaud SKY API and Blackbaud SKY UX. Both technologies function completely independant of one another.  
+This sample application was built to showcase the Blackbaud SKY API and Blackbaud SKY UX. Both technologies function completely independant of one another.  The Blackbaud SKY API currently supports the [Authorization Code Flow](https://apidocs.nxt.blackbaud-dev.com/docs/authorization/auth-code-flow/), which requires us to have a back-end server component where we're able to securely store the client secret. We've implemented the server component using NodeJS.  Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using Bower, we consume the built ui and move it to the barkbaud repo's **ui** folder during our deployment process.
 
-The Blackbaud SKY API currently supports the [Authorization Code Flow](https://apidocs.nxt.blackbaud-dev.com/docs/authorization/auth-code-flow/), which requires us to have a back-end server component where we're able to securely store the client secret. We've implemented the server component using NodeJS, which we automatically deploy to Heroku.
-
-Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using Bower, we consume the built ui and move it to the ui folder during our deployment process.
+The Barkbaud application starts by requesting authorization to your Blackbaud NXT data. A dashboard provides a listing of dogs that are looking for a good home. The biographies of each animal are stored in Parse within a class (table) named **Dog**.  Selecting a dog will take you to a page which lists the animal's owner and medical history. Blackbaud SKY API provides access to constituent data. The application uses the api to search for an constituent and retreive the constituent id which is used to relate the constituent to a dog as a dog owner within Parse. Owner history is stored within a Parse class named **DogOwnerHistory**. Medical history is stored as notes within a Parse class named **DogNotes**. Upon adding medical history, the user has the option of storing the information as a note on the current owner's RE NXT record. 
 
 ## Try
 
@@ -37,9 +35,16 @@ To run this application in your environment, you will need to complete the follo
 
 ## Import Dog data and images
 
-TO DO
+Let's populate Parse with the data necessary to power the app.  Parse allows you to import json files as data classes.  The json files can be found within this repo's **setup/data** folder.  After we import the data, we will upload the dog images to the appropriate class within Parse.  The image files can be found within this repo's **setup/images** folder. 
+
+### Import json files as Parse data classes
+
+
 
 - List the steps to import json files from the repo's **/setup/data** folder into Parse.
+
+### Upload images
+
 - List the steps to add dog images from the repo's **/setup/images**
 
 ## Clone repo and prep environment
