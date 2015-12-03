@@ -27,8 +27,8 @@ To run this application in your environment, you will need to complete the follo
 -  We assume you know how to clone a repo and use a command line interface (CLI) such as Terminal or the Windows Command Prompt.  
 
 ## Setup Parse
-0. Sign up for a [Parse](https://parse.com) account and create a Parse application.  You will use Parse to store the data for Dogs, DogNotes, and DogOwnerHistory while the data for constituents and notes will be stored in RE NXT and accessed via Blackbaud SKY API.
-0.  Copy and store your Parse **Application ID** and your **JavaScript Key**. 
+- Sign up for a [Parse](https://parse.com) account and create a Parse application.  You will use Parse to store the data for Dogs, DogNotes, and DogOwnerHistory while the data for constituents and notes will be stored in RE NXT and accessed via Blackbaud SKY API.
+- Copy and store your Parse **Application ID** and your **JavaScript Key**. 
 
 ![Parse Keys][parse-keys]
 [parse-keys]: /setup/images/parsekeys.png
@@ -53,7 +53,6 @@ Let's populate Parse with the data necessary to power the app.  Parse allows you
 
 - Repeat the process to import the data from the **DogNotes.json** and **DowOwnerHistory.json** files.
 
-
 ### Upload dog images
 
 With the json data imported, its time to add a new column to the **Dog** class (table).  This column will hold the images for each dog.
@@ -61,7 +60,7 @@ With the json data imported, its time to add a new column to the **Dog** class (
 - Click the **Core** menu item followed by the **Data** tab on the left hand side of the app.  
 - Click the **Dog** class under the **Data** tab. 
 - Select the **+ Col** button.  The **Add a Column** dialog window will be displayed.
-- For the **Select a type* drop down, select **File** as the column type.
+- For the **Select a type** drop down, select **File** as the column type.
 - Enter **image** as the column name. 
 - Click the **Create Column** button. 
 
@@ -77,9 +76,9 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 
 
 ## Clone repo and prep environment
-0. Fork or clone this repository.
-0. Copy the environment file named **.env.sample** as **.env**.
-0. Provide environment variable values by updating the **.env** file with the following values:
+- Fork or clone this repository.
+-  Copy the environment file named **.env.sample** as **.env**.
+-  Provide environment variable values by updating the **.env** file with the following values:
     * `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
     * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
     * `AUTH_SUBSCRIPTION_KEY` = Provide your **Subscription key**.  Use either the **primary key** or **secondary key**.  See your [profile](https://developer.nxt.blackbaud-dev.com/developer).
@@ -87,17 +86,17 @@ With the new **image** column added to the **Dog** class, let's upload an image 
     * `PARSE_APP_ID` = Parse **Application ID** 
     * `PARSE_JS_KEY` = Parse **JavaScript Key**
     
-0. Review the **.gitignore** file which specifies untracked files to ignore within git.  Note how the **.env** file is ignored. This prevents your registered application's keys from being exposed to everyone else on GitHub. 
+-  Review the **.gitignore** file which specifies untracked files to ignore within git.  Note how the **.env** file is ignored. This prevents your registered application's keys from being exposed to everyone else on GitHub. 
 
 ## Install dependencies and run the application   
  
-0. Using Terminal/Command Prompt, change to the working directory: `cd barkbaud`
-0. Run `npm install`.  **npm** is the package manager for **nodejs**.  `npm install` installs all modules that are listed within the **package.json** file and their dependencies into the local **node_modules** directory. 
-0. Optional.  Run `bower install`.  **bower** helps manage UI dependencies. Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using `bower install`, we pull down the ui components from the barkbaud-ui repo into this project's **bower_components** folder.
-0. Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
-0. Run `source .env` to load the environment variables from the **.env** file into your node app. 
-0. Run node index.js to start the application.  
-0. Open your browser to [https://localhost:5000](https://localhost:5000).
+- Using Terminal/Command Prompt, change to the working directory: `cd barkbaud`
+- Run `npm install`.  **npm** is the package manager for **nodejs**.  `npm install` installs all modules that are listed within the **package.json** file and their dependencies into the local **node_modules** directory. 
+- Optional.  Run `bower install`.  **bower** helps manage UI dependencies. Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using `bower install`, we pull down the ui components from the barkbaud-ui repo into this project's **bower_components** folder.
+- Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
+- Run `source .env` to load the environment variables from the **.env** file into your node app. 
+- Run `node index.js` to start the application.  
+- Open your browser to [https://localhost:5000](https://localhost:5000).
   
 <pre><code>$ cd barkbaud
 barkbaud $ npm install
