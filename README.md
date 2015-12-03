@@ -26,6 +26,13 @@ To run this application in your environment, you will need to complete the follo
 -  [Register your application](https://developerapp.apim.blackbaud-dev.com/applications) in order to obtain the **Application ID** (client id) and **Application secret** (client secret).  If you plan on running this sample on your local machine, be sure to supply a **Redirect URI** of `https://localhost:5000/auth/callback`.
 -  We assume you know how to clone a repo and use a command line interface (CLI) such as Terminal or the Windows Command Prompt.  
 
+## Clone or Fork
+
+- Fork or clone this repository.
+
+<pre><code>https://github.com/blackbaud/barkbaud.git
+</code><pre>
+
 ## Setup Parse
 - Sign up for a [Parse](https://parse.com) account and create a Parse application.  You will use Parse to store the data for Dogs, DogNotes, and DogOwnerHistory while the data for constituents and notes will be stored in RE NXT and accessed via Blackbaud SKY API.
 - Copy and store your Parse **Application ID** and your **JavaScript Key**. 
@@ -75,8 +82,7 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 - Repeat the process for the remaining dogs.
 
 
-## Clone repo and prep environment
-- Fork or clone this repository.
+## Prep your environment
 -  Copy the environment file named **.env.sample** as **.env**.
 -  Provide environment variable values by updating the **.env** file with the following values:
     * `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
