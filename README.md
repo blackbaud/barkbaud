@@ -70,7 +70,10 @@ With the json data imported, its time to add a new column to the **Dog** class (
 
 With the new **image** column added to the **Dog** class, let's upload an image for each dog.
 
-- 
+- Select the first row in the class and note the name of the dog. 
+- Double-click **(undefined)** value within the row's **image** column to change the value to **Upload File**.  Double click again to open the file dialog window.  
+- Select the image file for the appropriate dog.  
+- Repeat the process for the remaining dogs.
 
 
 ## Clone repo and prep environment
