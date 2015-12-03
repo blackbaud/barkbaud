@@ -30,7 +30,7 @@ To run this application in your environment, you will need to complete the follo
 
 - Fork or clone this repository.
 
-<pre><code>https://github.com/blackbaud/barkbaud.git
+<pre><code>git clone https://github.com/blackbaud/barkbaud.git
 </code></pre>
 
 ## Setup Parse
