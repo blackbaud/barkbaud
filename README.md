@@ -100,7 +100,7 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 - Run `npm install`.  **npm** is the package manager for **nodejs**.  `npm install` installs all modules that are listed within the **package.json** file and their dependencies into the local **node_modules** directory. 
 - Optional.  Run `bower install`.  **bower** helps manage UI dependencies. Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using `bower install`, we pull down the ui components from the barkbaud-ui repo into this project's **bower_components** folder.
 - Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
-- For OSX or linux run `source .env` to load all the environment variables from the **.env** file into your node app. For Windows environments, see [How can i set NODE_ENV=production in Windows?](http://stackoverflow.com/questions/9249830/how-can-i-set-node-env-production-in-windows).	` 
+- For OSX or linux run `source .env` to load all the environment variables from the **.env** file into your node app. For Windows environments, see [How can i set NODE_ENV=production in Windows?](http://stackoverflow.com/questions/9249830/how-can-i-set-node-env-production-in-windows).	
 - Run `node index.js` to start the application.  
 - Open your browser to [https://localhost:5000](https://localhost:5000).
   
