@@ -110,7 +110,10 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 
 - Run `node index.js` to start the application.  
 - Open your browser to [https://localhost:5000](https://localhost:5000).
-  
+
+
+### OSX/Linux example:
+
 <pre><code>$ cd barkbaud
 barkbaud $ npm install
 barkbaud $ bower install
@@ -121,3 +124,35 @@ barkbaud $ node index.js
 ==>  Now browse to https://localhost:5000/
 </code></pre>
 
+
+### Windows example:
+
+<pre><code>$ cd barkbaud
+barkbaud $ npm install
+barkbaud $ bower install
+barkbaud $ npm build
+
+barkbaud $ SET AUTH_CLIENT_ID={your registered application's Application ID.}
+barkbaud $ SET AUTH_CLIENT_SECRET={your application's Application secret.}
+barkbaud $ SET AUTH_SUBSCRIPTION_KEY={your Subscription key}
+barkbaud $ SET AUTH_REDIRECT_URI=https://localhost:5000/auth/callback
+barkbaud $ SET PARSE_APP_ID={your Parse application id}
+barkbaud $ SET PARSE_JS_KEY={your Parse JavaScript key}
+barkbaud $ SET NODE_ENV=development
+barkbaud $ SET PORT=5000
+
+barkbaud $ node index.js
+
+==>  Now browse to https://localhost:5000/
+</code></pre>
+
+
+<pre><code>$ cd sky-api-auth-tutorial
+
+
+sky-api-auth-tutorial $ 
+sky-api-auth-tutorial $ 
+sky-api-auth-tutorial $ 
+sky-api-auth-tutorial $ 
+
+sky-api-auth-tutorial $ node index.js</code></pre>
