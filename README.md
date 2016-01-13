@@ -104,11 +104,7 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 - Run `npm install`.  **npm** is the package manager for **nodejs**.  `npm install` installs all modules that are listed within the **package.json** file and their dependencies into the local **node_modules** directory. 
 - Optional.  Run `bower install`.  **bower** helps manage UI dependencies. Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using `bower install`, we pull down the ui components from the barkbaud-ui repo into this project's **bower_components** folder.
 - Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
-- For OSX or linux run `source .env` to load all the environment variables from the **.env** file into your node app.
-
-<p class="alert alert-info"><strong>Windows Users </strong>
-Loading environment variables for NodeJS is not as straightforward for Windows environments as it is for OSX/Linux. In a Windows environment, you can't use the <code>source</code> command to load the environment variables from the environment file. Instead of using `source .env` to load all the environment variables from the environment file, use the  `SET` command individually to set each environment variable. Changes made with `SET` will remain only for the duration of the current Windows Command Prompt session.  
-</p>  
+- For OSX or linux run `source .env` to load all the environment variables from the **.env** file into your node app.  **Windows Users: **Loading environment variables for NodeJS is not as straightforward for Windows environments as it is for OSX/Linux. In a Windows environment, you can't use the `source` command to load the environment variables from the environment file. Instead of using `source .env` to load all the environment variables from the environment file, use the  `SET` command individually to set each environment variable. Changes made with `SET` will remain only for the duration of the current Windows Command Prompt session.  
 
 - Run `node index.js` to start the application.  
 - Open your browser to [https://localhost:5000](https://localhost:5000).
