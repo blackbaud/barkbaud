@@ -21,6 +21,7 @@ To run this application in your environment, you will need to complete the follo
 ## Prerequisites
 
 -  A server, such as your local machine, capable of running [NodeJS](https://nodejs.org/).
+-  Familiarity with NodeJS and environment variables, cloning a repo with git, using a command line interface (CLI) such as the Command Prompt in Windows.  
 -  Install NodeJS (which also installs NPM)
 -  Install [Git](https://git-scm.com/) for cloning the repo to your local machine
 -  Optional:  [Install Bower](http://bower.io/#install-bower)
@@ -28,14 +29,12 @@ To run this application in your environment, you will need to complete the follo
 -  If you have not already done so, be sure to complete the <a href="https://apidocs.nxt.blackbaud-dev.com/docs/getting-started/">Getting started guide</a>.  This will guide you through the process of signing up for a Blackbaud developer account and requesting a subscription to an API product.  Once approved, your subscription will contain a **Primary key** and a **Secondary key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header in calls to the API. You can view your subscription keys within your [profile](https://developer.nxt.blackbaud-dev.com/developer). 
 -  [Register your application](https://developerapp.apim.blackbaud-dev.com/applications) in order to obtain the **Application ID** (client id) and **Application secret** (client secret).  When you call the Blackbaud Authorization Service from your application, you pass the `redirect_uri` as part of the call. The Blackbaud Authorization Service redirects to this URI after the user grants or denies permission. Therefore, you must whitelist the web address(es) or authorization fails. URIs must exactly match the value your application uses in calls to the Blackbaud Authorization Service. If you plan on running this sample on your local machine, be sure to supply a **Redirect URI** of `https://localhost:5000/auth/callback`.  We can support localhost redirect URIs if they are bound as HTTPS using a self-signed SSL certificate.
 -  Install a self-signed SSL certificate to support a localhost redirect URI.    
--  We assume you know how to clone a repo and use a command line interface (CLI) such as Terminal or the Windows Command Prompt.  
 
 ## Clone or Fork
 
 - Fork or clone this repository.
 
-<pre><code>git clone https://github.com/blackbaud/barkbaud.git
-</code></pre>
+<pre><code>git clone https://github.com/blackbaud/barkbaud.git</code></pre>
 
 ## Setup Parse
 - Sign up for a [Parse](https://parse.com) account and create a Parse application.
@@ -87,7 +86,7 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 
 
 ## Prep your environment
--  Copy the environment file named **.env.sample** as **.env**.  **Windows Users take note:** Files within a Windows environment must have a name, not just an extension.  Attempting to create a file named **.env** will result in an error.  Windows users should provide a valid name for the environment file, such as **vars.env** instead of **.env**.
+-  Copy the environment file named **.env.sample** as **.env**.  **Windows Users take note** Files within a Windows environment must have a name, not just an extension.  Attempting to create a file named **.env** will result in an error.  Windows users should provide a valid name for the environment file, such as **vars.env** instead of **.env**.
 -  Provide environment variable values by updating the environment file with the following values:
     * `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
     * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
@@ -100,13 +99,13 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 
 ## Install dependencies and run the application   
  
-- Using Terminal/Command Prompt, change to the working directory: `cd barkbaud`
+- Using Terminal/Command Prompt, change to the working directory: `cd barkbaud`.
 - Run `npm install`.  **npm** is the package manager for **nodejs**.  `npm install` installs all modules that are listed within the **package.json** file and their dependencies into the local **node_modules** directory. 
 - Optional.  Run `bower install`.  **bower** helps manage UI dependencies. Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using `bower install`, we pull down the ui components from the barkbaud-ui repo into this project's **bower_components** folder.
 - Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
-- For OSX or linux run `source .env` to load all the environment variables from the **.env** file into your node app.  
+- For OSX or Linux run `source .env` to load all the environment variables from the **.env** file into your node app.  
 
-**Windows Users ** Loading environment variables for NodeJS is not as straightforward for Windows environments as it is for OSX/Linux. In a Windows environment, you can't use the `source` command to load the environment variables from the environment file. Instead of using `source .env` to load all the environment variables from the environment file, use the  `SET` command individually to set each environment variable. Changes made with `SET` will remain only for the duration of the current Windows Command Prompt session.  
+**Windows Users** Loading environment variables for NodeJS is not as straightforward as OSX/Linux. In a Windows environment, you can't use the `source` command to load the environment variables from the environment file. Open the environment file. Within the Command Prompt, use the  `SET` command  to individually set each environment variable and value. See **Windows example** below. Changes made with `SET` will remain only for the duration of the current Windows Command Prompt session.  
 
 - Run `node index.js` to start the application.  
 - Open your browser to [https://localhost:5000](https://localhost:5000).
@@ -145,14 +144,3 @@ barkbaud $ node index.js
 
 ==>  Now browse to https://localhost:5000/
 </code></pre>
-
-
-<pre><code>$ cd sky-api-auth-tutorial
-
-
-sky-api-auth-tutorial $ 
-sky-api-auth-tutorial $ 
-sky-api-auth-tutorial $ 
-sky-api-auth-tutorial $ 
-
-sky-api-auth-tutorial $ node index.js</code></pre>
