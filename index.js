@@ -52,10 +52,20 @@ app.use(cors({
     credentials: true,
     origin: [
         'http://localhost:5000',
+        'http://localhost:8080'
+    ]
+}));
+
+/*
+	app.use(cors({
+    credentials: true,
+    origin: [
+        'http://localhost:5000',
         'http://localhost:8080',
         'https://' + process.env.HEROKU_APP_NAME
     ]
 }));
+*/
 app.use(session(sessionConfig));
 app.use(timeout('30s'));
 

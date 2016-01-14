@@ -105,7 +105,7 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 - Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
 - For OSX or Linux run `source .env` to load all the environment variables from the **.env** file into your node app.  
 
-**Windows Users** Loading environment variables for NodeJS is not as straightforward as OSX/Linux. In a Windows environment, you can't use the `source` command to load the environment variables from the environment file. Open the environment file. Within the Command Prompt, use the  `SET` command  to individually set each environment variable and value. See **Windows example** below. Changes made with `SET` will remain only for the duration of the current Windows Command Prompt session.  
+**Windows Users** Loading environment variables for NodeJS is not as straightforward as OSX/Linux. In a Windows environment, you can't use the `source` command to load the environment variables from the environment file. Within the Command Prompt, use the  `SET` command  to individually set each environment variable and value. See **Windows example** below. Changes made with `SET` will remain only for the duration of the current Windows Command Prompt session.  
 
 - Run `node index.js` to start the application.  
 - Open your browser to [https://localhost:5000](https://localhost:5000).
@@ -131,7 +131,7 @@ barkbaud $ npm install
 barkbaud $ bower install
 barkbaud $ npm build
 
-barkbaud $ SET AUTH_CLIENT_ID={your registered application's Application ID.}
+barkbaud $ SET AUTH_CLIENT_ID={paste your registered application's Application ID value from the environment file.}
 barkbaud $ SET AUTH_CLIENT_SECRET={your application's Application secret.}
 barkbaud $ SET AUTH_SUBSCRIPTION_KEY={your Subscription key}
 barkbaud $ SET AUTH_REDIRECT_URI=https://localhost:5000/auth/callback
