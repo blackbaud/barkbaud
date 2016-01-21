@@ -84,18 +84,35 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 - Select the image file for the appropriate dog.  
 - Repeat the process for the remaining dogs.
 
-
 ## Prep your environment
--  Copy the environment file named **.env.sample** as **.env**.  **Windows Users take note** Files within a Windows environment must have a name, not just an extension.  Attempting to create a file named **.env** will result in an error.  Windows users should provide a valid name for the environment file, such as **vars.env** instead of **.env**.
--  Provide environment variable values by updating the environment file with the following values:
-    * `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
+
+### OSX/Linux users
+
+- Open the **sky-api-auth-tutorial** working directory and copy the configuration file **.env.sample** as **.env**.  The **.env** file contains the environment variables for the application for OSX environments. 
+- Update the **.env** with the following values:
+ 		* `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
     * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
     * `AUTH_SUBSCRIPTION_KEY` = Provide your **Subscription key**.  Use either the **primary key** or **secondary key**.  See your [profile](https://developer.nxt.blackbaud-dev.com/developer).
     * `AUTH_REDIRECT_URI` = One of your registered application's **Redirect URIs**. As you try out this sample locally, use `https://localhost:5000/auth/callback`.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
-    * `PARSE_APP_ID` = Parse **Application ID** 
-    * `PARSE_JS_KEY` = Parse **JavaScript Key**
-    
--  Review the **.gitignore** file which specifies untracked files to ignore within git.  Note how the **.env** file is ignored. This prevents your registered application's keys from being exposed to everyone else on GitHub. 
+    * `PARSE_APP_ID` = Parse **Application ID**. 
+    * `PARSE_JS_KEY` = Parse **JavaScript Key**.
+- Save the environment file. 
+- Review the **.gitignore** file.  The purpose of the file is to specify the untracked files to ignore. Note that the **.env** file is ignored. This prevents the file from being synced to GitHub and protects your registered application's keys and other sensitive data from being exposed. 
+
+### Windows users
+
+Files within a Windows environment must have a name, not just an extension.  Attempting to create a file named **.env** will result in an error.  Instead, you will need a batch file.
+
+- Instead of using a **.env** file, Windows users should copy the **envsample.bat** file as **env.bat**.  
+- Update the **env.bat** with the following values:
+ 		* `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
+    * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
+    * `AUTH_SUBSCRIPTION_KEY` = Provide your **Subscription key**.  Use either the **primary key** or **secondary key**.  See your [profile](https://developer.nxt.blackbaud-dev.com/developer).
+    * `AUTH_REDIRECT_URI` = One of your registered application's **Redirect URIs**. As you try out this sample locally, use `https://localhost:5000/auth/callback`.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
+    * `PARSE_APP_ID` = Parse **Application ID**. 
+    * `PARSE_JS_KEY` = Parse **JavaScript Key**.
+- Save the batch file.
+- Review the **.gitignore** file.  The purpose of the file is to specify the untracked files to ignore.  Notice how **env.bat** is ignored. This prevents the file from being synced to GitHub and protects your registered application's keys and other sensitive data from being exposed. 
 
 ## Install dependencies and run the application   
  
@@ -103,13 +120,9 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 - Run `npm install`.  **npm** is the package manager for **nodejs**.  `npm install` installs all modules that are listed within the **package.json** file and their dependencies into the local **node_modules** directory. 
 - Optional.  Run `bower install`.  **bower** helps manage UI dependencies. Our front-end is stored and built in the [barkbaud-ui repo](https://github.com/blackbaud/barkbaud-ui). Using `bower install`, we pull down the ui components from the barkbaud-ui repo into this project's **bower_components** folder.
 - Optional.  Run `npm build`.  This copies the ui build components from the **bower_components** folder to the **ui** folder. 
-- For OSX or Linux run `source .env` to load all the environment variables from the **.env** file into your node app.  
-
-**Windows Users** Loading environment variables for NodeJS is not as straightforward as OSX/Linux. In a Windows environment, you can't use the `source` command to load the environment variables from the environment file. Within the Command Prompt, use the  `SET` command  to individually set each environment variable and value. See **Windows example** below. Changes made with `SET` will remain only for the duration of the current Windows Command Prompt session.  
-
+- For OSX or Linux run `source .env` to load all the environment variables from the **.env** file into your node app. Windows user should run the `env.bat` batch file to load the environment variables. 
 - Run `node index.js` to start the application.  
 - Open your browser to [https://localhost:5000](https://localhost:5000).
-
 
 ### OSX/Linux example:
 
@@ -123,23 +136,13 @@ barkbaud $ node index.js
 ==>  Now browse to https://localhost:5000/
 </code></pre>
 
-
 ### Windows example:
 
 <pre><code>$ cd barkbaud
 barkbaud $ npm install
 barkbaud $ bower install
 barkbaud $ npm build
-
-barkbaud $ SET AUTH_CLIENT_ID={paste your registered application's Application ID value from the environment file.}
-barkbaud $ SET AUTH_CLIENT_SECRET={your application's Application secret.}
-barkbaud $ SET AUTH_SUBSCRIPTION_KEY={your Subscription key}
-barkbaud $ SET AUTH_REDIRECT_URI=https://localhost:5000/auth/callback
-barkbaud $ SET PARSE_APP_ID={your Parse application id}
-barkbaud $ SET PARSE_JS_KEY={your Parse JavaScript key}
-barkbaud $ SET NODE_ENV=development
-barkbaud $ SET PORT=5000
-
+barkbaud $ env.bat
 barkbaud $ node index.js
 
 ==>  Now browse to https://localhost:5000/
