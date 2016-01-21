@@ -88,7 +88,7 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 
 ### OSX/Linux users
 
-- Open the **sky-api-auth-tutorial** working directory and copy the configuration file **.env.sample** as **.env**.  The **.env** file contains the environment variables for the application for OSX environments. 
+- Open the **barkbaud** working directory and copy the configuration file **.env.sample** as **.env**.  The **.env** file contains the environment variables for the application for OSX environments. 
 - Update the **.env** with the following values:
  		* `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
     * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
@@ -103,7 +103,7 @@ With the new **image** column added to the **Dog** class, let's upload an image 
 
 Files within a Windows environment must have a name, not just an extension.  Attempting to create a file named **.env** will result in an error.  Instead, you will need a batch file.
 
-- Instead of using a **.env** file, Windows users should copy the **envsample.bat** file as **env.bat**.  
+- Open the **barkbaud** working directory.  Instead of using a **.env** file, Windows users should copy the **envsample.bat** file as **env.bat**.  
 - Update the **env.bat** with the following values:
  		* `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
     * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
