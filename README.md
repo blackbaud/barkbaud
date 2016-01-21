@@ -105,12 +105,12 @@ Files within a Windows environment must have a name, not just an extension.  Att
 
 - Open the **barkbaud** working directory.  Instead of using a **.env** file, Windows users should copy the **envsample.bat** file as **env.bat**.  
 - Update the **env.bat** with the following values:
- 		* `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
-    * `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
-    * `AUTH_SUBSCRIPTION_KEY` = Provide your **Subscription key**.  Use either the **primary key** or **secondary key**.  See your [profile](https://developer.nxt.blackbaud-dev.com/developer).
-    * `AUTH_REDIRECT_URI` = One of your registered application's **Redirect URIs**. As you try out this sample locally, use `https://localhost:5000/auth/callback`.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
-    * `PARSE_APP_ID` = Parse **Application ID**. 
-    * `PARSE_JS_KEY` = Parse **JavaScript Key**.
+	* `AUTH_CLIENT_ID` = Your registered application's **Application ID**.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
+	* `AUTH_CLIENT_SECRET` = Your registered application's **Application secret**.
+	* `AUTH_SUBSCRIPTION_KEY` = Provide your **Subscription key**.  Use either the **primary key** or **secondary key**.  See your [profile](https://developer.nxt.blackbaud-dev.com/developer).
+	* `AUTH_REDIRECT_URI` = One of your registered application's **Redirect URIs**. As you try out this sample locally, use `https://localhost:5000/auth/callback`.  See [Managing your apps](https://apidocs.nxt.blackbaud-dev.com/docs/apps/).
+	* `PARSE_APP_ID` = Parse **Application ID**. 
+	* `PARSE_JS_KEY` = Parse **JavaScript Key**.
 - Save the batch file.
 - Review the **.gitignore** file.  The purpose of the file is to specify the untracked files to ignore.  Notice how **env.bat** is ignored. This prevents the file from being synced to GitHub and protects your registered application's keys and other sensitive data from being exposed. 
 
