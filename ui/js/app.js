@@ -483,13 +483,14 @@ angular.module('md5', []).constant('md5', (function() {
 
 }).call(this);
 
-/*globals angular */
+/*jshint browser: true */
+/*globals angular, ng */
 
 (function () {
     'use strict';
 
     var barkbaudConfig = {
-        apiUrl: 'https://glacial-mountain-6366.herokuapp.com/'
+        apiUrl: 'https://barkbaud.herokuapp.com/'
     };
 
     function config($locationProvider, $urlRouterProvider, bbWindowConfig) {
@@ -566,6 +567,80 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
+    function barkbaudAuthService(barkbaudConfig, bbData, bbModal, $q, $window) {
+        var modal,
+            service = {};
+
+        function go(action, redirect) {
+            $window.location.href = [
+                barkbaudConfig.apiUrl,
+                'auth/',
+                action,
+                '?redirect=',
+                encodeURIComponent(redirect)
+            ].join('');
+        }
+
+        service.isAuthenticated = function () {
+            var deferred = $q.defer();
+            bbData.load({
+                data: 'auth/authenticated?' + (new Date().getTime())
+            }).then(function (result) {
+                service.authenticated = result.data.authenticated;
+                service.tenantId = result.data.tenant_id;
+                deferred.resolve(result.data.authenticated);
+            });
+            return deferred.promise;
+        };
+
+        service.login = function (redirect) {
+            go('login', redirect);
+        };
+
+        service.logout = function (redirect) {
+            go('logout', redirect);
+        };
+
+        service.update = function () {
+            modal.close(service.authenticated);
+        };
+
+        service.modal = function (redirect) {
+            if (!modal) {
+                modal = bbModal.open({
+                    controller: 'LoginPageController as loginPage',
+                    templateUrl: 'login/loginpage.html',
+                    resolve: {
+                        barkbaudRedirect: function () {
+                            return redirect;
+                        }
+                    }
+                });
+            }
+
+            return modal.result;
+        };
+
+        return service;
+    }
+
+    barkbaudAuthService.$inject = [
+        'barkbaudConfig',
+        'bbData',
+        'bbModal',
+        '$q',
+        '$window'
+    ];
+
+    angular.module('barkbaud')
+        .factory('barkbaudAuthService', barkbaudAuthService);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
+
     function constituentUrlFilter(barkbaudAuthService) {
         return function (constituentId) {
             return [
@@ -595,25 +670,32 @@ angular.module('md5', []).constant('md5', (function() {
                 barkPhotoUrl: '=',
                 barkPhotoGravatarEmail: '='
             },
-            link: function (scope, el) {
+            bindToController: true,
+            controller: angular.noop,
+            controllerAs: 'barkPhoto',
+            link: function (scope, el, attr, barkPhoto) {
                 function setImageUrl(url) {
                     el.css('background-image', 'url(\'' + url + '\')');
                 }
 
-                scope.$watch('barkPhotoUrl', function (newValue) {
+                scope.$watch(function () {
+                    return barkPhoto.barkPhotoUrl;
+                }, function (newValue) {
                     if (newValue) {
                         setImageUrl(newValue.replace('http://', '//'));
                     }
                 });
 
-                scope.$watch('barkPhotoGravatarEmail', function (newValue) {
+                scope.$watch(function () {
+                    return barkPhoto.barkPhotoGravatarEmail;
+                }, function (newValue) {
                     if (newValue) {
                         setImageUrl(gravatarService.url(newValue, {default: 'mm'}));
                     }
                 });
             },
             replace: true,
-            templateUrl: 'components/photo.html'
+            templateUrl: 'components/photo.directive.html'
         };
     }
 
@@ -632,12 +714,21 @@ angular.module('md5', []).constant('md5', (function() {
         $stateProvider
             .state('dashboard', {
                 controller: 'DashboardPageController as dashboardPage',
-                templateUrl: 'pages/dashboard/dashboardpage.html',
+                templateUrl: 'dashboard/dashboardpage.html',
                 url: '/dashboard'
             });
     }
 
     dashboardPageConfig.$inject = ['$stateProvider'];
+
+    angular.module('barkbaud')
+        .config(dashboardPageConfig);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
 
     function DashboardPageController($scope, $stateParams, bbData, bbWindow) {
         var self = this;
@@ -662,7 +753,6 @@ angular.module('md5', []).constant('md5', (function() {
     ];
 
     angular.module('barkbaud')
-        .config(dashboardPageConfig)
         .controller('DashboardPageController', DashboardPageController);
 }());
 
@@ -757,13 +847,22 @@ angular.module('md5', []).constant('md5', (function() {
         'bbData',
         'dogId'
     ];
+    
+    angular.module('barkbaud')
+        .controller('FindHomeController', FindHomeController);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
 
     function barkFindHome(bbModal) {
         return {
             open: function (dogId) {
                 return bbModal.open({
                     controller: 'FindHomeController as findHome',
-                    templateUrl: 'pages/dogs/currenthome/findhome.html',
+                    templateUrl: 'dogs/currenthome/findhome.html',
                     resolve: {
                         dogId: function () {
                             return dogId;
@@ -777,7 +876,6 @@ angular.module('md5', []).constant('md5', (function() {
     barkFindHome.$inject = ['bbModal'];
 
     angular.module('barkbaud')
-        .controller('FindHomeController', FindHomeController)
         .factory('barkFindHome', barkFindHome);
 }());
 
@@ -791,7 +889,7 @@ angular.module('md5', []).constant('md5', (function() {
             .state('dog', {
                 abstract: true,
                 controller: 'DogPageController as dogPage',
-                templateUrl: 'pages/dogs/dogpage.html',
+                templateUrl: 'dogs/dogpage.html',
                 url: '/dogs/:dogId',
                 resolve: {
                     dogId: ['$stateParams', function ($stateParams) {
@@ -804,21 +902,30 @@ angular.module('md5', []).constant('md5', (function() {
                 views: {
                     'currenthome': {
                         controller: 'DogCurrentHomeTileController as dogCurrentHomeTile',
-                        templateUrl: 'pages/dogs/currenthome/currenthometile.html'
+                        templateUrl: 'dogs/currenthome/currenthometile.html'
                     },
                     'previoushomes': {
                         controller: 'DogPreviousHomesTileController as dogPreviousHomesTile',
-                        templateUrl: 'pages/dogs/previoushomes/previoushomestile.html'
+                        templateUrl: 'dogs/previoushomes/previoushomestile.html'
                     },
                     'notes': {
                         controller: 'DogNotesTileController as dogNotesTile',
-                        templateUrl: 'pages/dogs/notes/notestile.html'
+                        templateUrl: 'dogs/notes/notestile.html'
                     }
                 }
             });
     }
 
     dogPageConfig.$inject = ['$stateProvider'];
+
+    angular.module('barkbaud')
+        .config(dogPageConfig);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
 
     function DogPageController($scope, $stateParams, bbData, bbWindow, dogId) {
         var self = this;
@@ -878,7 +985,6 @@ angular.module('md5', []).constant('md5', (function() {
     ];
 
     angular.module('barkbaud')
-        .config(dogPageConfig)
         .controller('DogPageController', DogPageController);
 }());
 
@@ -910,12 +1016,21 @@ angular.module('md5', []).constant('md5', (function() {
         'dogId'
     ];
 
+    angular.module('barkbaud')
+        .controller('NoteAddController', NoteAddController);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
+
     function barkNoteAdd(bbModal) {
         return {
             open: function (dogId) {
                 return bbModal.open({
                     controller: 'NoteAddController as noteAdd',
-                    templateUrl: 'pages/dogs/notes/noteadd.html',
+                    templateUrl: 'dogs/notes/noteadd.html',
                     resolve: {
                         dogId: function () {
                             return dogId;
@@ -929,7 +1044,6 @@ angular.module('md5', []).constant('md5', (function() {
     barkNoteAdd.$inject = ['bbModal'];
 
     angular.module('barkbaud')
-        .controller('NoteAddController', NoteAddController)
         .factory('barkNoteAdd', barkNoteAdd);
 }());
 
@@ -1024,6 +1138,7 @@ angular.module('md5', []).constant('md5', (function() {
         .controller('DogPreviousHomesTileController', DogPreviousHomesTileController);
 }());
 
+
 /*global angular */
 
 (function () {
@@ -1091,86 +1206,12 @@ angular.module('md5', []).constant('md5', (function() {
         .controller('LoginPageController', LoginPageController);
 }());
 
-/*global angular */
-
-(function () {
-    'use strict';
-
-    function barkbaudAuthService(barkbaudConfig, bbData, bbModal, $q, $window) {
-        var modal,
-            service = {};
-
-        function go(action, redirect) {
-            $window.location.href = [
-                barkbaudConfig.apiUrl,
-                'auth/',
-                action,
-                '?redirect=',
-                encodeURIComponent(redirect)
-            ].join('');
-        }
-
-        service.isAuthenticated = function () {
-            var deferred = $q.defer();
-            bbData.load({
-                data: 'auth/authenticated?' + (new Date().getTime())
-            }).then(function (result) {
-                service.authenticated = result.data.authenticated;
-                service.tenantId = result.data.tenant_id;
-                deferred.resolve(result.data.authenticated);
-            });
-            return deferred.promise;
-        };
-
-        service.login = function (redirect) {
-            go('login', redirect);
-        };
-
-        service.logout = function (redirect) {
-            go('logout', redirect);
-        };
-
-        service.update = function () {
-            modal.close(service.authenticated);
-        };
-
-        service.modal = function (redirect) {
-            if (!modal) {
-                modal = bbModal.open({
-                    controller: 'LoginPageController as loginPage',
-                    templateUrl: 'pages/login/loginpage.html',
-                    resolve: {
-                        barkbaudRedirect: function () {
-                            return redirect;
-                        }
-                    }
-                });
-            }
-
-            return modal.result;
-        };
-
-        return service;
-    }
-
-    barkbaudAuthService.$inject = [
-        'barkbaudConfig',
-        'bbData',
-        'bbModal',
-        '$q',
-        '$window'
-    ];
-
-    angular.module('barkbaud')
-        .factory('barkbaudAuthService', barkbaudAuthService);
-}());
-
 angular.module('barkbaud.templates', []).run(['$templateCache', function($templateCache) {
-    $templateCache.put('components/photo.html',
+    $templateCache.put('components/photo.directive.html',
         '<div class="bark-photo img-circle center-block">\n' +
         '</div>\n' +
         '');
-    $templateCache.put('pages/dashboard/dashboardpage.html',
+    $templateCache.put('dashboard/dashboardpage.html',
         '<div class="container-fluid">\n' +
         '  <h1>Dashboard</h1>\n' +
         '  <section class="panel" ng-repeat="dog in dashboardPage.dogs">\n' +
@@ -1196,7 +1237,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  </div>\n' +
         '</div>\n' +
         '');
-    $templateCache.put('pages/dogs/currenthome/currenthometile.html',
+    $templateCache.put('dogs/currenthome/currenthometile.html',
         '<bb-tile bb-tile-header="\'Current home\'">\n' +
         '  <bb-tile-header-content ng-show="dogCurrentHomeTile.currentHome.constituentId">\n' +
         '      <bb-tile-header-check></bb-tile-header-check>\n' +
@@ -1246,7 +1287,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  </div>\n' +
         '</bb-tile>\n' +
         '');
-    $templateCache.put('pages/dogs/currenthome/findhome.html',
+    $templateCache.put('dogs/currenthome/findhome.html',
         '<bb-modal>\n' +
         '  <form name="findHome.formFind" ng-submit="findHome.saveData()">\n' +
         '    <div class="modal-form">\n' +
@@ -1274,7 +1315,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  </form>\n' +
         '</bb-modal>\n' +
         '');
-    $templateCache.put('pages/dogs/dogpage.html',
+    $templateCache.put('dogs/dogpage.html',
         '<div class="bb-page-header">\n' +
         '    <div class="container-fluid">\n' +
         '        <div class="row">\n' +
@@ -1296,7 +1337,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    <bb-tile-dashboard bb-layout="dogPage.layout" bb-tiles="dogPage.tiles"></bb-tile-dashboard>\n' +
         '</div>\n' +
         '');
-    $templateCache.put('pages/dogs/notes/noteadd.html',
+    $templateCache.put('dogs/notes/noteadd.html',
         '<bb-modal>\n' +
         '  <form name="noteAdd.formAdd" ng-submit="noteAdd.saveData()">\n' +
         '    <div class="modal-form">\n' +
@@ -1328,7 +1369,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  </form>\n' +
         '</bb-modal>\n' +
         '');
-    $templateCache.put('pages/dogs/notes/notestile.html',
+    $templateCache.put('dogs/notes/notestile.html',
         '<bb-tile bb-tile-header="\'Medical history\'">\n' +
         '  <bb-tile-header-content ng-show="dogNotesTile.notes.length">\n' +
         '      {{ dogNotesTile.notes.length }}\n' +
@@ -1357,7 +1398,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  </div>\n' +
         '</bb-tile>\n' +
         '');
-    $templateCache.put('pages/dogs/previoushomes/previoushomestile.html',
+    $templateCache.put('dogs/previoushomes/previoushomestile.html',
         '<bb-tile bb-tile-header="\'Previous homes\'">\n' +
         '  <bb-tile-header-content ng-show="dogPreviousHomesTile.previousHomes.length">\n' +
         '      {{ dogPreviousHomesTile.previousHomes.length }}\n' +
@@ -1391,7 +1432,39 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  </div>\n' +
         '</bb-tile>\n' +
         '');
-    $templateCache.put('pages/login/loginpage.html',
+    $templateCache.put('index.html',
+        '<!DOCTYPE html>\n' +
+        '<html xmlns="http://www.w3.org/1999/xhtml" ng-app="barkbaud">\n' +
+        '\n' +
+        '<head>\n' +
+        '  <title>Barkbaud</title>\n' +
+        '  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">\n' +
+        '  <link rel="stylesheet" type="text/css" href="https://sky.blackbaudcdn.net/skyux/1.4.2/css/sky-bundle.css" />\n' +
+        '  <link rel="stylesheet" type="text/css" href="css/app.css" />\n' +
+        '</head>\n' +
+        '\n' +
+        '<body ng-controller="MainController as mainController">\n' +
+        '  <bb-navbar>\n' +
+        '    <div class="container-fluid">\n' +
+        '      <ul class="nav navbar-nav navbar-left">\n' +
+        '        <li ui-sref-active="bb-navbar-active">\n' +
+        '          <a ui-sref="dashboard">Dashboard</a>\n' +
+        '        </li>\n' +
+        '      </ul>\n' +
+        '      <ul class="nav navbar-nav navbar-right">\n' +
+        '        <li>\n' +
+        '          <a ng-click="mainController.logout()">Logout</a>\n' +
+        '        </li>\n' +
+        '      </ul>\n' +
+        '    </div>\n' +
+        '  </bb-navbar>\n' +
+        '  <div ui-view></div>\n' +
+        '  <script src="https://sky.blackbaudcdn.net/skyux/1.4.2/js/sky-bundle.min.js"></script>\n' +
+        '  <script src="js/app.min.js"></script>\n' +
+        '</body>\n' +
+        '</html>\n' +
+        '');
+    $templateCache.put('login/loginpage.html',
         '<bb-modal>\n' +
         '  <div class="modal-form modal-authorize">\n' +
         '    <bb-modal-header>Barkbaud</bb-modal-header>\n' +
