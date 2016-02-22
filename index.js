@@ -1,4 +1,4 @@
-/*jshint node: true */
+/*jslint node: true, es5: true, nomen: true*/
 'use strict';
 
 var apiDogs,
@@ -52,10 +52,20 @@ app.use(cors({
     credentials: true,
     origin: [
         'http://localhost:5000',
+        'http://localhost:8080'
+    ]
+}));
+
+/*
+	app.use(cors({
+    credentials: true,
+    origin: [
+        'http://localhost:5000',
         'http://localhost:8080',
         'https://' + process.env.HEROKU_APP_NAME
     ]
 }));
+*/
 app.use(session(sessionConfig));
 app.use(timeout('30s'));
 
@@ -64,6 +74,19 @@ app.get('/auth/authenticated', auth.getAuthenticated);
 app.get('/auth/login', auth.getLogin);
 app.get('/auth/callback', auth.getCallback);
 app.get('/auth/logout', auth.getLogout);
+
+
+// Validates all requests
+function requireSession(request, response, next) {
+    auth.validate(request, function (valid) {
+        if (valid) {
+            next();
+        } else {
+            response.sendStatus(401);
+        }
+    });
+}
+
 
 // Register our Dogs GET API routes
 app.get('/api/dogs', requireSession, apiDogs.getDogs);
@@ -81,16 +104,6 @@ app.post('/api/dogs/:dogId/notes', requireSession, apiDogs.postNotes);
 // Register our front-end UI routes
 app.use('/', express.static(__dirname + '/ui'));
 
-// Validates all requests
-function requireSession(request, response, next) {
-    auth.validate(request, function (valid) {
-        if (valid) {
-            next();
-        } else {
-            response.sendStatus(401);
-        }
-    });
-}
 
 // Displays the startup message
 function onListen() {

@@ -3,4 +3,6 @@ node_modules
 bower_components
 .env
 !.env.sample
+env.bat
+!envsample.bat
 .DS_Store
