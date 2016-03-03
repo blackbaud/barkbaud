@@ -1,23 +1,33 @@
 {
   "name": "barkbaud",
-  "version": "0.0.1",
-  "description": "A Blackbaud NXT API / Sky UX demo application for bbcon 2015.",
+  "version": "0.0.3",
+  "description": "A Blackbaud Sky API/UX demo application.",
   "main": "index.js",
   "scripts": {
     "build": "grunt build",
-    "start": "node index.js"
+    "setup": "node ./bin/setup.js",
+    "start": "node ./bin/start.js"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "^1.14.1",
-    "connect-redis": "^3.0.1",
+    "colors": "^1.1.2",
+    "connect-mongo": "^1.1.0",
     "connect-timeout": "^1.7.0",
+    "continuation-local-storage": "^3.1.6",
     "cors": "^2.7.1",
+    "dotenv": "^2.0.0",
     "express": "^4.13.3",
     "express-session": "^1.11.3",
-    "parse": "^1.6.5",
+    "mongoose": "^4.4.4",
     "request": "^2.64.0",
     "request-promise": "^1.0.1",
-    "simple-oauth2": "^0.2.1"
+    "simple-oauth2": "^0.2.1",
+    "yesno": "0.0.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-copy": "^0.8.1"
   },
   "engines": {
     "node": "0.12.7"
@@ -31,9 +41,5 @@
     "renxt",
     "skyux"
   ],
-  "license": "MIT",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-copy": "^0.8.1"
-  }
+  "license": "MIT"
 }

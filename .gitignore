@@ -1,8 +1,7 @@
 npm-debug.log
 node_modules
 bower_components
-.env
-!.env.sample
-env.bat
-!envsample.bat
+barkbaud.env
 .DS_Store
+.env
+!.env-sample

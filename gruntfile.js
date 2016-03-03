@@ -2,8 +2,14 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var ui = 'ui/',
-        body = '</body>',
+    function addApiConfig() {
+        var apiConfig,
+            body,
+            html,
+            index;
+
+        index = 'ui/index.html';
+        body = '</body>';
         apiConfig = [
             "<script>",
             "(function () {",
@@ -17,6 +23,13 @@ module.exports = function (grunt) {
             "}());",
             "</script>"
         ];
+        html = grunt.file.read(index);
+        html = html.replace(body, apiConfig.join("\n") + body);
+
+        grunt.file.write(index, html);
+    }
+
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.initConfig({
         copy: {
@@ -32,17 +45,10 @@ module.exports = function (grunt) {
     });
 
     // Added the AngularJS config to make the api calls relative
-    grunt.registerTask('api', function () {
-        var index = ui + 'index.html',
-            html = grunt.file.read(index);
-        html = html.replace(body, apiConfig.join("\n") + body);
-        grunt.file.write(index, html);
-    });
-
+    grunt.registerTask('api', addApiConfig);
     grunt.registerTask('build', [
         'copy:build',
         'api'
     ]);
-
-    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.registerTask('default', ['build']);
 };
