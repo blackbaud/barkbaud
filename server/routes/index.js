@@ -4,13 +4,10 @@
 
     var routes;
 
-    routes = {
-        api: {}
-    };
+    routes = {};
 
     routes.auth = require('./auth');
-    routes.api.sky = require('./api/sky');
-    routes.api.dog = require('./api/dog')(routes.api.sky);
+    routes.api = require('./api');
 
     module.exports = routes;
 }());

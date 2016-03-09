@@ -93,21 +93,21 @@
     app.get('/auth/logout', routes.auth.getLogout);
 
     // API GET routes.
-    app.get('/api/dogs', routes.auth.checkSession, routes.api.dog.getDogs);
-    app.get('/api/dogs/:dogId', routes.auth.checkSession, routes.api.dog.getDog);
-    app.get('/api/dogs/:dogId/notes', routes.auth.checkSession, routes.api.dog.getNotes);
-    app.get('/api/dogs/:dogId/currenthome', routes.auth.checkSession, routes.api.dog.getCurrentHome);
-    app.get('/api/dogs/:dogId/previoushomes', routes.auth.checkSession, routes.api.dog.getPreviousHomes);
-    app.get('/api/dogs/:dogId/findhome', routes.auth.checkSession, routes.api.dog.getFindHome);
+    app.get('/api/dogs', routes.auth.checkSession, routes.api.getDogs);
+    app.get('/api/dogs/:dogId', routes.auth.checkSession, routes.api.getDog);
+    app.get('/api/dogs/:dogId/notes', routes.auth.checkSession, routes.api.getNotes);
+    app.get('/api/dogs/:dogId/currenthome', routes.auth.checkSession, routes.api.getCurrentHome);
+    app.get('/api/dogs/:dogId/previoushomes', routes.auth.checkSession, routes.api.getPreviousHomes);
+    app.get('/api/dogs/:dogId/findhome', routes.auth.checkSession, routes.api.getFindHome);
 
     // API POST routes.
-    app.post('/api/dogs/:dogId/currenthome', routes.auth.checkSession, routes.api.dog.postCurrentHome);
-    app.post('/api/dogs/:dogId/notes', routes.auth.checkSession, routes.api.dog.postNotes);
+    app.post('/api/dogs/:dogId/currenthome', routes.auth.checkSession, routes.api.postCurrentHome);
+    app.post('/api/dogs/:dogId/notes', routes.auth.checkSession, routes.api.postNotes);
 
     // Connect to the database.
     database.connect(function () {
 
-        // If we're building the database, we don't need to create the server.
+        // If we're running database setup, we don't need to start the server.
         // `node index.js --build-database`
         if (process.env.npm_config_build_database) {
             database.setup(function () {
@@ -117,7 +117,7 @@
 
         } else {
 
-            // Create the server.
+            // Start the server.
             if (environment === 'production') {
                 server = http.createServer(app);
             } else {
@@ -129,7 +129,7 @@
 
             // Listen to the port.
             server.listen(app.get('port'), function () {
-                console.log('Node app is running on port', app.get('port'));
+                console.log('Barkbaud is running on port', app.get('port'));
                 triggerReady();
             });
         }

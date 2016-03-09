@@ -12,6 +12,7 @@
     https = require('request');
     mongoose = require('mongoose');
     Dog = require('../../../database/models/dog');
+    Sky = require('../libs/sky');
 
     /**
      * Gets an array of all dogs sorted ascending by name.
@@ -342,27 +343,15 @@
         });
     }
 
-    /**
-     *
-     * @constructor
-     * @param {Object} Sky
-     * @returns {Object}
-     *  {@link getApi}
-     */
-    module.exports = function (skyApi) {
 
-        Sky = skyApi;
-
-        // Expose any methods from our module
-        return {
-            getCurrentHome: getCurrentHome,
-            getDog: getDog,
-            getDogs: getDogs,
-            getFindHome: getFindHome,
-            getNotes: getNotes,
-            getPreviousHomes: getPreviousHomes,
-            postCurrentHome: postCurrentHome,
-            postNotes: postNotes
-        };
+    module.exports = {
+          getCurrentHome: getCurrentHome,
+          getDog: getDog,
+          getDogs: getDogs,
+          getFindHome: getFindHome,
+          getNotes: getNotes,
+          getPreviousHomes: getPreviousHomes,
+          postCurrentHome: postCurrentHome,
+          postNotes: postNotes
     };
 }());

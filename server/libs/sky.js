@@ -67,7 +67,7 @@
      * @param {Function} callback
      */
     function getConstituent(request, constituentId, callback) {
-        get(request, 'constitmgmt/constituents/' + constituentId, callback);
+        get(request, 'constituent/constituents/' + constituentId, callback);
     }
 
     /**
@@ -78,7 +78,7 @@
      * @param {Function} callback
      */
     function getConstituentSearch(request, name, callback) {
-        get(request, 'constitmgmt/constituents/search?searchText=' + name, callback);
+        get(request, 'constituent/constituents/search?searchText=' + name, callback);
     }
 
     /**
@@ -89,7 +89,7 @@
      * @param {Function} callback
      */
     function postNotes(request, body, callback) {
-        post(request, 'constitmgmt/notes', body, callback);
+        post(request, 'constituent/notes', body, callback);
     }
 
     /**
