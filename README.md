@@ -5,7 +5,6 @@ Blackbaud SKY API / SKY UX sample application.
 ## Contents
 - [About](#about)
 - [Run Barkbaud on your server](#getting-started)
-- [Installation Summary](#summary)
 - [Deploy to Heroku](#deploy)
 
 <h2 id="about">About</h2>
@@ -135,33 +134,6 @@ barkbaud $  npm start
 ```
 
 Open a Web browser to <a href="https://localhost:5000">https://localhost:5000</a>.
-
-<h2 id="summary">Installation Summary</h2>
-
-<ol>
-    <li>
-        Clone the Barkbaud repository:<br>
-        <pre><code>$  git clone https://github.com/blackbaud/barkbaud.git
-$  cd barkbaud</code></pre>
-    </li>
-    <li>Create a MongoDB database.</li>
-    <li>Update <strong>barkbaud.env</strong> configuration variables.</li>
-    <li>
-        Install dependencies:<br>
-        <pre><code>barkbaud $  npm install</code></pre>
-    </li>
-    <li>
-        Build the front-end (optional):<br>
-        <pre><code>barkbaud $  bower install
-barkbaud $  npm build</code></pre>
-    </li>
-    <li>
-        Auto-populate the database (run once) and start the server:<br>
-        <pre><code>barkbaud $  npm run setup
-barkbaud $  npm start</code></pre>
-    </li>
-    <li>Open a Web browser to <a href="https://localhost:5000">https://localhost:5000</a>.</li>
-</ol>
 
 <h2 id="deploy">Deploy Barkbaud to Heroku</h2>
 
