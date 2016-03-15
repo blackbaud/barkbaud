@@ -668,12 +668,18 @@ angular.module('md5', []).constant('md5', (function() {
         return {
             scope: {
                 barkPhotoUrl: '=',
+                barkPhotoBase64: '=',
                 barkPhotoGravatarEmail: '='
             },
             bindToController: true,
             controller: angular.noop,
             controllerAs: 'barkPhoto',
             link: function (scope, el, attr, barkPhoto) {
+
+                function setImageData(data) {
+                    el.css('background-image', 'url("data:image/png;base64,' + data + '")');
+                }
+
                 function setImageUrl(url) {
                     el.css('background-image', 'url(\'' + url + '\')');
                 }
@@ -683,6 +689,14 @@ angular.module('md5', []).constant('md5', (function() {
                 }, function (newValue) {
                     if (newValue) {
                         setImageUrl(newValue.replace('http://', '//'));
+                    }
+                });
+
+                scope.$watch(function () {
+                    return barkPhoto.barkPhotoBase64;
+                }, function (newValue) {
+                    if (newValue) {
+                        setImageData(newValue);
                     }
                 });
 
@@ -778,7 +792,7 @@ angular.module('md5', []).constant('md5', (function() {
         };
 
         self.getTimeInHome = function (fromDate) {
-            var fromDateMoment = bbMoment(fromDate.iso);
+            var fromDateMoment = bbMoment(fromDate);
 
             return 'since ' + fromDateMoment.format('L') + ' (' + fromDateMoment.startOf('month').fromNow(true) + ')';
         };
@@ -1115,8 +1129,8 @@ angular.module('md5', []).constant('md5', (function() {
         };
 
         self.getSummaryDate = function (date) {
-            if (date && date.iso) {
-                return bbMoment(date.iso).format('MMM Do YY');
+            if (date) {
+                return bbMoment(date).format('MMM Do YY');
             }
         };
 
@@ -1218,16 +1232,16 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    <div class="panel-body">\n' +
         '      <div class="row">\n' +
         '          <div class="col-md-3 col-lg-2">\n' +
-        '            <a ui-sref="dog.views({dogId: dog.objectId})">\n' +
-        '              <bark-photo bark-photo-url="dog.image.url"></bark-photo>\n' +
+        '            <a ui-sref="dog.views({ dogId: dog._id })">\n' +
+        '              <bark-photo bark-photo-base64="dog.image.data"></bark-photo>\n' +
         '            </a>\n' +
         '          </div>\n' +
         '          <div class="col-md-9 col-lg-10">\n' +
         '              <h1>\n' +
-        '                <a ui-sref="dog.views({dogId: dog.objectId})">{{dog.name}}</a>\n' +
+        '                <a ui-sref="dog.views({ dogId: dog._id })">{{ dog.name }}</a>\n' +
         '              </h1>\n' +
-        '              <h4>{{dog.breed}} &middot; {{dog.gender}}</h4>\n' +
-        '              <p class="bb-text-block bark-dog-bio">{{dog.bio}}</p>\n' +
+        '              <h4>{{ dog.breed }} &middot; {{ dog.gender }}</h4>\n' +
+        '              <p class="bb-text-block bark-dog-bio">{{ dog.bio }}</p>\n' +
         '          </div>\n' +
         '      </div>\n' +
         '    </div>\n' +
@@ -1320,15 +1334,15 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    <div class="container-fluid">\n' +
         '        <div class="row">\n' +
         '            <div class="col-md-3 col-lg-2">\n' +
-        '                <bark-photo bark-photo-url="dogPage.dog.image.url"></bark-photo>\n' +
+        '                <bark-photo bark-photo-base64="dogPage.dog.image.data"></bark-photo>\n' +
         '            </div>\n' +
         '            <div class="col-md-9 col-lg-10">\n' +
         '                <h1>\n' +
-        '                  {{dogPage.dog.name}}\n' +
+        '                  {{ dogPage.dog.name }}\n' +
         '                </h1>\n' +
-        '                <h4>{{dogPage.dog.breed}} &middot; {{dogPage.dog.gender}}</h4>\n' +
+        '                <h4>{{ dogPage.dog.breed }} &middot; {{ dogPage.dog.gender }}</h4>\n' +
         '                <p></p>\n' +
-        '                <p class="bb-text-block bark-dog-bio">{{dogPage.dog.bio}}</p>\n' +
+        '                <p class="bb-text-block bark-dog-bio">{{ dogPage.dog.bio }}</p>\n' +
         '            </div>\n' +
         '        </div>\n' +
         '    </div>\n' +
@@ -1412,7 +1426,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '        <div ng-switch-default class="bb-repeater">\n' +
         '          <div ng-repeat="previousHome in dogPreviousHomesTile.previousHomes" class="clearfix bb-repeater-item">\n' +
         '            <h4 class="pull-left">\n' +
-        '              <a ng-href="{{previousHome.constituentId | barkConstituentUrl}}" target="_blank">\n' +
+        '              <a ng-href="{{ previousHome.constituentId | barkConstituentUrl }}" target="_blank">\n' +
         '                {{ previousHome.constituent.name }}\n' +
         '              </a>\n' +
         '            </h4>\n' +
@@ -1439,8 +1453,9 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '<head>\n' +
         '  <title>Barkbaud</title>\n' +
         '  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">\n' +
-        '  <link rel="stylesheet" type="text/css" href="https://sky.blackbaudcdn.net/skyux/1.4.2/css/sky-bundle.css" />\n' +
-        '  <link rel="stylesheet" type="text/css" href="css/app.css" />\n' +
+        '  <link rel="icon" type="image/png" href="images/favicon.ico">\n' +
+        '  <link rel="stylesheet" type="text/css" href="https://sky.blackbaudcdn.net/skyux/1.4.2/css/sky-bundle.css">\n' +
+        '  <link rel="stylesheet" type="text/css" href="css/app.css">\n' +
         '</head>\n' +
         '\n' +
         '<body ng-controller="MainController as mainController">\n' +
