@@ -11,7 +11,7 @@
     async = require('async');
     https = require('request');
     mongoose = require('mongoose');
-    Dog = require('../../../database/models/dog');
+    Dog = require('../database/models/dog');
     Sky = require('../libs/sky');
 
     /**
