@@ -184,12 +184,15 @@
 
             if (dtCurrent >= dtExpires) {
                 console.log('BARKBAUD - Token expired');
-
-                token = oauth2.accessToken.create(request.session.ticket);
-                token.refresh(function (error, ticket) {
-                    saveTicket(request, ticket.token);
-                    return callback(!error);
-                });
+                try {
+                    token = oauth2.accessToken.create(request.session.ticket);
+                    token.refresh(function (error, ticket) {
+                        saveTicket(request, ticket.token);
+                        return callback(!error);
+                    });
+                } catch (e) {
+                    callback(false);
+                }
             } else {
                 callback(true);
             }
