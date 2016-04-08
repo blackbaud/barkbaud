@@ -187,6 +187,9 @@
                 try {
                     token = oauth2.accessToken.create(request.session.ticket);
                     token.refresh(function (error, ticket) {
+                        if (!ticket.token) {
+                            return callback(false);
+                        }
                         saveTicket(request, ticket.token);
                         return callback(!error);
                     });

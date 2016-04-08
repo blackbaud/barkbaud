@@ -59,7 +59,8 @@
     // Only cache the authorized session in production.
     if (environment === "production") {
         sessionConfig.store = new MongoStore({
-            url: databaseUri
+            url: databaseUri,
+            autoRemove: 'native'
         });
     }
 

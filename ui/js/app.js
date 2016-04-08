@@ -414,13 +414,13 @@ angular.module('md5', []).constant('md5', (function() {
             delete attrs[directiveName];
             opts = filterKeys('gravatar', attrs);
             unbind = scope.$watch(item, function(newVal) {
+              element.attr('src', gravatarService.url(newVal, opts));
               if (bindOnce) {
                 if (newVal == null) {
                   return;
                 }
                 unbind();
               }
-              element.attr('src', gravatarService.url(newVal, opts));
             });
           }
         };
@@ -834,7 +834,7 @@ angular.module('md5', []).constant('md5', (function() {
                 return bbData.load({
                     data: 'api/dogs/' + dogId + '/findhome?searchText=' + searchText
                 }).then(function (results) {
-                    self.results = results.data.results;
+                    self.results = results.data.value;
                 }).catch(function (result) {
                     self.error = result.data.error;
                 });
@@ -861,7 +861,7 @@ angular.module('md5', []).constant('md5', (function() {
         'bbData',
         'dogId'
     ];
-    
+
     angular.module('barkbaud')
         .controller('FindHomeController', FindHomeController);
 }());
