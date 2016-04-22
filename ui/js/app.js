@@ -664,7 +664,7 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function barkPhoto(gravatarService) {
+    function barkPhoto(bbData, gravatarService) {
         return {
             scope: {
                 barkPhotoUrl: '=',
@@ -713,7 +713,10 @@ angular.module('md5', []).constant('md5', (function() {
         };
     }
 
-    barkPhoto.$inject = ['gravatarService'];
+    barkPhoto.$inject = [
+        'bbData',
+        'gravatarService'
+    ];
 
     angular.module('barkbaud')
         .directive('barkPhoto', barkPhoto);
@@ -1272,7 +1275,8 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '          <div bb-tile-section ng-switch-default>\n' +
         '            <div class="row">\n' +
         '              <div class="col-sm-3 col-xs-4">\n' +
-        '                <bark-photo class="bark-photo-small" bark-photo-gravatar-email="dogCurrentHomeTile.currentHome.constituent.email.address"></bark-photo>\n' +
+        '                <bark-photo class="bark-photo-small" ng-if="::dogCurrentHomeTile.currentHome.constituent.profile_picture" bark-photo-url="dogCurrentHomeTile.currentHome.constituent.profile_picture.thumbnail_url"></bark-photo>\n' +
+        '                <bark-photo class="bark-photo-small" ng-if="::!dogCurrentHomeTile.currentHome.constituent.profile_picture" bark-photo-gravatar-email="dogCurrentHomeTile.currentHome.constituent.email.address"></bark-photo>\n' +
         '              </div>\n' +
         '              <div class="col-sm-9 col-xs-8">\n' +
         '                <h4>\n' +

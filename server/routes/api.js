@@ -108,11 +108,15 @@
 
             if (currentOwner) {
                 Sky.getConstituent(request, currentOwner.constituentId, function (constituent) {
-                    response.json({
-                        data: (function (temp) {
-                            temp.constituent = constituent;
-                            return temp;
-                        }(currentOwner.toObject()))
+                    var temp = currentOwner.toObject();
+                    temp.constituent = constituent;
+                    Sky.getConstituentProfilePicture(request, currentOwner.constituentId, function (data) {
+                        if (!data.error) {
+                            temp.constituent.profile_picture = data;
+                        }
+                        response.json({
+                            data: temp
+                        });
                     });
                 });
             } else {
