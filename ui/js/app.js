@@ -664,7 +664,7 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function barkPhoto(bbData, gravatarService) {
+    function barkPhoto(gravatarService) {
         return {
             scope: {
                 barkPhotoUrl: '=',
@@ -714,7 +714,6 @@ angular.module('md5', []).constant('md5', (function() {
     }
 
     barkPhoto.$inject = [
-        'bbData',
         'gravatarService'
     ];
 
