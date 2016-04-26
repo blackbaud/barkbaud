@@ -1402,10 +1402,10 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '          This dog has no medical history.\n' +
         '        </div>\n' +
         '        <div ng-switch-default class="bb-repeater">\n' +
-        '          <div ng-repeat="note in dogNotesTile.notes" class="bb-repeater-item">\n' +
-        '            <h4 class="bb-repeater-item-title">{{ note.title }}</h4>\n' +
-        '            <h5>{{ dogNotesTile.getNoteDate(note.date) }}</h5>\n' +
-        '            <p>{{ note.description }}</p>\n' +
+        '          <div ng-repeat="note in ::dogNotesTile.notes.slice().reverse() track by $index" class="bb-repeater-item">\n' +
+        '            <h4 class="bb-repeater-item-title">{{:: note.title }}</h4>\n' +
+        '            <h5>{{:: dogNotesTile.getNoteDate(note.date) }}</h5>\n' +
+        '            <p>{{:: note.description }}</p>\n' +
         '          </div>\n' +
         '        </div>\n' +
         '      </div>\n' +
