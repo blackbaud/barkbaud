@@ -108,7 +108,8 @@
 
             if (currentOwner) {
                 Sky.getConstituent(request, currentOwner.constituentId, function (constituent) {
-                    var temp = currentOwner.toObject();
+                    var temp;
+                    temp = currentOwner.toObject();
                     temp.constituent = constituent;
                     Sky.getConstituentProfilePicture(request, currentOwner.constituentId, function (data) {
                         if (!data.error) {
@@ -155,15 +156,12 @@
                 fromDate: -1
             } }
         ], function (error, owners) {
-
             var waterfall;
+            waterfall = [];
 
             if (error) {
-                console.log(error);
-                return;
+                return onParseError(response, error);
             }
-
-            waterfall = [];
 
             function fetchConstituent(index, callback) {
                 Sky.getConstituent(request, owners[index].constituentId, function (constituent) {
@@ -182,7 +180,7 @@
                 }
             });
 
-            async.waterfall(waterfall, function (error, result) {
+            async.waterfall(waterfall, function (error) {
                 if (error) {
                     return onParseError(response, error);
                 }
@@ -212,8 +210,7 @@
         Dog.findOne({
             '_id': request.params.dogId
         }).exec(function (error, dog) {
-            var currentDate,
-                currentOwner;
+            var currentDate;
 
             if (error) {
                 return onParseError(response, error);
