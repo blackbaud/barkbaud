@@ -31,7 +31,8 @@
         };
 
         promise(options).then(callback).catch(function (err) {
-            console.log(err);
+            console.log("(!)[ERROR] ", err.error.Message);
+            callback(err);
         });
     }
 
@@ -81,6 +82,10 @@
         get(request, 'constituent/constituents/search?searchText=' + name, callback);
     }
 
+    function getConstituentProfilePicture(request, constituentId, callback) {
+        get(request, 'constituent/constituents/' + constituentId + '/profilepicture', callback);
+    }
+
     /**
      * Posts a note to the specified constituent
      * @name postNotes
@@ -101,6 +106,7 @@
     module.exports = {
         getConstituent: getConstituent,
         getConstituentSearch: getConstituentSearch,
+        getConstituentProfilePicture: getConstituentProfilePicture,
         postNotes: postNotes
     };
 }());
