@@ -5,6 +5,7 @@
     var promise;
 
     promise = require('request-promise');
+    promise.debug = true;
 
     /**
      * Proxy method to the RENXT api.
