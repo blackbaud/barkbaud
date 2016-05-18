@@ -34,7 +34,7 @@
         console.log(options);
         console.log('END PROXY REQUEST');
 
-        promise(options).then(callback).catch(function (err) {
+        promise(options).then(callback, function (err) {
             console.log("(!)[ERROR] ", err.error.Message);
             callback(err);
         });
