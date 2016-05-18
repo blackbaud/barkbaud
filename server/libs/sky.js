@@ -30,6 +30,10 @@
             }
         };
 
+        console.log('BEGIN PROXY REQUEST');
+        console.log(options);
+        console.log('END PROXY REQUEST');
+
         promise(options).then(callback).catch(function (err) {
             console.log("(!)[ERROR] ", err.error.Message);
             callback(err);
