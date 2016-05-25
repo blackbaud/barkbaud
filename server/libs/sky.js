@@ -24,6 +24,7 @@
             json: true,
             method: method,
             body: body,
+            timeout: 29000,
             url: 'https://api.sky.blackbaud.com/' + endpoint,
             headers: {
                 'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
