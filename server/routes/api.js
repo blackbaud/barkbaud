@@ -156,41 +156,35 @@
                 fromDate: -1
             } }
         ], function (error, owners) {
-            var waterfall;
-            waterfall = [];
-
             if (error) {
                 return onParseError(response, error);
             }
-
-            function fetchConstituent(index, callback) {
-                Sky.getConstituent(request, owners[index].constituentId, function (constituent) {
-                    owners[index].constituent = constituent;
-                    if (typeof callback === "function") {
-                        callback(null, ++index);
+            async.eachSeries(
+                owners,
+                function (owner, next) {
+                    Sky.getConstituent(request, owner.constituentId, function (constituent) {
+                        owner.constituent = constituent;
+                        next(null);
+                    });
+                },
+                function done(error) {
+                    if (error) {
+                        return onParseError(response, error);
                     }
-                });
-            }
-
-            owners.forEach(function (owner, i) {
-                if (i === 0) {
-                    waterfall.push(async.apply(fetchConstituent, i));
-                } else {
-                    waterfall.push(fetchConstituent);
+                    response.json({
+                        data: owners
+                    });
                 }
-            });
-
-            async.waterfall(waterfall, function (error) {
-                if (error) {
-                    return onParseError(response, error);
-                }
-                response.json({
-                    data: owners
-                });
-            });
+            );
         });
     }
 
+    /**
+     *
+     * @name getFindHome
+     * @param {Object} request
+     * @param {Object} response
+     */
     function getFindHome(request, response) {
         Sky.getConstituentSearch(request, request.query.searchText, function (results) {
             response.json(results);
@@ -203,8 +197,6 @@
      * @name postCurrentHome
      * @param {Object} request
      * @param {Object} response
-     * @param {string} request.params.dogId
-     * @param {string} request.body.id
      */
     function postCurrentHome(request, response) {
         Dog.findOne({

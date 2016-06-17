@@ -2,10 +2,12 @@
 (function () {
     'use strict';
 
-    var promise;
+    var constituentBaseUri,
+        rq;
 
-    promise = require('request-promise');
-    promise.debug = true;
+    constituentBaseUri = 'constituent/v1/';
+    rq = require('request-promise');
+    rq.debug = true;
 
     /**
      * Proxy method to the RENXT api.
@@ -32,12 +34,10 @@
             }
         };
 
-        console.log('BEGIN PROXY REQUEST');
-        console.log(options);
-        console.log('END PROXY REQUEST');
-
-        promise(options).then(callback, function (err) {
-            console.log("(!)[ERROR] ", err.error.Message);
+        rq(options).then(function (data) {
+            callback(data);
+        }).catch(function (err) {
+            console.log("(!)[ERROR] ", err);
             callback(err);
         });
     }
@@ -51,7 +51,7 @@
      * @param {Function} callback
      */
     function get(request, endpoint, callback) {
-        return proxy(request, 'GET', endpoint, '', callback);
+        proxy(request, 'GET', endpoint, '', callback);
     }
 
     /**
@@ -63,7 +63,7 @@
      * @param {Function} callback
      */
     function post(request, endpoint, body, callback) {
-        return proxy(request, 'POST', endpoint, body, callback);
+        proxy(request, 'POST', endpoint, body, callback);
     }
 
     /**
@@ -74,7 +74,7 @@
      * @param {Function} callback
      */
     function getConstituent(request, constituentId, callback) {
-        get(request, 'constituent/constituents/' + constituentId, callback);
+        get(request, constituentBaseUri + 'constituents/' + constituentId, callback);
     }
 
     /**
@@ -85,11 +85,11 @@
      * @param {Function} callback
      */
     function getConstituentSearch(request, name, callback) {
-        get(request, 'constituent/constituents/search?searchText=' + name, callback);
+        get(request, constituentBaseUri + 'constituents/search?searchText=' + name, callback);
     }
 
     function getConstituentProfilePicture(request, constituentId, callback) {
-        get(request, 'constituent/constituents/' + constituentId + '/profilepicture', callback);
+        get(request, constituentBaseUri + 'constituents/' + constituentId + '/profilepicture', callback);
     }
 
     /**
@@ -100,7 +100,7 @@
      * @param {Function} callback
      */
     function postNotes(request, body, callback) {
-        post(request, 'constituent/notes', body, callback);
+        post(request, constituentBaseUri + 'notes', body, callback);
     }
 
     /**

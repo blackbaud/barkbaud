@@ -6,7 +6,6 @@
         bodyParser,
         callbacks,
         colors,
-        cookieParser,
         cors,
         Database,
         database,
@@ -15,7 +14,6 @@
         express,
         fs,
         http,
-        https,
         MongoStore,
         mongoose,
         port,
@@ -29,7 +27,6 @@
     fs = require('fs');
     cors = require('cors');
     http = require('http');
-    https = require('https');
     routes = require('./server/routes');
     colors = require('colors');
     express = require('express');
@@ -118,19 +115,11 @@
 
         } else {
 
-            // Start the server.
-            if (environment === 'production') {
-                server = http.createServer(app);
-            } else {
-                server = https.createServer({
-                    key: fs.readFileSync('./server/sslcerts/server.key', 'utf8'),
-                    cert: fs.readFileSync('./server/sslcerts/server.crt', 'utf8')
-                }, app);
-            }
+            server = http.createServer(app);
 
             // Listen to the port.
-            server.listen(app.get('port'), function () {
-                console.log('Barkbaud is running on port', app.get('port'));
+            server.listen(port, function () {
+                console.log('Barkbaud is running on port', port);
                 triggerReady();
             });
         }
