@@ -35,13 +35,13 @@ To run this application in your environment, you will need a server (such as you
 ### Sky API Requirements:
 
 - **A Blackbaud Developer Subscription Key**
-    - If you have not already done so, be sure to complete the [Getting started guide](https://apidocs.sky.blackbaud.com/docs/getting-started/). This will guide you through the process of registering for a Blackbaud developer account and requesting a subscription to an API product.  
+    - If you have not already done so, be sure to complete the [Getting started guide](https://apidocs.sky.blackbaud.com/docs/getting-started/). This will guide you through the process of registering for a Blackbaud developer account and requesting a subscription to an API product.
     - Once approved, your subscription will contain a **Primary Key** and a **Secondary Key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header when making calls to the API.
     - You can view your subscription keys on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer).
 - **A Blackbaud Developer Application ID and Application Secret**
     - [Register your application](https://developerapp.sky.blackbaud.com/applications) in order to obtain the **Application ID** (client ID) and **Application Secret** (client secret).
     - When you call the Blackbaud Authorization Service from your application, you pass the `redirect_uri` as part of the call. The Blackbaud Authorization Service redirects to this URI after the user grants or denies permission. Therefore, you must whitelist the web address(es) or the authorization will fail.
-    - URIs must _exactly_ match the value your application uses in calls to the Blackbaud Authorization Service. If you plan on running Barkbaud on your local machine, be sure to supply a **Redirect URI** of "https://localhost:5000/auth/callback" (we support localhost redirect URIs only if they are bound as HTTPS [using a self-signed SSL certificate](https://devcenter.heroku.com/articles/ssl-certificate-self)).
+    - URIs must _exactly_ match the value your application uses in calls to the Blackbaud Authorization Service. If you plan on running Barkbaud on your local machine, be sure to supply a **Redirect URI** of "http://localhost:5000/auth/callback".
 
 ### Steps to Install:
 
@@ -61,7 +61,7 @@ $  cd barkbaud
 
 #### 3)  Prepare your environment
 
-- On your server (or local machine), open the **barkbaud/** working directory and copy the configuration file **barkbaud.env-sample**, saving it as **barkbaud.env**.  
+- On your server (or local machine), open the **barkbaud/** working directory and copy the configuration file **barkbaud.env-sample**, saving it as **barkbaud.env**.
 - Open **barkbaud.env** in a text editor (such as Notepad or TextEdit).
 - You should see a list of variables which will serve to configure Barkbaud's NodeJS environment.
 - Update the file with the following values:<br><br>
@@ -84,7 +84,7 @@ $  cd barkbaud
         <td>**`AUTH_REDIRECT_URI`**</td>
         <td>
             One of your registered application's **Redirect URIs**. <br>
-            For local development, use `https://localhost:5000/auth/callback`. <br>
+            For local development, use `http://localhost:5000/auth/callback`. <br>
             (See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).)
         </td>
     </tr>
@@ -124,7 +124,7 @@ barkbaud $  npm run setup
 - (Optional) Run `bower install`.
     - Our front-end is stored and built in the [barkbaud-ui repository](https://github.com/blackbaud/barkbaud-ui).
     - Using Bower, we pull down the front-end components from Barkbaud UI into this project's **bower_components/** folder.
-- (Optional) Run `npm build`.  
+- (Optional) Run `npm build`.
     - This copies the front-end build components from the **bower_components/barkbaud-ui/** directory into our application's **ui/** folder.
 
 Now that all the dependencies have been installed and the database created, we can run the application with:
@@ -133,7 +133,7 @@ Now that all the dependencies have been installed and the database created, we c
 barkbaud $  npm start
 ```
 
-Open a Web browser to <a href="https://localhost:5000">https://localhost:5000</a>.
+Open a Web browser to <a href="http://localhost:5000">http://localhost:5000</a>.
 
 <h2 id="deploy">Deploy Barkbaud to Heroku</h2>
 
