@@ -827,7 +827,7 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function FindHomeController($modalInstance, bbData, dogId) {
+    function FindHomeController($uibModalInstance, bbData, dogId) {
         var self = this;
 
         self.search = function (searchText) {
@@ -850,7 +850,7 @@ angular.module('md5', []).constant('md5', (function() {
                     data: self.constituent,
                     type: 'POST'
                 }).then(function (result) {
-                    $modalInstance.close(result.data);
+                    $uibModalInstance.close(result.data);
                 }).catch(function (result) {
                     self.error = result.data.error;
                 });
@@ -859,7 +859,7 @@ angular.module('md5', []).constant('md5', (function() {
     }
 
     FindHomeController.$inject = [
-        '$modalInstance',
+        '$uibModalInstance',
         'bbData',
         'dogId'
     ];
@@ -1009,7 +1009,7 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function NoteAddController($modalInstance, bbData, dogId) {
+    function NoteAddController($uibModalInstance, bbData, dogId) {
         var self = this;
 
         self.note = {};
@@ -1019,7 +1019,7 @@ angular.module('md5', []).constant('md5', (function() {
                 data: self.note,
                 type: 'POST'
             }).then(function (result) {
-                $modalInstance.close(result.data);
+                $uibModalInstance.close(result.data);
             }).catch(function (result) {
                 self.error = result.data.error;
             });
@@ -1027,7 +1027,7 @@ angular.module('md5', []).constant('md5', (function() {
     }
 
     NoteAddController.$inject = [
-        '$modalInstance',
+        '$uibModalInstance',
         'bbData',
         'dogId'
     ];
@@ -1457,7 +1457,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  <title>Barkbaud</title>\n' +
         '  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">\n' +
         '  <link rel="icon" type="image/png" href="images/favicon.ico">\n' +
-        '  <link rel="stylesheet" type="text/css" href="https://sky.blackbaudcdn.net/skyux/1.4.2/css/sky-bundle.css">\n' +
+        '  <link rel="stylesheet" type="text/css" href="https://sky.blackbaudcdn.net/skyux/1.5.22/css/sky-bundle.css">\n' +
         '  <link rel="stylesheet" type="text/css" href="css/app.css">\n' +
         '</head>\n' +
         '\n' +
@@ -1477,7 +1477,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    </div>\n' +
         '  </bb-navbar>\n' +
         '  <div ui-view></div>\n' +
-        '  <script src="https://sky.blackbaudcdn.net/skyux/1.4.2/js/sky-bundle.min.js"></script>\n' +
+        '  <script src="https://sky.blackbaudcdn.net/skyux/1.5.22/js/sky-bundle.min.js"></script>\n' +
         '  <script src="js/app.min.js"></script>\n' +
         '</body>\n' +
         '</html>\n' +
