@@ -42,6 +42,7 @@ To run this application in your environment, you will need a server (such as you
     - [Register your application](https://developerapp.sky.blackbaud.com/applications) in order to obtain the **Application ID** (client ID) and **Application Secret** (client secret).
     - When you call the Blackbaud Authorization Service from your application, you pass the `redirect_uri` as part of the call. The Blackbaud Authorization Service redirects to this URI after the user grants or denies permission. Therefore, you must whitelist the web address(es) or the authorization will fail.
     - URIs must _exactly_ match the value your application uses in calls to the Blackbaud Authorization Service. If you plan on running Barkbaud on your local machine, be sure to supply a **Redirect URI** of "http://localhost:5000/auth/callback".
+- Add the note type, "Barkbaud", to the Constituent API **Note Types** table.
 
 ### Steps to Install:
 
