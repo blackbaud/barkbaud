@@ -20,8 +20,8 @@
     "express": "^4.13.3",
     "express-session": "^1.11.3",
     "mongoose": "^4.4.4",
-    "request": "^2.64.0",
-    "request-promise": "^3.0.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1",
     "simple-oauth2": "^0.2.1",
     "yesno": "0.0.1"
   },

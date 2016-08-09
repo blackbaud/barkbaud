@@ -14,6 +14,8 @@
     Dog = require('../database/models/dog');
     Sky = require('../libs/sky');
 
+    mongoose.Promise = global.Promise;
+
     /**
      * Gets an array of all dogs sorted ascending by name.
      * @name getDogs
@@ -24,13 +26,13 @@
     function getDogs(request, response) {
         Dog.find({}).sort({
             'name': 'ascending'
-        }).exec(function (error, docs) {
-            if (error) {
-                return onParseError(response, error);
-            }
+        }).exec().then(function (docs) {
             response.json({
-                data: docs
+                count: docs.length || 0,
+                value: docs
             });
+        }).catch(function (error) {
+            errorResponse(response, error);
         });
     }
 
@@ -46,13 +48,10 @@
     function getDog(request, response) {
         Dog.findOne({
             '_id': request.params.dogId
-        }).exec(function (error, doc) {
-            if (error) {
-                return onParseError(response, error);
-            }
-            response.json({
-                data: doc
-            });
+        }).exec().then(function (doc) {
+            response.json(doc);
+        }).catch(function (error) {
+            errorResponse(response, error);
         });
     }
 
@@ -70,11 +69,20 @@
             '_id': request.params.dogId
         }).exec(function (error, dog) {
             if (error) {
-                return onParseError(response, error);
+                return errorResponse(response, error);
             }
             response.json({
-                data: dog.notes
+                count: dog.notes.length || 0,
+                value: dog.notes
             });
+        });
+    }
+
+    function getNoteTypes(request, response) {
+        Sky.getConstituentNoteTypes(request).then(function (data) {
+            response.json(data);
+        }).catch(function (error) {
+            errorResponse(response, error);
         });
     }
 
@@ -89,12 +97,8 @@
     function getCurrentHome(request, response) {
         Dog.findOne({
             '_id': request.params.dogId
-        }).exec(function (error, dog) {
+        }).exec().then(function (dog) {
             var currentOwner;
-
-            if (error) {
-                return onParseError(response, error);
-            }
 
             // Get the current owner.
             if (dog.owners) {
@@ -107,24 +111,32 @@
             }
 
             if (currentOwner) {
-                Sky.getConstituent(request, currentOwner.constituentId, function (constituent) {
+                Sky.getConstituent(request, currentOwner.constituentId).then(function (constituent) {
                     var temp;
                     temp = currentOwner.toObject();
                     temp.constituent = constituent;
-                    Sky.getConstituentProfilePicture(request, currentOwner.constituentId, function (data) {
+                    Sky.getConstituentProfilePicture(request, currentOwner.constituentId).then(function (data) {
                         if (!data.error) {
                             temp.constituent.profile_picture = data;
                         }
-                        response.json({
-                            data: temp
-                        });
+                        response.json(temp);
+                    }).catch(function () {
+                        response.json({});
+                    });
+                }).catch(function () {
+                    response.json({
+                        count: 0,
+                        value: []
                     });
                 });
             } else {
                 response.json({
-                    data: []
+                    count: 0,
+                    value: []
                 });
             }
+        }).catch(function (error) {
+            errorResponse(response, error);
         });
     }
 
@@ -157,22 +169,25 @@
             } }
         ], function (error, owners) {
             if (error) {
-                return onParseError(response, error);
+                return errorResponse(response, error);
             }
             async.eachSeries(
                 owners,
                 function (owner, next) {
-                    Sky.getConstituent(request, owner.constituentId, function (constituent) {
+                    Sky.getConstituent(request, owner.constituentId).then(function (constituent) {
                         owner.constituent = constituent;
+                        next(null);
+                    }).catch(function () {
                         next(null);
                     });
                 },
                 function done(error) {
                     if (error) {
-                        return onParseError(response, error);
+                        return errorResponse(response, error);
                     }
                     response.json({
-                        data: owners
+                        count: owners.length || 0,
+                        value: owners
                     });
                 }
             );
@@ -186,7 +201,7 @@
      * @param {Object} response
      */
     function getFindHome(request, response) {
-        Sky.getConstituentSearch(request, request.query.searchText, function (results) {
+        Sky.getConstituentSearch(request, request.query.searchText).then(function (results) {
             response.json(results);
         });
     }
@@ -205,7 +220,7 @@
             var currentDate;
 
             if (error) {
-                return onParseError(response, error);
+                return errorResponse(response, error);
             }
 
             currentDate = new Date();
@@ -227,11 +242,9 @@
 
             dog.save(function (error) {
                 if (error) {
-                    return onParseError(response, error);
+                    return errorResponse(response, error);
                 }
-                response.json({
-                    data: dog.toObject()
-                });
+                response.json(dog.toObject());
             });
         });
     }
@@ -251,15 +264,11 @@
     function postNotes(request, response) {
         Dog.findOne({
             _id: request.params.dogId
-        }).exec(function (error, dog) {
+        }).exec().then(function (dog) {
 
             var currentDate,
                 currentOwner,
                 dogNote;
-
-            if (error) {
-                return onParseError(response, error);
-            }
 
             // Get the current owner.
             if (dog.owners) {
@@ -275,51 +284,47 @@
 
             // Validate current owner if requesting to addConstituentNote
             if (request.body.addConstituentNote && !currentOwner) {
-                return onParseError(response, {
+                return errorResponse(response, {
                     message: 'Dog does not have a current owner to save the note to.'
                 });
 
-            } else if (!request.body.title || !request.body.description || request.body.title === '' || request.body.description === '') {
-                return onParseError(response, {
+            }
+
+            if (!request.body.title || !request.body.description || request.body.title === '' || request.body.description === '') {
+                return errorResponse(response, {
                     message: 'Title and description are required'
                 });
-
-            } else {
-                dogNote = dog.notes.push({
-                    date: currentDate,
-                    title: request.body.title,
-                    description: request.body.description
-                });
-
-                dog.save(function (error) {
-
-                    if (error) {
-                        return onParseError(response, error);
-                    }
-
-                    if (request.body.addConstituentNote) {
-                        Sky.postNotes(request, {
-                            constituent_id: currentOwner.constituentId,
-                            type: 'Barkbaud',
-                            date: {
-                                y: currentDate.getFullYear(),
-                                m: currentDate.getMonth() + 1,
-                                d: currentDate.getDate()
-                            },
-                            summary: request.body.title,
-                            text: request.body.description
-                        }, function (note) {
-                            response.json({
-                                data: note
-                            });
-                        });
-                    } else {
-                        response.json({
-                            data: dogNote
-                        });
-                    }
-                });
             }
+
+            dogNote = dog.notes.push({
+                date: currentDate,
+                title: request.body.title,
+                description: request.body.description
+            });
+
+            dog.save().then(function () {
+                if (request.body.addConstituentNote) {
+                    Sky.postNotes(request, {
+                        constituent_id: currentOwner.constituentId,
+                        type: request.body.type || 'Barkbaud',
+                        date: {
+                            y: currentDate.getFullYear(),
+                            m: currentDate.getMonth() + 1,
+                            d: currentDate.getDate()
+                        },
+                        summary: request.body.title,
+                        text: request.body.description
+                    }).then(function (note) {
+                        response.json(note);
+                    });
+                } else {
+                    response.json(dogNote);
+                }
+            }).catch(function (error) {
+                errorResponse(response, error);
+            });
+        }).catch(function (error) {
+            errorResponse(response, error);
         });
     }
 
@@ -330,7 +335,7 @@
      * @param {Object} response
      * @param {Object} error
     */
-    function onParseError(response, error) {
+    function errorResponse(response, error) {
         response.status(500).json({
             error: error
         });
@@ -343,6 +348,7 @@
           getDogs: getDogs,
           getFindHome: getFindHome,
           getNotes: getNotes,
+          getNoteTypes: getNoteTypes,
           getPreviousHomes: getPreviousHomes,
           postCurrentHome: postCurrentHome,
           postNotes: postNotes

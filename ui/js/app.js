@@ -754,7 +754,7 @@ angular.module('md5', []).constant('md5', (function() {
         bbData.load({
             data: 'api/dogs'
         }).then(function (result) {
-            self.dogs = result.data.data;
+            self.dogs = result.data.value;
             $scope.$emit('bbEndWait');
         }).catch(function (result) {
             self.error = result.data.error;
@@ -785,9 +785,11 @@ angular.module('md5', []).constant('md5', (function() {
             bbData.load({
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
             }).then(function (result) {
-                self.currentHome = result.data.data;
+                console.log("Current home success:", result);
+                self.currentHome = result.data;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             }).catch(function (result) {
+                console.log("Current home error:", result);
                 self.error = result.data.error;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
@@ -795,7 +797,6 @@ angular.module('md5', []).constant('md5', (function() {
 
         self.getTimeInHome = function (fromDate) {
             var fromDateMoment = bbMoment(fromDate);
-
             return 'since ' + fromDateMoment.format('L') + ' (' + fromDateMoment.startOf('month').fromNow(true) + ')';
         };
 
@@ -987,7 +988,7 @@ angular.module('md5', []).constant('md5', (function() {
         bbData.load({
             data: 'api/dogs/' + encodeURIComponent(dogId)
         }).then(function (result) {
-            self.dog = result.data.data;
+            self.dog = result.data;
             bbWindow.setWindowTitle(self.dog.name);
         });
     }
@@ -1011,6 +1012,12 @@ angular.module('md5', []).constant('md5', (function() {
 
     function NoteAddController($uibModalInstance, bbData, dogId) {
         var self = this;
+
+        bbData.load({
+            data: 'api/dogs/notetypes'
+        }).then(function (result) {
+            self.noteTypes = result.data.value;
+        });
 
         self.note = {};
         self.saveData = function () {
@@ -1076,7 +1083,7 @@ angular.module('md5', []).constant('md5', (function() {
             bbData.load({
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/notes'
             }).then(function (result) {
-                self.notes = result.data.data;
+                self.notes = result.data.value;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             }).catch(function (result) {
                 self.error = result.data.error;
@@ -1122,9 +1129,11 @@ angular.module('md5', []).constant('md5', (function() {
             bbData.load({
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/previoushomes'
             }).then(function (result) {
-                self.previousHomes = result.data.data;
+                console.log("Previous homes success.", result);
+                self.previousHomes = result.data.value;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             }).catch(function (result) {
+                console.log("Previous homes error.", result);
                 self.error = result.data.error;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
@@ -1166,7 +1175,7 @@ angular.module('md5', []).constant('md5', (function() {
         bbData.load({
             data: 'api/dogs/' + encodeURIComponent(dogId) + '/summary'
         }).then(function (result) {
-            self.summary = result.data.data;
+            self.summary = result.data;
         });
 
         self.getSummaryDate = function (date) {
@@ -1360,18 +1369,35 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    <div class="modal-form">\n' +
         '      <bb-modal-header>Add medical history</bb-modal-header>\n' +
         '      <div bb-modal-body>\n' +
-        '        <div class="form-group">\n' +
-        '          <label class="control-label">History</label>\n' +
-        '          <input type="text" class="form-control" ng-model="noteAdd.note.title" />\n' +
+        '        <div class="row">\n' +
+        '          <div class="col-sm-6">\n' +
+        '            <div class="form-group">\n' +
+        '              <label class="control-label">Title</label>\n' +
+        '              <input type="text" class="form-control" ng-model="noteAdd.note.title" />\n' +
+        '            </div>\n' +
+        '          </div>\n' +
+        '          <div class="col-sm-6">\n' +
+        '            <div class="form-group">\n' +
+        '              <label class="control-label">Note Type</label>\n' +
+        '              <select class="form-control" ng-model="noteAdd.note.type">\n' +
+        '                <option ng-repeat="option in ::noteAdd.noteTypes" ng-bind="option" value="{{::option}}"></option>\n' +
+        '              </select>\n' +
+        '            </div>\n' +
+        '          </div>\n' +
         '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '          <textarea class="form-control" ng-model="noteAdd.note.description"></textarea>\n' +
-        '        </div>\n' +
-        '        <div class="form-group">\n' +
-        '          <label class="control-label">\n' +
-        '            <input type="checkbox" bb-check ng-model="noteAdd.note.addConstituentNote" />\n' +
-        '            Add as note on current owner\'s Raisers Edge NXT record.\n' +
-        '          </label>\n' +
+        '        <div class="row">\n' +
+        '          <div class="col-sm-12">\n' +
+        '            <div class="form-group">\n' +
+        '              <label class="control-label">Description</label>\n' +
+        '              <textarea class="form-control" ng-model="noteAdd.note.description"></textarea>\n' +
+        '            </div>\n' +
+        '            <div class="form-group">\n' +
+        '              <label class="control-label">\n' +
+        '                <input type="checkbox" bb-check ng-model="noteAdd.note.addConstituentNote" />\n' +
+        '                Add as note on current owner\'s Raisers Edge NXT record.\n' +
+        '              </label>\n' +
+        '            </div>\n' +
+        '          </div>\n' +
         '        </div>\n' +
         '      </div>\n' +
         '      <bb-modal-footer>\n' +
