@@ -7,7 +7,6 @@
 
     constituentBaseUri = 'constituent/v1/';
     rq = require('request-promise');
-    rq.debug = true;
 
     /**
      * Proxy method to the RENXT api.
@@ -17,12 +16,9 @@
      * @param {Object} request
      * @param {string} method
      * @param {string} endpoint
-     * @param {Function} callback
      */
-    function proxy(request, method, endpoint, body, callback) {
-        var options;
-
-        options = {
+    function proxy(request, method, endpoint, body) {
+        return rq({
             json: true,
             method: method,
             body: body,
@@ -32,13 +28,6 @@
                 'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
                 'Authorization': 'Bearer ' + request.session.ticket.access_token
             }
-        };
-
-        rq(options).then(function (data) {
-            callback(data);
-        }).catch(function (err) {
-            console.log("(!)[ERROR] ", err);
-            callback(err);
         });
     }
 
@@ -48,10 +37,9 @@
      * @name get
      * @param {Object} request
      * @param {String} endpoint
-     * @param {Function} callback
      */
-    function get(request, endpoint, callback) {
-        proxy(request, 'GET', endpoint, '', callback);
+    function get(request, endpoint) {
+        return proxy(request, 'GET', endpoint, '');
     }
 
     /**
@@ -60,10 +48,9 @@
      * @name get
      * @param {Object} request
      * @param {String} endpoint
-     * @param {Function} callback
      */
-    function post(request, endpoint, body, callback) {
-        proxy(request, 'POST', endpoint, body, callback);
+    function post(request, endpoint, body) {
+        return proxy(request, 'POST', endpoint, body);
     }
 
     /**
@@ -71,10 +58,13 @@
      * @name getConstituent
      * @param {Object} request
      * @param {string} constituentId Id of the constituent to retrieve
-     * @param {Function} callback
      */
-    function getConstituent(request, constituentId, callback) {
-        get(request, constituentBaseUri + 'constituents/' + constituentId, callback);
+    function getConstituent(request, constituentId) {
+        return get(request, constituentBaseUri + 'constituents/' + constituentId);
+    }
+
+    function getConstituentNoteTypes(request) {
+        return get(request, constituentBaseUri + 'notetypes');
     }
 
     /**
@@ -82,14 +72,13 @@
      * @name getConstituent
      * @param {Object} request
      * @param {string} name Name of the constituent to search for.
-     * @param {Function} callback
      */
-    function getConstituentSearch(request, name, callback) {
-        get(request, constituentBaseUri + 'constituents/search?searchText=' + name, callback);
+    function getConstituentSearch(request, name) {
+        return get(request, constituentBaseUri + 'constituents/search?searchText=' + name);
     }
 
-    function getConstituentProfilePicture(request, constituentId, callback) {
-        get(request, constituentBaseUri + 'constituents/' + constituentId + '/profilepicture', callback);
+    function getConstituentProfilePicture(request, constituentId) {
+        return get(request, constituentBaseUri + 'constituents/' + constituentId + '/profilepicture');
     }
 
     /**
@@ -97,10 +86,9 @@
      * @name postNotes
      * @param {Object} request
      * @param {string} constituentId Id of the constituent to retrieve
-     * @param {Function} callback
      */
-    function postNotes(request, body, callback) {
-        post(request, constituentBaseUri + 'notes', body, callback);
+    function postNotes(request, body) {
+        return post(request, constituentBaseUri + 'notes', body);
     }
 
     /**
@@ -111,6 +99,7 @@
      */
     module.exports = {
         getConstituent: getConstituent,
+        getConstituentNoteTypes: getConstituentNoteTypes,
         getConstituentSearch: getConstituentSearch,
         getConstituentProfilePicture: getConstituentProfilePicture,
         postNotes: postNotes

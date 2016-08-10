@@ -91,6 +91,7 @@
     app.get('/auth/logout', routes.auth.getLogout);
 
     // API GET routes.
+    app.get('/api/dogs/notetypes', routes.auth.checkSession, routes.api.getNoteTypes);
     app.get('/api/dogs', routes.auth.checkSession, routes.api.getDogs);
     app.get('/api/dogs/:dogId', routes.auth.checkSession, routes.api.getDog);
     app.get('/api/dogs/:dogId/notes', routes.auth.checkSession, routes.api.getNotes);
