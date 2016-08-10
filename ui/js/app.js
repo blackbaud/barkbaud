@@ -785,11 +785,9 @@ angular.module('md5', []).constant('md5', (function() {
             bbData.load({
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/currenthome'
             }).then(function (result) {
-                console.log("Current home success:", result);
                 self.currentHome = result.data;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             }).catch(function (result) {
-                console.log("Current home error:", result);
                 self.error = result.data.error;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
@@ -1129,11 +1127,9 @@ angular.module('md5', []).constant('md5', (function() {
             bbData.load({
                 data: 'api/dogs/' + encodeURIComponent(dogId) + '/previoushomes'
             }).then(function (result) {
-                console.log("Previous homes success.", result);
                 self.previousHomes = result.data.value;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             }).catch(function (result) {
-                console.log("Previous homes error.", result);
                 self.error = result.data.error;
                 $scope.$emit('bbEndWait', { nonblocking: true });
             });
