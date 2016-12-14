@@ -74,7 +74,7 @@
      * @param {string} name Name of the constituent to search for.
      */
     function getConstituentSearch(request, name) {
-        return get(request, constituentBaseUri + 'constituents/search?searchText=' + name);
+        return get(request, constituentBaseUri + 'constituents/search?search_text=' + name);
     }
 
     function getConstituentProfilePicture(request, constituentId) {
