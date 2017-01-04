@@ -54,6 +54,28 @@
     }
 
     /**
+     * Wrap all PATCH proxy calls.
+     * @private
+     * @name patch
+     * @param {Object} request
+     * @param {String} endpoint
+     */
+    function patch(request, endpoint, body) {
+        return proxy(request, 'PATCH', endpoint, body);
+    }
+
+    /**
+     * Wrap all DELETE proxy calls.
+     * @private
+     * @name delete
+     * @param {Object} request
+     * @param {String} endpoint
+     */
+    function del(request, endpoint) {
+        return proxy(request, 'DELETE', endpoint, '');
+    }
+
+    /**
      * Gets the requested constituent
      * @name getConstituent
      * @param {Object} request
@@ -91,6 +113,79 @@
         return post(request, constituentBaseUri + 'notes', body);
     }
 
+     /**
+     * Gets ratings for a constituent
+     * @name getConstituentRatings
+     * @param {Object} request
+     * @param {string} constituentId Id of the constituent to retrieve
+     */
+    function getConstituentRatings(request, constituentId) {
+        return get(request, constituentBaseUri + constituentId + '/ratings');
+    }
+
+    /**
+     * Gets the list of rating categories
+     * @name getConstituentRatingCategories
+     * @param {Object} request
+     * @param {string} sources Name of the source associated with the category
+     */
+    function getConstituentRatingCategories(request, sourceName) {
+        return get(request, constituentBaseUri + '/ratings/categories?source_name=' + sourceName);
+    }
+
+    /**
+     * Gets the list of rating sources
+     * @name getConstituentRatingSources
+     * @param {Object} request
+     */
+    function getConstituentRatingSources(request) {
+        return get(request, constituentBaseUri + '/ratings/sources');
+    }
+
+    /**
+     * Gets the list values for a rating category
+     * @name getConstituentRatingCategoryValues
+     * @param {Object} request
+     * @param {string} categoryName
+     * @param {string} sourceName
+     */
+    function getConstituentRatingCategoryValues(request, categoryName, sourceName) {
+        var optional;
+        if (sourceName == '') {
+            optional = '&source_name=' + sourceName;
+        }
+        return get(request, constituentBaseUri + '/ratings/categories/values?category_name=' + categoryName + optional);
+    }
+
+    /**
+     * Creates a constituent rating
+     * @name postConstituentRating
+     * @param {Object} request
+     */
+    function postConstituentRatings(request, body) {
+        return post(request, constituentBaseUri + '/ratings');
+    }
+
+    /**
+     * Updates a constituent rating
+     * @name patchConstituentRating
+     * @param {Object} request
+     * @param {string} ratingId Id of the rating to edit
+     */
+    function patchConstituentRating(request, ratingId, body) {
+        return patch(request, constituentBaseUri + '/ratings' + ratingId);
+    }
+
+    /**
+     * Deletes a rating from a constituent
+     * @name getConstituentRatings
+     * @param {Object} request
+     * @param {string} ratingId Id of the rating to delete
+     */
+    function deleteConstituentRatings(request, ratingId) {
+        return del(request, constituentBaseUri + '/ratings' + ratingId);
+    }
+
     /**
      * Class which lightly wraps a few of RENXT API endpoints.
      * @constructor
@@ -102,6 +197,13 @@
         getConstituentNoteTypes: getConstituentNoteTypes,
         getConstituentSearch: getConstituentSearch,
         getConstituentProfilePicture: getConstituentProfilePicture,
-        postNotes: postNotes
+        postNotes: postNotes,
+        getConstituentRatings: getConstituentRatings,
+        getConstituentRatingCategories: getConstituentRatingCategories,
+        getConstituentRatingSources: getConstituentRatingSources,
+        getConstituentRatingCategoryValues: getConstituentRatingCategoryValues,
+        postConstituentRatings: postConstituentRatings,
+        patchConstituentRating: patchConstituentRating,
+        deleteConstituentRatings: deleteConstituentRatings
     };
 }());

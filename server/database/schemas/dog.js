@@ -4,11 +4,13 @@
 
     var dogNoteSchema,
         dogOwnerSchema,
+        dogRatingSchema,
         mongoose;
 
     mongoose = require('mongoose');
     dogNoteSchema = require(__dirname + '/dog-note.js');
     dogOwnerSchema = require(__dirname + '/dog-owner.js');
+    dogRatingSchema = require(__dirname + '/dog-rating.js');
 
     module.exports = mongoose.Schema({
         bio: String,
@@ -22,6 +24,7 @@
         },
         name: String,
         notes: [dogNoteSchema],
+        ratings: [dogRatingSchema],
         updatedAt: String
     }, {
         collection : 'Dog'

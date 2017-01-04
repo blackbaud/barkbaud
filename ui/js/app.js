@@ -777,6 +777,51 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
+    function DogBehaviorTrainingTileController($scope, bbData, bbMoment, dogId) {
+        var self = this;
+
+        self.load = function () {
+            $scope.$emit('bbBeginWait', { nonblocking: true });
+            bbData.load({
+                data: 'api/dogs/' + encodeURIComponent(dogId) + '/previoushomes'
+            }).then(function (result) {
+                self.previousHomes = result.data.value;
+                $scope.$emit('bbEndWait', { nonblocking: true });
+            }).catch(function (result) {
+                self.error = result.data.error;
+                $scope.$emit('bbEndWait', { nonblocking: true });
+            });
+        };
+
+        self.getSummaryDate = function (date) {
+            if (date) {
+                return bbMoment(date).format('MMM Do YY');
+            }
+        };
+
+        $scope.$on('bbNewCurrentOwner', function () {
+            self.load();
+        });
+
+        self.load();
+    }
+
+    DogBehaviorTrainingTileController.$inject = [
+        '$scope',
+        'bbData',
+        'bbMoment',
+        'dogId'
+    ];
+
+    angular.module('barkbaud')
+        .controller('DogBehaviorTrainingTileController', DogBehaviorTrainingTileController);
+}());
+
+/*global angular */
+
+(function () {
+    'use strict';
+
     function DogCurrentHomeTileController($rootScope, $scope, bbData, bbMoment, barkFindHome, dogId) {
         var self = this;
 
@@ -926,7 +971,11 @@ angular.module('md5', []).constant('md5', (function() {
                     'notes': {
                         controller: 'DogNotesTileController as dogNotesTile',
                         templateUrl: 'dogs/notes/notestile.html'
-                    }
+                    },
+                    'behaviortraining': {
+                        controller: 'DogBehaviorTrainingTileController as dogBehaviorTrainingTile',
+                        templateUrl: 'dogs/behaviortraining/behaviortrainingtile.html'
+                    },
                 }
             });
     }
@@ -963,6 +1012,12 @@ angular.module('md5', []).constant('md5', (function() {
                 view_name: 'notes',
                 collapsed: false,
                 collapsed_small: false
+            },
+            {
+                id: 'DogBehaviorTrainingTile',
+                view_name: 'behaviortraining',
+                collapsed: false,
+                collapsed_small: false
             }
         ];
 
@@ -970,7 +1025,8 @@ angular.module('md5', []).constant('md5', (function() {
             one_column_layout: [
                 'DogCurrentHomeTile',
                 'DogPreviousHomesTile',
-                'DogNotesTile'
+                'DogNotesTile',
+                'DogBehaviorTrainingTile'
             ],
             two_column_layout: [
                 [
@@ -978,7 +1034,8 @@ angular.module('md5', []).constant('md5', (function() {
                     'DogPreviousHomesTile'
                 ],
                 [
-                    'DogNotesTile'
+                    'DogNotesTile',
+                    'DogBehaviorTrainingTile'
                 ]
             ]
         };
@@ -1257,6 +1314,40 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    Error loading dogs.\n' +
         '  </div>\n' +
         '</div>\n' +
+        '');
+    $templateCache.put('dogs/behaviortraining/behaviortrainingtile.html',
+        '<bb-tile bb-tile-header="\'Behavior/Training\'">\n' +
+        '  <bb-tile-header-content ng-show="dogBehaviorTrainingTile.previousHomes.length">\n' +
+        '      {{ dogBehaviorTrainingTile.previousHomes.length }}\n' +
+        '  </bb-tile-header-content>\n' +
+        '  <div>\n' +
+        '    <div ng-show="dogBehaviorTrainingTile.previousHomes">\n' +
+        '      <div ng-switch="dogBehaviorTrainingTile.previousHomes.length || 0">\n' +
+        '        <div bb-tile-section ng-switch-when="0" class="bb-no-records">\n' +
+        '          This dog has no previous homes.\n' +
+        '        </div>\n' +
+        '        <div ng-switch-default class="bb-repeater">\n' +
+        '          <div ng-repeat="previousHome in dogBehaviorTrainingTile.previousHomes" class="clearfix bb-repeater-item">\n' +
+        '            <h4 class="pull-left">\n' +
+        '              <a ng-href="{{ previousHome.constituentId | barkConstituentUrl }}" target="_blank">\n' +
+        '                {{ previousHome.constituent.name }}\n' +
+        '              </a>\n' +
+        '            </h4>\n' +
+        '            <h5 class="pull-right">\n' +
+        '              {{ dogBehaviorTrainingTile.getSummaryDate(previousHome.fromDate) }}\n' +
+        '              <span ng-show="previousHome.toDate">\n' +
+        '                to {{ dogBehaviorTrainingTile.getSummaryDate(previousHome.toDate) }}\n' +
+        '              </span>\n' +
+        '            </h5>\n' +
+        '          </div>\n' +
+        '        </div>\n' +
+        '      </div>\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '  <div bb-tile-section class="text-danger" ng-show="dogBehaviorTrainingTile.error">\n' +
+        '    Error loading previous homes.\n' +
+        '  </div>\n' +
+        '</bb-tile>\n' +
         '');
     $templateCache.put('dogs/currenthome/currenthometile.html',
         '<bb-tile bb-tile-header="\'Current home\'">\n' +

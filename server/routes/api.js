@@ -329,6 +329,86 @@
     }
 
     /**
+     *
+     * @name getDogRatings
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function getDogRatings(request, response) {
+        Sky.getConstituentRatings(request, request.params.dogId).then(function (results) {
+            response.json(results);
+        });
+    }
+
+    /**
+     *
+     * @name getDogRatingCategories
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function getDogRatingCategories(request, response) {
+        var dogCategories = ['House breaking', 'Activity level', 'Obedience', 'Motivated by', 'Estimated age']
+        
+        Sky.getConstituentRatingCategories(request, request.query.sourceName).then(function (results) {
+            var categoriesToReturn = [];
+            for (var category in results.value) {
+                if (category.name in dogCategories) {
+                    categoriesToReturn += [category];
+                }
+            }
+            categoryResponse = {
+                count: categoriesToReturn.length,
+                value: categoriesToReturn
+            };
+
+            response.json(categoryResponse)
+        });
+    }
+
+    /**
+     *
+     * @name getDogSources
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function getDogSources(request, response) {
+        var dogSources = ['Barkbaud']
+        
+        Sky.getConstituentRatingSources(request).then(function (results) {
+            var sourcesToReturn = [];
+            for (var source in results.value) {
+                if (source.name in dogSources) {
+                    sourcesToReturn += [source];
+                }
+            }
+            sourceResponse = {
+                count: sourcesToReturn.length,
+                value: sourcesToReturn
+            };
+
+            response.json(sourceResponse)
+        });
+    }
+
+    /**
+     *
+     * @name postDogRatings
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.body.dogId
+     * @param {string} request.body.category
+     * @param {string} request.body.date
+     * @param {string} request.body.source
+     * @param {string} request.body.type
+     * @param {Object} request.body.value 
+     */
+    function getDogSources(request, response) {
+        Sky.postRatings(request, request.body).then(function (ratingId) {
+                        response.json(ratingId);
+                    });;
+    }
+
+    /**
      * Handles parse errors
      * @internal
      * @name handleError
