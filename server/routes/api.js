@@ -335,8 +335,16 @@
      * @param {Object} response
      */
     function getDogRatings(request, response) {
-        Sky.getConstituentRatings(request, request.params.dogId).then(function (results) {
-            response.json(results);
+        Dog.findOne({
+            _id: request.params.dogId
+        }).exec(function (error, dog) {
+            if (error) {
+                return errorResponse(response, error);
+            }
+            response.json({
+                count: dog.ratings.length || 0,
+                value: dog.ratings
+            });
         });
     }
 
@@ -367,11 +375,11 @@
 
     /**
      *
-     * @name getDogSources
+     * @name getDogRatingSources
      * @param {Object} request
      * @param {Object} response
      */
-    function getDogSources(request, response) {
+    function getDogRatingSources(request, response) {
         var dogSources = ['Barkbaud']
         
         Sky.getConstituentRatingSources(request).then(function (results) {
@@ -400,12 +408,79 @@
      * @param {string} request.body.date
      * @param {string} request.body.source
      * @param {string} request.body.type
-     * @param {Object} request.body.value 
+     * @param {Object} request.body.value
+     * @param {string} request.body.addConstituentRating
      */
-    function getDogSources(request, response) {
-        Sky.postRatings(request, request.body).then(function (ratingId) {
-                        response.json(ratingId);
-                    });;
+    function postDogRatings(request, response) {
+        Dog.findOne({
+            _id: request.params.dogId
+        }).exec().then(function (dog) {
+
+            var currentOwner,
+                categories,
+                dogCategory,
+                dogRating;
+
+            // Get the current owner.
+            if (dog.owners) {
+                dog.owners.forEach(function (owner) {
+                    if (owner.isActive) {
+                        currentOwner = owner;
+                        return;
+                    }
+                });
+            }
+
+            // Validate current owner if requesting to addConstituentRating
+            if (request.body.addConstituentRating && !currentOwner) {
+                return errorResponse(response, {
+                    message: 'Dog does not have a current owner to save the rating to.'
+                });
+            }
+
+            if (!request.body.category || !request.body.date || request.body.category === '' || request.body.date === '') {
+                return errorResponse(response, {
+                    message: 'Category and date are required'
+                });
+            }
+
+            categories = Sky.getDogRatingCategories(request, request.body.source);
+
+            for (var category in categories) {
+                if (category.name === request.body.category) {
+                    dogCategory = category;
+                }
+            }
+
+            dogRating = dog.ratings.push({
+                category: dogCategory,
+                source: request.body.source,
+                date: request.body.date,
+                type: request.body.type,
+                value: request.body.value
+            });
+
+            dog.save().then(function () {
+                if (request.body.addConstituentRating) {
+                    Sky.postConstituentRatings(request, {
+                        constituent_id: currentOwner.constituentId,
+                        category: request.body.category,
+                        date: request.body.date,
+                        source: request.body.source,
+                        type: request.body.type,
+                        value: request.body.value
+                    }).then(function (rating) {
+                        response.json(rating);
+                    });
+                } else {
+                    response.json(dogRating);
+                }
+            }).catch(function (error) {
+                errorResponse(response, error);
+            });
+        }).catch(function (error) {
+            errorResponse(response, error);
+        });
     }
 
     /**
@@ -431,6 +506,10 @@
           getNoteTypes: getNoteTypes,
           getPreviousHomes: getPreviousHomes,
           postCurrentHome: postCurrentHome,
-          postNotes: postNotes
+          postNotes: postNotes,
+          getDogRatings: getDogRatings,
+          getDogRatingCategories: getDogRatingCategories,
+          getDogRatingSources: getDogRatingSources,
+          postDogRatings: postDogRatings
     };
 }());

@@ -9,6 +9,6 @@
     "tests"
   ],
   "devDependencies": {
-    "barkbaud-ui": "https://github.com/blackbaud/barkbaud-ui.git"
+    "barkbaud-ui": "../barkbaud-ui"
   }
 }

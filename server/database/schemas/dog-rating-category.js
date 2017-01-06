@@ -3,8 +3,8 @@
     'use strict';
 
     module.exports = require('mongoose').Schema({
-       name: String,
-       type: String,
-       source: String
+        name: String,
+        type: String,
+        source: String
     });
 }());

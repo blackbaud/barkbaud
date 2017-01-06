@@ -75,6 +75,18 @@
                     updatedAt: "2015-11-24T22:21:50.855Z"
                 }
             ],
+            ratings: [
+                {
+                    category: {
+                        name: "test",
+                        type: "test"
+                    },
+                    source: "Barkbaud",
+                    date: "Jan 1, 2017",
+                    type: "Text",
+                    value: "Testing"
+                }
+            ],
             owners: [
                 {
                     constituentId: "242",

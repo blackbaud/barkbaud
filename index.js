@@ -98,10 +98,14 @@
     app.get('/api/dogs/:dogId/currenthome', routes.auth.checkSession, routes.api.getCurrentHome);
     app.get('/api/dogs/:dogId/previoushomes', routes.auth.checkSession, routes.api.getPreviousHomes);
     app.get('/api/dogs/:dogId/findhome', routes.auth.checkSession, routes.api.getFindHome);
+    app.get('/api/dogs/:dogId/ratings', routes.auth.checkSession, routes.api.getDogRatings);
+    app.get('/api/dogs/ratings/categories', routes.auth.checkSession, routes.api.getDogRatingCategories);
+    app.get('/api/dogs/ratings/sources', routes.auth.checkSession, routes.api.getDogRatingSources);
 
     // API POST routes.
     app.post('/api/dogs/:dogId/currenthome', routes.auth.checkSession, routes.api.postCurrentHome);
     app.post('/api/dogs/:dogId/notes', routes.auth.checkSession, routes.api.postNotes);
+    app.post('/api/dogs/:dogId/ratings', routes.auth.checkSession, routes.api.postNotes);
 
     // Connect to the database.
     database.connect(function () {
