@@ -11,8 +11,7 @@
     module.exports = require('mongoose').Schema({
         category: dogRatingCategorySchema,
         source: String,
-        date: String,
-        type: String,
-        value: Object
+        value: Object,
+        constituentRatingId: String
     });
 }());

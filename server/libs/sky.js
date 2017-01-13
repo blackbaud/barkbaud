@@ -130,7 +130,7 @@
      * @param {string} sources Name of the source associated with the category
      */
     function getConstituentRatingCategories(request, sourceName) {
-        return get(request, constituentBaseUri + '/ratings/categories?source_name=' + sourceName);
+        return get(request, constituentBaseUri + '/ratings/categories?source_name=' + sourceName || '');
     }
 
     /**
@@ -150,11 +150,12 @@
      * @param {string} sourceName
      */
     function getConstituentRatingCategoryValues(request, categoryName, sourceName) {
-        var optional;
-        if (sourceName == '') {
-            optional = '&source_name=' + sourceName;
+        var optional = '';
+
+        if (sourceName) {
+            optional = '&source_name=' + encodeURIComponent(sourceName);
         }
-        return get(request, constituentBaseUri + '/ratings/categories/values?category_name=' + categoryName + optional);
+        return get(request, constituentBaseUri + 'ratings/categories/values?category_name=' + encodeURIComponent(categoryName) + optional);
     }
 
     /**
@@ -163,7 +164,7 @@
      * @param {Object} request
      */
     function postConstituentRatings(request, body) {
-        return post(request, constituentBaseUri + '/ratings');
+        return post(request, constituentBaseUri + 'ratings', body);
     }
 
     /**
@@ -173,7 +174,7 @@
      * @param {string} ratingId Id of the rating to edit
      */
     function patchConstituentRating(request, ratingId, body) {
-        return patch(request, constituentBaseUri + '/ratings' + ratingId);
+        return patch(request, constituentBaseUri + 'ratings/' + ratingId, body);
     }
 
     /**
@@ -182,8 +183,8 @@
      * @param {Object} request
      * @param {string} ratingId Id of the rating to delete
      */
-    function deleteConstituentRatings(request, ratingId) {
-        return del(request, constituentBaseUri + '/ratings' + ratingId);
+    function deleteConstituentRating(request, ratingId) {
+        return del(request, constituentBaseUri + 'ratings/' + ratingId);
     }
 
     /**
@@ -204,6 +205,6 @@
         getConstituentRatingCategoryValues: getConstituentRatingCategoryValues,
         postConstituentRatings: postConstituentRatings,
         patchConstituentRating: patchConstituentRating,
-        deleteConstituentRatings: deleteConstituentRatings
+        deleteConstituentRating: deleteConstituentRating
     };
 }());
