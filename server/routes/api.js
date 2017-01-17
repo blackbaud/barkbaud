@@ -357,10 +357,10 @@
      * @param {Object} response
      */
     function getDogRating(request, response) {
-        var lookup;
         Dog.findOne({
             _id: request.params.dogId
         }).exec(function (error, dog) {
+            var lookup;
             if (error) {
                 return errorResponse(response, error);
             }
@@ -381,7 +381,7 @@
      * @param {Object} response
      */
     function getDogRatingCategories(request, response) {
-        var dogCategories = ['House breaking', 'Activity level', 'Obedience', 'Motivated by', 'Estimated age', 'Favorite toy', 'Sheds', 'Allowance', 'Adoption date', 'Allowed treats per day']
+        var dogCategories = ['House breaking', 'Activity level', 'Obedience', 'Motivated by', 'Estimated age', 'Favorite toy', 'Sheds', 'Allowance', 'Adoption date', 'Allowed treats per day'];
         
         Sky.getConstituentRatingCategories(request, request.query.sourceName || '').then(function (results) {
             var categoriesToReturn,
