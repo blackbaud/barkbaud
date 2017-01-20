@@ -424,7 +424,7 @@
         var dogSources,
             sourceResponse;
             
-        dogSources = ['Barkbaud', 'Blackbaud Analytics\' Giving Score'];
+        dogSources = ['Barkbaud'];
         
         Sky.getConstituentRatingSources(request).then(function (results) {
             var sourcesToReturn = [];
@@ -568,7 +568,7 @@
                 });
             }
             else {
-                dog.ratings.splice(dog.ratings[lookup], 1);
+                dog.ratings.splice(lookup, 1);
                 dog.save().then(function () {
                     response.send();
                 });
@@ -610,7 +610,7 @@
                 });
             }
             else {
-                dog.ratings.splice(dog.ratings[lookup], 1, request.body);
+                dog.ratings.splice(lookup, 1, request.body);
                 dog.save().then(function () {
                     response.send();
                 });

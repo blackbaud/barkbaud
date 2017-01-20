@@ -797,8 +797,6 @@ angular.module('md5', []).constant('md5', (function() {
             self.categoryValues = null; 
             self.behaviortraining.value = null;
 
-            console.log(self.behaviortraining.category)
-
             if (self.behaviortraining.category.type === 'codetable') {
                 bbData.load({
                     data: 'api/dogs/ratings/categories/values?categoryName=' + encodeURIComponent(self.behaviortraining.category.name)
@@ -888,7 +886,7 @@ angular.module('md5', []).constant('md5', (function() {
     function BehaviorTrainingDeleteController($uibModalInstance, bbData, dogId, behaviorTrainingId) {
 
         var self = this;
-        console.log('in behavior delete controller');
+
         self.saveData = function() {
             bbData.save({
                 url: 'api/dogs/' + encodeURIComponent(dogId) + '/ratings/' + encodeURIComponent(behaviorTrainingId),
@@ -1032,7 +1030,6 @@ angular.module('md5', []).constant('md5', (function() {
 
     function DogBehaviorTrainingTileController($scope, bbData, bbMoment, bbModal, dogId, barkBehaviorTrainingAdd, barkBehaviorTrainingEdit, barkBehaviorTrainingDelete) {
         var self = this;
-        console.log(dogId);
 
         self.load = function () {
             $scope.$emit('bbBeginWait', { nonblocking: true });
@@ -1797,9 +1794,10 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '																<span ng-switch="rating.category.type" class="bb-prospectui-rating-description bb-prospectui-ellipsis">\n' +
         '																		<span ng-switch-when="datetime">\n' +
         '																			<span ng-if="rating.value">{{::rating.value | date : "shortDate"}}</span>\n' +
-        '																			<span ng-if="!rating.value">No Rating</span>\n' +
+        '																			<span ng-if="typeof rating.value === \'undefined\'">No Rating</span>\n' +
         '																		</span>\n' +
-        '																		<span ng-switch-default>{{::rating.value || \'No Rating\'}}</span>\n' +
+        '																		<span ng-switch-when="boolean">{{rating.value ? \'Yes\' : \'No\'}}</span>\n' +
+        '																		<span ng-switch-default>{{::rating.value != undefined ? rating.value : \'No Rating\'}}</span>\n' +
         '																</span>\n' +
         '														</span>\n' +
         '														<span class="custom-rating-category bb-prospectui-ellipsis">{{::rating.category.name}}</span>\n' +
