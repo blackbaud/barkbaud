@@ -1796,7 +1796,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '																			<span ng-if="rating.value">{{::rating.value | date : "shortDate"}}</span>\n' +
         '																			<span ng-if="typeof rating.value === \'undefined\'">No Rating</span>\n' +
         '																		</span>\n' +
-        '																		<span ng-switch-when="boolean">{{rating.value ? \'Yes\' : \'No\'}}</span>\n' +
+        '																		<span ng-switch-when="boolean">{{::rating.value ? \'Yes\' : \'No\'}}</span>\n' +
         '																		<span ng-switch-default>{{::rating.value != undefined ? rating.value : \'No Rating\'}}</span>\n' +
         '																</span>\n' +
         '														</span>\n' +
