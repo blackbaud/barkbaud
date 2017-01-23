@@ -329,6 +329,298 @@
     }
 
     /**
+     *
+     * @name getDogRatings
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function getDogRatings(request, response) {
+        Dog.findOne({
+            _id: request.params.dogId
+        }).exec(function (error, dog) {
+            if (error) {
+                return errorResponse(response, error);
+            }
+            response.json({
+                count: dog.ratings.length || 0,
+                value: dog.ratings
+            });
+        });
+    }
+
+    /**
+     *
+     * @name getDogRating
+     * @param {Object} request
+     * @param {String} request.param.dogId
+     * @param {String} request.param.dogRatingId
+     * @param {Object} response
+     */
+    function getDogRating(request, response) {
+        Dog.findOne({
+            _id: request.params.dogId
+        }).exec(function (error, dog) {
+            var lookup;
+            if (error) {
+                return errorResponse(response, error);
+            }
+
+            for (var i = 0; i < dog.ratings.length; i++) {
+                if (dog.ratings[i]._id == request.params.dogRatingId) {
+                    lookup = i;
+                }
+            }
+            response.json(dog.ratings[lookup]);
+        });
+    }
+
+    /**
+     *
+     * @name getDogRatingCategories
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function getDogRatingCategories(request, response) {
+        var dogCategories = ['House breaking', 'Activity level', 'Obedience', 'Motivated by', 'Estimated age', 'Favorite toy', 'Sheds', 'Allowance', 'Adoption date', 'Allowed treats per day'];
+        
+        Sky.getConstituentRatingCategories(request, request.query.sourceName || '').then(function (results) {
+            var categoriesToReturn,
+                categoryResponse;
+                
+            categoriesToReturn = [];
+            for (var i = 0; i < results.value.length; i++) {
+                if (dogCategories.indexOf(results.value[i].name) > -1) {
+                    categoriesToReturn.push(results.value[i]);
+                }
+            }
+            categoryResponse = {
+                count: categoriesToReturn.length,
+                value: categoriesToReturn
+            };
+
+            response.json(categoryResponse);
+        });
+    }
+
+    /**
+     *
+     * @name getDogRatingCategoryValues
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function getDogRatingCategoryValues(request, response) {
+        Sky.getConstituentRatingCategoryValues(request, request.query.categoryName, request.query.sourceName || '').then(function (results) {
+            response.json(results);
+        });
+    }
+
+    /**
+     *
+     * @name getDogRatingSources
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function getDogRatingSources(request, response) {        
+        var dogSources,
+            sourceResponse;
+            
+        dogSources = ['Barkbaud'];
+        
+        Sky.getConstituentRatingSources(request).then(function (results) {
+            var sourcesToReturn = [];
+            for (var i = 0; i < results.value.length; i++) {
+                if (dogSources.indexOf(results.value[i].name) > -1) {
+                    sourcesToReturn.push(results.value[i].name);
+                }
+            }
+            sourceResponse = {
+                count: sourcesToReturn.length,
+                value: sourcesToReturn
+            };
+
+            response.json(sourceResponse)
+        });
+    }
+
+    /**
+     *
+     * @name postDogRating
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.dogId
+     * @param {string} request.body.category
+     * @param {string} request.body.source
+     * @param {Object} request.body.value
+     * @param {string} request.body.addConstituentRating
+     */
+    function postDogRating(request, response) {
+        Dog.findOne({
+            _id: request.params.dogId
+        }).exec().then(function (dog) {
+
+            var currentOwner,
+                currentDate,
+                categories,
+                dogRating;
+
+            currentDate = new Date();
+
+            // Get the current owner.
+            if (dog.owners) {
+                dog.owners.forEach(function (owner) {
+                    if (owner.isActive) {
+                        currentOwner = owner;
+                        return;
+                    }
+                });
+            }
+
+            // Test required fields
+            if (!request.body.category || request.body.category === '') {
+                return errorResponse(response, {
+                    message: 'Category is required.'
+                });
+            }
+
+            if (request.body.addConstituentRating) {
+                // Validate current owner
+                if (!currentOwner) {
+                    return errorResponse(response, {
+                        message: 'Dog does not have a current owner to save the rating to.'
+                    });
+                }
+
+                // Create constituent rating
+                Sky.postConstituentRatings(request, {
+                    constituent_id: currentOwner.constituentId,
+                    category: request.body.category.name,
+                    date: currentDate.toISOString(),
+                    source: request.body.source,
+                    type: request.body.category.type,
+                    value: request.body.value
+                }).then(function (rating) {
+                    // Create dog rating with constituent rating id
+                    dogRating = dog.ratings.push({
+                        category: request.body.category,
+                        source: request.body.source,
+                        value: request.body.value,
+                        constituentRatingId: rating.id
+                    });
+
+                    dog.save().then(function () {
+                        response.json(dogRating);
+                    }).catch(function (error) {
+                        errorResponse(response, error);
+                    });
+
+                    // Not sure if this is needed here but leaving just in case
+                    response.json(rating);
+                });
+            }
+            else {
+                // Not creating constituent rating so just add dog rating without api call
+                dogRating = dog.ratings.push({
+                    category: request.body.category,
+                    source: request.body.source,
+                    value: request.body.value 
+                });
+
+                dog.save().then(function () {
+                    response.json(dogRating);
+                }).catch(function (error) {
+                    errorResponse(response, error);
+                });
+            }            
+        }).catch(function (error) {
+            errorResponse(response, error);
+        });
+    }
+
+    /**
+     *
+     * @name deleteDogRating
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.dogId
+     * @param {string} request.params.dogRatingId
+     */
+    function deleteDogRating(request, response) {
+        Dog.findOne({
+            _id: request.params.dogId
+        }).exec().then(function (dog) {
+            var lookup;
+            for (var i = 0, len = dog.ratings.length; i < len; i++) {
+                if (dog.ratings[i]._id == request.params.dogRatingId) {
+                    lookup = i;
+                    break;
+                }
+            }
+
+            // If rating has a linked constituent rating, delete it as well
+            if (dog.ratings[lookup].constituentRatingId) {
+                Sky.deleteConstituentRating(request, dog.ratings[lookup].constituentRatingId).then(function () {
+                    dog.ratings.splice(lookup, 1);
+                    dog.save().then(function () {
+                        response.send();
+                    });
+                }).catch(function (error) {
+                    errorResponse(response, error);
+                });
+            }
+            else {
+                dog.ratings.splice(lookup, 1);
+                dog.save().then(function () {
+                    response.send();
+                });
+            }
+        }).catch(function (error) {
+            errorResponse(response, error);
+        });
+    }
+
+    /**
+     *
+     * @name patchDogRating
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.dogId
+     * @param {string} request.params.dogRatingId
+     */
+    function patchDogRating(request, response) {
+        Dog.findOne({
+            _id: request.params.dogId
+        }).exec().then(function (dog) {
+            var lookup;
+            for (var i = 0, len = dog.ratings.length; i < len; i++) {
+                if (dog.ratings[i]._id == request.params.dogRatingId) {
+                    lookup = i;
+                    break;
+                }
+            }
+
+            // If rating has a linked constituent rating, delete it as well
+            if (dog.ratings[lookup].constituentRatingId) {
+                Sky.patchConstituentRating(request, dog.ratings[lookup].constituentRatingId, request.body).then(function () {
+                    dog.ratings.splice(lookup, 1, request.body);
+                    dog.save().then(function () {
+                        response.send();
+                    });
+                }).catch(function (error) {
+                    errorResponse(response, error);
+                });
+            }
+            else {
+                dog.ratings.splice(lookup, 1, request.body);
+                dog.save().then(function () {
+                    response.send();
+                });
+            }
+        }).catch(function (error) {
+            errorResponse(response, error);
+        });
+    }
+
+    /**
      * Handles parse errors
      * @internal
      * @name handleError
@@ -351,6 +643,14 @@
           getNoteTypes: getNoteTypes,
           getPreviousHomes: getPreviousHomes,
           postCurrentHome: postCurrentHome,
-          postNotes: postNotes
+          postNotes: postNotes,
+          getDogRatings: getDogRatings,
+          getDogRating: getDogRating,
+          getDogRatingCategories: getDogRatingCategories,
+          getDogRatingCategoryValues: getDogRatingCategoryValues,
+          getDogRatingSources: getDogRatingSources,
+          postDogRating: postDogRating,
+          patchDogRating: patchDogRating,
+          deleteDogRating: deleteDogRating
     };
 }());

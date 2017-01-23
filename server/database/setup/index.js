@@ -75,6 +75,26 @@
                     updatedAt: "2015-11-24T22:21:50.855Z"
                 }
             ],
+            ratings: [
+                {
+                    category: {
+                        name: "Obedience",
+                        type: "codetable"
+                    },
+                    source: "Barkbaud",
+                    date: "Jan 1, 2017",
+                    value: "Just starting"
+                },
+                {
+                    category: {
+                        name: "Sheds",
+                        type: "boolean"
+                    },
+                    source: "Barkbaud",
+                    date: "Jan 1, 2017",
+                    value: false
+                }
+            ],
             owners: [
                 {
                     constituentId: "242",
@@ -166,6 +186,26 @@
                     description: "We got Pebbles her standard shots",
                     title: "Shots",
                     updatedAt: "2015-10-27T09:49:31.921Z"
+                }
+            ],
+            ratings: [
+                {
+                    category: {
+                        name: "Activity level",
+                        type: "codetable"
+                    },
+                    source: "Barkbaud",
+                    date: "Jan 1, 2017",
+                    value: "Couch Potato"
+                },
+                {
+                    category: {
+                        name: "Sheds",
+                        type: "boolean"
+                    },
+                    source: "Barkbaud",
+                    date: "Jan 1, 2017",
+                    value: true
                 }
             ],
             owners: [
