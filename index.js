@@ -43,7 +43,7 @@
     port = process.env.PORT || 5000;
     sessionConfig = {
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         secret: '+rEchas&-wub24dR'
     };
 
