@@ -382,11 +382,11 @@
      */
     function getDogRatingCategories(request, response) {
         var dogCategories = ['House breaking', 'Activity level', 'Obedience', 'Motivated by', 'Estimated age', 'Favorite toy', 'Sheds', 'Allowance', 'Adoption date', 'Allowed treats per day'];
-        
+
         Sky.getConstituentRatingCategories(request, request.query.sourceName || '').then(function (results) {
             var categoriesToReturn,
                 categoryResponse;
-                
+
             categoriesToReturn = [];
             for (var i = 0; i < results.value.length; i++) {
                 if (dogCategories.indexOf(results.value[i].name) > -1) {
@@ -420,12 +420,12 @@
      * @param {Object} request
      * @param {Object} response
      */
-    function getDogRatingSources(request, response) {        
+    function getDogRatingSources(request, response) {
         var dogSources,
             sourceResponse;
-            
+
         dogSources = ['Barkbaud'];
-        
+
         Sky.getConstituentRatingSources(request).then(function (results) {
             var sourcesToReturn = [];
             for (var i = 0; i < results.value.length; i++) {
@@ -453,88 +453,85 @@
      * @param {Object} request.body.value
      * @param {string} request.body.addConstituentRating
      */
-    function postDogRating(request, response) {
-        Dog.findOne({
-            _id: request.params.dogId
-        }).exec().then(function (dog) {
+     function postDogRating(request, response) {
+         Dog.findOne({
+             _id: request.params.dogId
+         }).exec().then(function (dog) {
 
-            var currentOwner,
-                currentDate,
-                categories,
-                dogRating;
+             var currentOwner,
+             currentDate,
+             categories,
+             dogRating;
 
-            currentDate = new Date();
+             currentDate = new Date();
 
-            // Get the current owner.
-            if (dog.owners) {
-                dog.owners.forEach(function (owner) {
-                    if (owner.isActive) {
-                        currentOwner = owner;
-                        return;
-                    }
-                });
-            }
+             // Get the current owner.
+             if (dog.owners) {
+                 dog.owners.forEach(function (owner) {
+                     if (owner.isActive) {
+                         currentOwner = owner;
+                         return;
+                     }
+                 });
+             }
 
-            // Test required fields
-            if (!request.body.category || request.body.category === '') {
-                return errorResponse(response, {
-                    message: 'Category is required.'
-                });
-            }
+             // Test required fields
+             if (!request.body.category || request.body.category === '') {
+                 return errorResponse(response, {
+                     message: 'Category is required.'
+                 });
+             }
 
-            if (request.body.addConstituentRating) {
-                // Validate current owner
-                if (!currentOwner) {
-                    return errorResponse(response, {
-                        message: 'Dog does not have a current owner to save the rating to.'
-                    });
-                }
+             if (request.body.addConstituentRating) {
+                 // Validate current owner
+                 if (!currentOwner) {
+                     return errorResponse(response, {
+                         message: 'Dog does not have a current owner to save the rating to.'
+                     });
+                 }
 
-                // Create constituent rating
-                Sky.postConstituentRatings(request, {
-                    constituent_id: currentOwner.constituentId,
-                    category: request.body.category.name,
-                    date: currentDate.toISOString(),
-                    source: request.body.source,
-                    type: request.body.category.type,
-                    value: request.body.value
-                }).then(function (rating) {
-                    // Create dog rating with constituent rating id
-                    dogRating = dog.ratings.push({
-                        category: request.body.category,
-                        source: request.body.source,
-                        value: request.body.value,
-                        constituentRatingId: rating.id
-                    });
+                 // Create constituent rating
+                 Sky.postConstituentRatings(request, {
+                     constituent_id: currentOwner.constituentId,
+                     category: request.body.category.name,
+                     date: currentDate.toISOString(),
+                     source: request.body.source,
+                     type: request.body.category.type,
+                     value: request.body.value
+                 }).then(function (rating) {
+                     // Create dog rating with constituent rating id
+                     dogRating = dog.ratings.push({
+                         category: request.body.category,
+                         source: request.body.source,
+                         value: request.body.value,
+                         constituentRatingId: rating.id
+                     });
 
-                    dog.save().then(function () {
-                        response.json(dogRating);
-                    }).catch(function (error) {
-                        errorResponse(response, error);
-                    });
+                     dog.save().then(function () {
+                         response.json(dogRating);
+                     }).catch(function (error) {
+                         errorResponse(response, error);
+                     });
+                 });
+             }
+             else {
+                 // Not creating constituent rating so just add dog rating without api call
+                 dogRating = dog.ratings.push({
+                     category: request.body.category,
+                     source: request.body.source,
+                     value: request.body.value
+                 });
 
-                    // Not sure if this is needed here but leaving just in case
-                    response.json(rating);
-                });
-            }
-            else {
-                // Not creating constituent rating so just add dog rating without api call
-                dogRating = dog.ratings.push({
-                    category: request.body.category,
-                    source: request.body.source,
-                    value: request.body.value 
-                });
-
-                dog.save().then(function () {
-                    response.json(dogRating);
-                }).catch(function (error) {
-                    errorResponse(response, error);
-                });
-            }            
-        }).catch(function (error) {
-            errorResponse(response, error);
-        });
-    }
+                 dog.save().then(function () {
+                     response.json(dogRating);
+                 }).catch(function (error) {
+                     errorResponse(response, error);
+                 });
+             }
+         }).catch(function (error) {
+             errorResponse(response, error);
+         });
+     }
 
     /**
      *
