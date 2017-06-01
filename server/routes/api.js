@@ -382,11 +382,11 @@
      */
     function getDogRatingCategories(request, response) {
         var dogCategories = ['House breaking', 'Activity level', 'Obedience', 'Motivated by', 'Estimated age', 'Favorite toy', 'Sheds', 'Allowance', 'Adoption date', 'Allowed treats per day'];
-        
+
         Sky.getConstituentRatingCategories(request, request.query.sourceName || '').then(function (results) {
             var categoriesToReturn,
                 categoryResponse;
-                
+
             categoriesToReturn = [];
             for (var i = 0; i < results.value.length; i++) {
                 if (dogCategories.indexOf(results.value[i].name) > -1) {
@@ -420,12 +420,12 @@
      * @param {Object} request
      * @param {Object} response
      */
-    function getDogRatingSources(request, response) {        
+    function getDogRatingSources(request, response) {
         var dogSources,
             sourceResponse;
-            
+
         dogSources = ['Barkbaud'];
-        
+
         Sky.getConstituentRatingSources(request).then(function (results) {
             var sourcesToReturn = [];
             for (var i = 0; i < results.value.length; i++) {
@@ -453,10 +453,10 @@
      * @param {Object} request.body.value
      * @param {string} request.body.addConstituentRating
      */
-    function postDogRating(request, response) {
-        Dog.findOne({
+     function postDogRating(request, response) {
+         Dog.findOne({
             _id: request.params.dogId
-        }).exec().then(function (dog) {
+         }).exec().then(function (dog) {
 
             var currentOwner,
                 currentDate,
@@ -512,9 +512,6 @@
                     }).catch(function (error) {
                         errorResponse(response, error);
                     });
-
-                    // Not sure if this is needed here but leaving just in case
-                    response.json(rating);
                 });
             }
             else {
@@ -522,7 +519,7 @@
                 dogRating = dog.ratings.push({
                     category: request.body.category,
                     source: request.body.source,
-                    value: request.body.value 
+                    value: request.body.value
                 });
 
                 dog.save().then(function () {
@@ -530,11 +527,11 @@
                 }).catch(function (error) {
                     errorResponse(response, error);
                 });
-            }            
+            }
         }).catch(function (error) {
             errorResponse(response, error);
         });
-    }
+     }
 
     /**
      *

@@ -17,19 +17,34 @@
      * @param {string} method
      * @param {string} endpoint
      */
-    function proxy(request, method, endpoint, body) {
-        return rq({
-            json: true,
-            method: method,
-            body: body,
-            timeout: 29000,
-            url: 'https://api.sky.blackbaud.com/' + endpoint,
-            headers: {
-                'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
-                'Authorization': 'Bearer ' + request.session.ticket.access_token
-            }
-        });
-    }
+     function proxy(request, method, endpoint, body) {
+        function makeRequest() {
+            return rq({
+                json: true,
+                method: method,
+                body: body,
+                timeout: 29000,
+                url: 'https://api.sky.blackbaud.com/' + endpoint,
+                headers: {
+                    'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
+                    'Authorization': 'Bearer ' + request.session.ticket.access_token
+                }
+            });
+        }
+
+        return makeRequest()
+            .catch(function (error) {
+                return new Promise((resolve, reject) => {
+                    if (error.response.statuscode === 429) {
+                        setTimeout(function() {
+                            resolve(makeRequest());
+                        }, parseInt(error.response.headers['retry-after']) * 1000);
+                    } else {
+                        reject(error);
+                    }
+                });
+            });
+     }
 
     /**
      * Wrap all GET proxy calls.
