@@ -3,10 +3,12 @@
     'use strict';
 
     var constituentBaseUri,
-        rq;
+        rq,
+        DEFAULT_WAIT_SECONDS;
 
     constituentBaseUri = 'constituent/v1/';
     rq = require('request-promise');
+    DEFAULT_WAIT_SECONDS = 5;
 
     /**
      * Proxy method to the RENXT api.
@@ -32,18 +34,27 @@
             });
         }
 
-        return makeRequest()
-            .catch(function (error) {
-                return new Promise((resolve, reject) => {
-                    if (error.response.statuscode === 429) {
-                        setTimeout(function() {
-                            resolve(makeRequest());
-                        }, parseInt(error.response.headers['retry-after']) * 1000);
-                    } else {
-                        reject(error);
-                    }
-                });
-            });
+        function handleResponse(shouldRetry){
+          return makeRequest()
+              .catch(function (error) {
+                  return new Promise((resolve, reject) => {
+                      if (error.response.statuscode === 429) {
+                          setTimeout(function() {
+                              resolve(makeRequest());
+                          }, parseInt(error.response.headers['retry-after']) * 1000);
+                      } else if (error.response.statuscode === 500 && shouldRetry) {
+                          // Wait and retry for a 500 response
+                          setTimeout(function() {
+                              resolve(handleResponse(false));
+                          }, DEFAULT_WAIT_SECONDS * 1000);
+                      } else if (error.response.statuscode === 500) {
+                          reject(error);
+                      }
+                  });
+              });
+          }
+
+          return handleResponse(true);
      }
 
     /**
