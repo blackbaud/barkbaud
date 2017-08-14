@@ -1,13 +1,7 @@
-/*jslint node: true, nomen: true*/
-(function () {
-    'use strict';
+const dotenv = require('dotenv');
 
-    var app,
-        dotenv;
+dotenv.config({
+    path: 'barkbaud.env'
+});
 
-    dotenv = require('dotenv').config({
-        path: 'barkbaud.env'
-    });
-    app = require('../index.js');
-
-}());
+require('../index');

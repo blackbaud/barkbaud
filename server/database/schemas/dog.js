@@ -1,32 +1,22 @@
-/*jslint node: true, nomen: true*/
-(function () {
-    'use strict';
+const mongoose = require('mongoose');
+const dogNoteSchema = require('./dog-note');
+const dogOwnerSchema = require('./dog-owner');
+const dogRatingSchema = require('./dog-rating');
 
-    var dogNoteSchema,
-        dogOwnerSchema,
-        dogRatingSchema,
-        mongoose;
-
-    mongoose = require('mongoose');
-    dogNoteSchema = require(__dirname + '/dog-note.js');
-    dogOwnerSchema = require(__dirname + '/dog-owner.js');
-    dogRatingSchema = require(__dirname + '/dog-rating.js');
-
-    module.exports = mongoose.Schema({
-        bio: String,
-        breed: String,
-        createdAt: String,
-        owners: [dogOwnerSchema],
-        gender: String,
-        image: {
-            file: String,
-            data: String
-        },
-        name: String,
-        notes: [dogNoteSchema],
-        ratings: [dogRatingSchema],
-        updatedAt: String
-    }, {
-        collection : 'Dog'
-    });
-}());
+module.exports = mongoose.Schema({
+    bio: String,
+    breed: String,
+    createdAt: String,
+    owners: [dogOwnerSchema],
+    gender: String,
+    image: {
+        file: String,
+        data: String
+    },
+    name: String,
+    notes: [dogNoteSchema],
+    ratings: [dogRatingSchema],
+    updatedAt: String
+}, {
+    collection: 'Dog'
+});

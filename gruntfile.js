@@ -1,30 +1,23 @@
-/*jshint node: true */
 module.exports = function (grunt) {
-    'use strict';
-
     function addApiConfig() {
-        var apiConfig,
-            body,
-            html,
-            index;
-
-        index = 'ui/index.html';
-        body = '</body>';
-        apiConfig = [
-            "<script>",
-            "(function () {",
-            "    'use strict';",
-            "    function config(barkbaudConfig) {",
-            "        barkbaudConfig.apiUrl = '/';",
-            "    }",
-            "    config.$inject = ['barkbaudConfig'];",
-            "    angular.module('barkbaud')",
-            "        .config(config);",
-            "}());",
-            "</script>"
+        const index = 'ui/index.html';
+        const body = '</body>';
+        const apiConfig = [
+            '<script>',
+            '(function () {',
+            '    \'use strict\';',
+            '    function config(barkbaudConfig) {',
+            '        barkbaudConfig.apiUrl = '/';',
+            '    }',
+            '    config.$inject = [\'barkbaudConfig\'];',
+            '    angular.module(\'barkbaud\')',
+            '        .config(config);',
+            '}());',
+            '</script>'
         ];
-        html = grunt.file.read(index);
-        html = html.replace(body, apiConfig.join("\n") + body);
+
+        let html = grunt.file.read(index);
+        html = html.replace(body, apiConfig.join('\n') + body);
 
         grunt.file.write(index, html);
     }
