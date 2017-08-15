@@ -1,27 +1,19 @@
-/*jslint node: true, nomen: true*/
-(function () {
-    'use strict';
+const setup = require('./setup');
 
-    var setup;
+function Database(options) {
+    const uri = options.uri;
+    const service = options.service;
 
-    setup = require(__dirname + '/setup');
+    service.Promise = global.Promise;
 
-    function Database(options) {
-        var service,
-            uri;
+    this.connect = function (callback) {
+        service.connect(uri, { useMongoClient: true });
+        callback();
+    };
 
-        uri = options.uri;
-        service = options.service;
+    this.setup = setup;
 
-        this.connect = function (callback) {
-            service.connect(uri);
-            callback();
-        };
+    return this;
+}
 
-        this.setup = setup;
-
-        return this;
-    }
-
-    module.exports = Database;
-}());
+module.exports = Database;

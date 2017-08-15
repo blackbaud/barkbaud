@@ -1,13 +1,6 @@
-/*jslint node: true, nomen: true*/
-(function () {
-    'use strict';
+const routes = {};
 
-    var routes;
+routes.auth = require('./auth');
+routes.api = require('./api');
 
-    routes = {};
-
-    routes.auth = require('./auth');
-    routes.api = require('./api');
-
-    module.exports = routes;
-}());
+module.exports = routes;
