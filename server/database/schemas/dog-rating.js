@@ -1,17 +1,9 @@
-/*jslint node: true, nomen: true*/
-(function () {
-    'use strict';
+const mongoose = require('mongoose');
+const dogRatingCategorySchema = require('./dog-rating-category');
 
-    var dogRatingCategorySchema,
-        mongoose;
-        
-    mongoose = require('mongoose');
-    dogRatingCategorySchema = require(__dirname + '/dog-rating-category.js');
-
-    module.exports = require('mongoose').Schema({
-        category: dogRatingCategorySchema,
-        source: String,
-        value: Object,
-        constituentRatingId: String
-    });
-}());
+module.exports = mongoose.Schema({
+    category: dogRatingCategorySchema,
+    source: String,
+    value: Object,
+    constituentRatingId: String
+});
