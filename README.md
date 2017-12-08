@@ -8,6 +8,7 @@ Blackbaud SKY API / SKY UX sample application.
 - [Deploy to Heroku](#deploy)
 
 <h2 id="about">About</h2>
+
 This sample application showcases the [Blackbaud SKY API](https://developer.sky.blackbaud.com/) and [Blackbaud SKY UX](http://skyux.developer.blackbaud.com/). Both technologies function completely independent of one another.  The Blackbaud SKY API currently supports the [Authorization Code Flow](http://apidocs.sky.blackbaud.com/docs/authorization/auth-code-flow/), which requires us to have a back-end server component where we're able to securely store the client secret. We've implemented the server component using [NodeJS](https://nodejs.org/).  Our front-end is stored and built in the [barkbaud-ui repository](https://github.com/blackbaud/barkbaud-ui). Using [Bower](http://bower.io/), we consume the front-end components and move it to the Barkbaud application's **ui/** folder during the install and build steps.
 
 ### Features:
@@ -65,49 +66,16 @@ $  cd barkbaud
 - On your server (or local machine), open the **barkbaud/** working directory and copy the configuration file **barkbaud.env-sample**, saving it as **barkbaud.env**.
 - Open **barkbaud.env** in a text editor (such as Notepad or TextEdit).
 - You should see a list of variables which will serve to configure Barkbaud's NodeJS environment.
-- Update the file with the following values:<br><br>
-    <table>
-    <tr>
-        <td>**`AUTH_CLIENT_ID`**</td>
-        <td>
-            Your registered application's **Application ID**.<br>
-            (See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).)
-        </td>
-    </tr>
-    <tr>
-        <td>**`AUTH_CLIENT_SECRET`**</td>
-        <td>
-            Your registered application's **Application Secret**.<br>
-            (See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).)
-        </td>
-    </tr>
-    <tr>
-        <td>**`AUTH_REDIRECT_URI`**</td>
-        <td>
-            One of your registered application's **Redirect URIs**. <br>
-            For local development, use `http://localhost:5000/auth/callback`. <br>
-            (See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).)
-        </td>
-    </tr>
-    <tr>
-        <td>**`AUTH_SUBSCRIPTION_KEY`**</td>
-        <td>
-            Your Blackbaud Developer **Subscription Key**.<br>
-            Use either the **Primary key** or **Secondary key**, visible on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer).
-        </td>
-    </tr>
-    <tr>
-        <td>**`DATABASE_URI`**</td>
-        <td>
-            A MongoDB connection string, which points to your mLab database. The string must follow this format: <br>
-            ```
-            mongodb://<dbuser>:<dbpassword>@<dbaddress>/<dbname>
-            ```
-            <br>
-            More details about how to find your connection string can be found on [mLab's Documentation](http://docs.mlab.com/connecting/#connect-string).
-        </td>
-    </tr>
-    </table>
+- Update the file with the following values:
+
+| Key | Description |
+|---|---|
+| **`AUTH_CLIENT_ID`** | Your registered application's **Application ID**.<br >(See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).) |
+| **`AUTH_CLIENT_SECRET`** | Your registered application's **Application Secret**.<br>(See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).) |
+| **`AUTH_REDIRECT_URI`** | One of your registered application's **Redirect URIs**. <br>For local development, use `http://localhost:5000/auth/callback`. <br>(See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).)  |
+| **`AUTH_SUBSCRIPTION_KEY`** | Your Blackbaud Developer **Subscription Key**.<br>Use either the **Primary key** or **Secondary key**, visible on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer). |
+| **`DATABASE_URI`** | A MongoDB connection string, which points to your mLab database.<br>The string must follow this format: <br>`mongodb://<dbuser>:<dbpassword>@<dbaddress>/<dbname>`<br>More details about how to find your connection string can be found on [mLab's Documentation](http://docs.mlab.com/connecting/#connect-string). |
+
 - Save the **barkbaud.env** file.
 - Review the **.gitignore** file.  The purpose of this file is to specify which directories and files Git should ignore when performing a commit. Note that the **barkbaud.env** file is ignored. This prevents the file from being synced to your repository and protects your registered application's keys and other sensitive data from being exposed.
 

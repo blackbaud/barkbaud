@@ -1,12 +1,4 @@
-/*jslint node: true, nomen: true*/
-(function () {
-    'use strict';
+const mongoose = require('mongoose');
+const schema = require('../schemas/dog');
 
-    var mongoose,
-        schema;
-
-    mongoose = require('mongoose');
-    schema = require('../schemas/dog');
-
-    module.exports = mongoose.model('Dog', schema);
-}());
+module.exports = mongoose.model('Dog', schema);
