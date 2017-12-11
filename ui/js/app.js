@@ -555,7 +555,7 @@ angular.module('md5', []).constant('md5', (function() {
 
     MainController.$inject = ['barkbaudAuthService'];
 
-    angular.module('barkbaud', ['sky', 'ui.select', 'ui.bootstrap', 'ui.router', 'ngAnimate', 'barkbaud.templates', 'ui.gravatar'])
+    angular.module('barkbaud', ['sky', 'ui.router', 'ngAnimate', 'barkbaud.templates', 'ui.gravatar'])
         .constant('barkbaudConfig', barkbaudConfig)
         .config(config)
         .run(run)
@@ -797,7 +797,7 @@ angular.module('md5', []).constant('md5', (function() {
             self.categoryValues = null; 
             self.behaviortraining.value = null;
 
-            if (self.behaviortraining.category.type === 'codetable') {
+            if (self.behaviortraining.category && self.behaviortraining.category.type === 'CodeTable') {
                 bbData.load({
                     data: 'api/dogs/ratings/categories/values?categoryName=' + encodeURIComponent(self.behaviortraining.category.name)
                 }).then(function (result) {
@@ -973,7 +973,7 @@ angular.module('md5', []).constant('md5', (function() {
         self.minDate = 1700;
         self.maxDate = 3000;
 
-        if (self.behaviortraining.category.type === 'codetable') {
+        if (self.behaviortraining.category.type === 'CodeTable') {
             bbData.load({
                 data: 'api/dogs/ratings/categories/values?categoryName=' + encodeURIComponent(self.behaviortraining.category.name)
             }).then(function (result) {
@@ -1045,15 +1045,15 @@ angular.module('md5', []).constant('md5', (function() {
         };
 
         self.addBehaviorTraining = function () {
-            barkBehaviorTrainingAdd.open(dogId).result.then(self.load);
+            barkBehaviorTrainingAdd.open(dogId).result.then(self.load, angular.noop);
         };
 
         self.editBehaviorTraining = function (behaviortraining) {
-            barkBehaviorTrainingEdit.open(dogId, behaviortraining).result.then(self.load);
+            barkBehaviorTrainingEdit.open(dogId, behaviortraining).result.then(self.load, angular.noop);
         };
 
         self.deleteBehaviorTraining = function (behaviorTrainingId) {
-            barkBehaviorTrainingDelete.open(dogId, behaviorTrainingId).result.then(self.load);
+            barkBehaviorTrainingDelete.open(dogId, behaviorTrainingId).result.then(self.load, angular.noop);
         };
 
         self.load();
@@ -1104,7 +1104,8 @@ angular.module('md5', []).constant('md5', (function() {
             barkFindHome.open(dogId).result.then(function () {
                 self.load();
                 $rootScope.$broadcast('bbNewCurrentOwner');
-            });
+            },
+            angular.noop);
         };
 
         self.load();
@@ -1128,27 +1129,56 @@ angular.module('md5', []).constant('md5', (function() {
 (function () {
     'use strict';
 
-    function FindHomeController($uibModalInstance, bbData, dogId) {
+    function FindHomeController($http, $q, $uibModalInstance, barkbaudConfig, bbData, dogId) {
         var self = this;
 
-        self.search = function (searchText) {
+        self.results = [];
+        self.searchCancelers = [];
+        self.selectedResult = [];
 
-            if (searchText && searchText.length > 0) {
-                return bbData.load({
-                    data: 'api/dogs/' + dogId + '/findhome?searchText=' + searchText
-                }).then(function (results) {
-                    self.results = results.data.value;
+        self.onSearch = function (args) {
+            if (args.searchText && args.searchText.length > 0) {
+                self.error = null;
+ 
+                // Resolve/cancel any previous previous searches
+                self.searchCancelers.forEach(function(canceler) {
+                    canceler.resolve();
+                });
+
+                var searchCanceler = $q.defer();
+                self.searchCancelers.push(searchCanceler);
+
+                $http({ 
+                    url: barkbaudConfig.apiUrl + 'api/dogs/' + dogId + '/findhome?searchText=' + args.searchText,
+                    timeout: searchCanceler.promise,
+                    withCredentials: true
+                }).then(function (response) {
+                    removeFromSearchCancelers(searchCanceler);
+                    self.results = [];
+
+                    response.data.value.forEach(function(constituent) {
+                        self.results.push({
+                            constituent: constituent,
+                            description: constituent.address,
+                            title: constituent.name + ' (' + constituent.id + ')'
+                        });
+                    });
                 }).catch(function (result) {
-                    self.error = result.data.error;
+                    removeFromSearchCancelers(searchCanceler);
+                    if (result && result.status !== -1) { // -1 for canceled requests
+                        self.error = {
+                            message: "Search error: " + (result.data.message || result.statusText)
+                        }
+                    }
                 });
             }
         };
 
         self.saveData = function () {
-            if (self.constituent) {
+            if (self.selectedResult.length > 0 && self.selectedResult[0].constituent) {
                 bbData.save({
                     url: 'api/dogs/' + dogId + '/currenthome',
-                    data: self.constituent,
+                    data: self.selectedResult[0].constituent,
                     type: 'POST'
                 }).then(function (result) {
                     $uibModalInstance.close(result.data);
@@ -1157,10 +1187,20 @@ angular.module('md5', []).constant('md5', (function() {
                 });
             }
         };
+
+        function removeFromSearchCancelers(canceler) {
+            var index = self.searchCancelers.indexOf(canceler);
+            if (index >= 0) {
+                self.searchCancelers.splice(index, 1);
+            }
+        }
     }
 
     FindHomeController.$inject = [
+        '$http',
+        '$q',
         '$uibModalInstance',
+        'barkbaudConfig',
         'bbData',
         'dogId'
     ];
@@ -1410,7 +1450,7 @@ angular.module('md5', []).constant('md5', (function() {
         };
 
         self.addNote = function () {
-            barkNoteAdd.open(dogId).result.then(self.load);
+            barkNoteAdd.open(dogId).result.then(self.load, angular.noop);
         };
 
         self.load();
@@ -1541,7 +1581,7 @@ angular.module('md5', []).constant('md5', (function() {
         .controller('LoginPageController', LoginPageController);
 }());
 
-angular.module('barkbaud.templates', []).run(['$templateCache', function($templateCache) {
+angular.module('barkbaud.templates', []).run(['$templateCache', function ($templateCache) {
     $templateCache.put('components/photo.directive.html',
         '<div class="bark-photo img-circle center-block">\n' +
         '</div>\n' +
@@ -1604,31 +1644,31 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '                        <!--None selected -->\n' +
         '                        <input type="text" class="form-control" ng-disabled="true" ng-if="!behaviorTrainingAdd.behaviortraining.category" />\n' +
         '                        <!--Unknown -->\n' +
-        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="unknown" ng-maxlength="255" />\n' +
+        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="Unknown" ng-maxlength="255" />\n' +
         '                        <!--Text -->\n' +
-        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="text" ng-maxlength="255" />\n' +
+        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="Text" ng-maxlength="255" />\n' +
         '                        <!--Number -->\n' +
-        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="number" />\n' +
+        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="Number" />\n' +
         '                        <!--Date -->\n' +
         '                        <bb-datepicker bb-datepicker-name="Value"\n' +
         '                                       ng-model="behaviorTrainingAdd.behaviortraining.value"\n' +
-        '                                       ng-switch-when="datetime"\n' +
+        '                                       ng-switch-when="DateTime"\n' +
         '                                       bb-datepicker-min="behaviorTrainingAdd.minDate"\n' +
         '                                       bb-datepicker-max="behaviorTrainingAdd.maxDate"\n' +
         '                                       bb-datepicker-append-to-body="true">\n' +
         '                        </bb-datepicker>\n' +
         '                        <!--Currency = 4, -->\n' +
-        '                        <input type="text" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="currency" />\n' +
+        '                        <input type="text" class="form-control" ng-model="behaviorTrainingAdd.behaviortraining.value" ng-switch-when="Currency" />\n' +
         '                        <!--Boolean = 5, -->\n' +
         '                        <select class="form-control"\n' +
         '                                ng-model="behaviorTrainingAdd.behaviortraining.value"\n' +
         '                                ng-options="yes_or_no.value as yes_or_no.label for yes_or_no in behaviorTrainingAdd.yesno"\n' +
-        '                                ng-switch-when="boolean"></select>\n' +
+        '                                ng-switch-when="Boolean"></select>\n' +
         '                        <!--CodeTableEntry = 6, -->\n' +
         '                        <select class="form-control"\n' +
         '                                ng-model="behaviorTrainingAdd.behaviortraining.value"\n' +
         '                                ng-options="categoryValue as categoryValue for categoryValue in behaviorTrainingAdd.categoryValues"\n' +
-        '                                ng-switch-when="codetable">\n' +
+        '                                ng-switch-when="CodeTable">\n' +
         '                        </select>\n' +
         '                    </span>\n' +
         '            </div>\n' +
@@ -1711,31 +1751,31 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '                        <!--None selected -->\n' +
         '                        <input type="text" class="form-control" ng-disabled="true" ng-if="!behaviorTrainingEdit.behaviortraining.category" />\n' +
         '                        <!--Unknown -->\n' +
-        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="unknown" ng-maxlength="255" />\n' +
+        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="Unknown" ng-maxlength="255" />\n' +
         '                        <!--Text -->\n' +
-        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="text" ng-maxlength="255" />\n' +
+        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="Text" ng-maxlength="255" />\n' +
         '                        <!--Number -->\n' +
-        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="number" />\n' +
+        '                        <input type="text" name="Value" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="Number" />\n' +
         '                        <!--Date -->\n' +
         '                        <bb-datepicker bb-datepicker-name="Value"\n' +
         '                                       ng-model="behaviorTrainingEdit.behaviortraining.value"\n' +
-        '                                       ng-switch-when="datetime"\n' +
+        '                                       ng-switch-when="DateTime"\n' +
         '                                       bb-datepicker-min="behaviorTrainingEdit.minDate"\n' +
         '                                       bb-datepicker-max="behaviorTrainingEdit.maxDate"\n' +
         '                                       bb-datepicker-append-to-body="true">\n' +
         '                        </bb-datepicker>\n' +
         '                        <!--Currency = 4, -->\n' +
-        '                        <input type="text" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="currency" />\n' +
+        '                        <input type="text" class="form-control" ng-model="behaviorTrainingEdit.behaviortraining.value" ng-switch-when="Currency" />\n' +
         '                        <!--Boolean = 5, -->\n' +
         '                        <select class="form-control"\n' +
         '                                ng-model="behaviorTrainingEdit.behaviortraining.value"\n' +
         '                                ng-options="yes_or_no.value as yes_or_no.label for yes_or_no in behaviorTrainingEdit.yesno"\n' +
-        '                                ng-switch-when="boolean"></select>\n' +
+        '                                ng-switch-when="Boolean"></select>\n' +
         '                        <!--CodeTableEntry = 6, -->\n' +
         '                        <select class="form-control"\n' +
         '                                ng-model="behaviorTrainingEdit.behaviortraining.value"\n' +
         '                                ng-options="categoryValue as categoryValue for categoryValue in behaviorTrainingEdit.categoryValues"\n' +
-        '                                ng-switch-when="codetable">\n' +
+        '                                ng-switch-when="CodeTable">\n' +
         '                        </select>\n' +
         '                    </span>\n' +
         '            </div>\n' +
@@ -1888,22 +1928,27 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '      <bb-modal-header>Find a home</bb-modal-header>\n' +
         '      <div bb-modal-body>\n' +
         '        <div class="form-group">\n' +
-        '          <label class="control-label">Search By Name</label>\n' +
-        '          <ui-select ng-model="findHome.constituent" append-to-body="true" bb-autofocus>\n' +
-        '            <ui-select-match allow-clear placeholder="Search by Name">{{$select.selected.name}}</ui-select-match>\n' +
-        '            <ui-select-choices repeat="constituent in findHome.results" refresh="findHome.search($select.search, \'single\')" refresh-delay="250">\n' +
-        '              <span>{{ constituent.name }} ({{ constituent.id }})</span><br />\n' +
-        '              <small><strong>{{ constituent.address }}</strong></small>\n' +
-        '            </ui-select-choices>\n' +
-        '          </ui-select>\n' +
+        '          <bb-checklist\n' +
+        '            bb-checklist-items="findHome.results"\n' +
+        '            bb-checklist-selected-items="findHome.selectedResult"\n' +
+        '            bb-checklist-include-search="true"\n' +
+        '            bb-checklist-search-placeholder="Search by name"\n' +
+        '            bb-checklist-filter-callback="findHome.onSearch"\n' +
+        '            bb-checklist-no-items-message="No home found. Search above."\n' +
+        '            bb-checklist-mode="list"\n' +
+        '            bb-checklist-select-style="single"\n' +
+        '            bb-checklist-search-debounce="250"\n' +
+        '            bb-checklist-is-loading="findHome.searchCancelers.length">\n' +
+        '          </bb-checklist>\n' +
         '        </div>\n' +
         '      </div>\n' +
         '      <bb-modal-footer>\n' +
-        '        <bb-modal-footer-button-primary></bb-modal-footer-button-primary>\n' +
+        '        <bb-modal-footer-button-primary ng-disabled="!findHome.selectedResult.length"></bb-modal-footer-button-primary>\n' +
         '        <bb-modal-footer-button-cancel></bb-modal-footer-button-cancel>\n' +
-        '        <span ng-show="noteAdd.error" class="text-danger">\n' +
-        '          Error saving home\n' +
-        '        </span>\n' +
+        '        <span ng-show="findHome.error" class="text-danger">\n' +
+        '            <span ng-show="findHome.error.message">{{ findHome.error.message }}</span>\n' +
+        '            <span ng-hide="findHome.error.message">Unknown error occured.</span>\n' +
+        '          </span>\n' +
         '      </bb-modal-footer>\n' +
         '    </div>\n' +
         '  </form>\n' +
@@ -2051,7 +2096,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '  <title>Barkbaud</title>\n' +
         '  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">\n' +
         '  <link rel="icon" type="image/png" href="images/favicon.ico">\n' +
-        '  <link rel="stylesheet" type="text/css" href="https://sky.blackbaudcdn.net/skyux/1.5.22/css/sky-bundle.css">\n' +
+        '  <link rel="stylesheet" type="text/css" href="https://sky.blackbaudcdn.net/skyux/1.19.1/css/sky-bundle.css">\n' +
         '  <link rel="stylesheet" type="text/css" href="css/app.css">\n' +
         '</head>\n' +
         '\n' +
@@ -2071,7 +2116,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function($templa
         '    </div>\n' +
         '  </bb-navbar>\n' +
         '  <div ui-view></div>\n' +
-        '  <script src="https://sky.blackbaudcdn.net/skyux/1.5.22/js/sky-bundle.min.js"></script>\n' +
+        '  <script src="https://sky.blackbaudcdn.net/skyux/1.19.1/js/sky-bundle.min.js"></script>\n' +
         '  <script src="js/app.min.js"></script>\n' +
         '</body>\n' +
         '</html>\n' +
