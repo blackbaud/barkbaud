@@ -2134,7 +2134,7 @@ angular.module('barkbaud.templates', []).run(['$templateCache', function ($templ
         '          An unknown error has occurred.\n' +
         '        </span>\n' +
         '      </p>\n' +
-        '      <p>Welcome to the Barkbaud Sample App.  This demo was built to showcase the Blackbaud NXT API and Blackbaud Sky UX.</p>\n' +
+        '      <p>Welcome to the Barkbaud Sample App.  This demo was built to showcase the Blackbaud SKY API and Blackbaud Sky UX.</p>\n' +
         '      <p>Click the Login button below to view the demo, or click the Learn More button below to visit the GitHub repo.</p>\n' +
         '    </div>\n' +
         '    <bb-modal-footer>\n' +
