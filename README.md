@@ -9,7 +9,7 @@ Blackbaud SKY API / SKY UX sample application.
 
 <h2 id="about">About</h2>
 
-This sample application showcases the [Blackbaud SKY API](https://developer.sky.blackbaud.com/) and [Blackbaud SKY UX](http://skyux.developer.blackbaud.com/). Both technologies function completely independent of one another.  The Blackbaud SKY API currently supports the [Authorization Code Flow](http://apidocs.sky.blackbaud.com/docs/authorization/auth-code-flow/), which requires us to have a back-end server component where we're able to securely store the client secret. We've implemented the server component using [NodeJS](https://nodejs.org/).  Our front-end is stored and built in the [barkbaud-ui repository](https://github.com/blackbaud/barkbaud-ui). Using [Bower](http://bower.io/), we consume the front-end components and move it to the Barkbaud application's **ui/** folder during the install and build steps.
+This sample application showcases the [Blackbaud SKY API](https://developer.blackbaud.com/skyapi/) and [Blackbaud SKY UX](http://developer.blackbaud.com/skyux). Both technologies function completely independent of one another.  The Blackbaud SKY API currently supports the [Authorization Code Flow](https://developer.blackbaud.com/skyapi/docs/authorization/auth-code-flow), which requires us to have a back-end server component where we're able to securely store the client secret. We've implemented the server component using [NodeJS](https://nodejs.org/).  Our front-end is stored and built in the [barkbaud-ui repository](https://github.com/blackbaud/barkbaud-ui). Using [Bower](http://bower.io/), we consume the front-end components and move it to the Barkbaud application's **ui/** folder during the install and build steps.
 
 ### Features:
 - The Barkbaud application starts by requesting authorization to your Blackbaud Raiser's Edge NXT data.
@@ -36,11 +36,11 @@ To run this application in your environment, you will need a server (such as you
 ### Sky API Requirements:
 
 - **A Blackbaud Developer Subscription Key**
-    - If you have not already done so, be sure to complete the [Getting started guide](https://apidocs.sky.blackbaud.com/docs/getting-started/). This will guide you through the process of registering for a Blackbaud developer account and requesting a subscription to an API product.
+    - If you have not already done so, be sure to complete the [Getting started guide](https://developer.blackbaud.com/skyapi/docs/getting-started). This will guide you through the process of registering for a Blackbaud developer account and requesting a subscription to an API product.
     - Once approved, your subscription will contain a **Primary Key** and a **Secondary Key**.  You can use either key as the subscription key value for the `bb-api-subscription-key` request header when making calls to the API.
     - You can view your subscription keys on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer).
 - **A Blackbaud Developer Application ID and Application Secret**
-    - [Register your application](https://developerapp.sky.blackbaud.com/applications) in order to obtain the **Application ID** (client ID) and **Application Secret** (client secret).
+    - [Register your application](https://developer.blackbaud.com/apps/) in order to obtain the **Application ID** (client ID) and **Application Secret** (client secret).
     - When you call the Blackbaud Authorization Service from your application, you pass the `redirect_uri` as part of the call. The Blackbaud Authorization Service redirects to this URI after the user grants or denies permission. Therefore, you must whitelist the web address(es) or the authorization will fail.
     - URIs must _exactly_ match the value your application uses in calls to the Blackbaud Authorization Service. If you plan on running Barkbaud on your local machine, be sure to supply a **Redirect URI** of "http://localhost:5000/auth/callback".
 - Add the note type, "Barkbaud", to the Constituent API **Note Types** table.
@@ -70,9 +70,9 @@ $  cd barkbaud
 
 | Key | Description |
 |---|---|
-| **`AUTH_CLIENT_ID`** | Your registered application's **Application ID**.<br >(See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).) |
-| **`AUTH_CLIENT_SECRET`** | Your registered application's **Application Secret**.<br>(See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).) |
-| **`AUTH_REDIRECT_URI`** | One of your registered application's **Redirect URIs**. <br>For local development, use `http://localhost:5000/auth/callback`. <br>(See, [Managing your apps](https://apidocs.sky.blackbaud.com/docs/apps/).)  |
+| **`AUTH_CLIENT_ID`** | Your registered application's **Application ID**.<br >(See, [Managing your apps](https://developer.blackbaud.com/apps/).) |
+| **`AUTH_CLIENT_SECRET`** | Your registered application's **Application Secret**.<br>(See, [Managing your apps](https://developer.blackbaud.com/apps/).) |
+| **`AUTH_REDIRECT_URI`** | One of your registered application's **Redirect URIs**. <br>For local development, use `http://localhost:5000/auth/callback`. <br>(See, [Managing your apps](https://developer.blackbaud.com/apps/).)  |
 | **`AUTH_SUBSCRIPTION_KEY`** | Your Blackbaud Developer **Subscription Key**.<br>Use either the **Primary key** or **Secondary key**, visible on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer). |
 | **`DATABASE_URI`** | A MongoDB connection string, which points to your mLab database.<br>The string must follow this format: <br>`mongodb://<dbuser>:<dbpassword>@<dbaddress>/<dbname>`<br>More details about how to find your connection string can be found on [mLab's Documentation](http://docs.mlab.com/connecting/#connect-string). |
 
@@ -108,7 +108,7 @@ Open a Web browser to <a href="http://localhost:5000">http://localhost:5000</a>.
 
 - Create a [free Heroku account](https://signup.heroku.com/login).
 - From your Heroku Dashboard, [create a new Heroku application](https://dashboard.heroku.com/new).
-- Edit your [Blackbaud Sky API Application](https://developerapp.sky.blackbaud.com/applications) and add a new **Redirect URL** that points to your Heroku application's URL. This URL should also include the path "/auth/callback". For example:
+- Edit your [Blackbaud Sky API Application](https://developer.blackbaud.com/apps/) and add a new **Redirect URL** that points to your Heroku application's URL. This URL should also include the path "/auth/callback". For example:
 ```
 https://your-heroku-app-name.herokuapp.com/auth/callback
 ```
