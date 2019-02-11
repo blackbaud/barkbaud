@@ -8,7 +8,8 @@
     "setup": "node ./bin/setup.js",
     "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "heroku-postbuild": "echo Skip build on Heroku"
   },
   "dependencies": {
     "async": "2.5.0",
@@ -49,5 +50,6 @@
     "renxt",
     "skyux"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "heroku-run-build-script": true
 }
