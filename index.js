@@ -7,7 +7,7 @@ const session = require('express-session');
 const timeout = require('connect-timeout');
 const Database = require('./server/database');
 const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo/es5')(session);
+const MongoStore = require('connect-mongo')(session);
 const bodyParser = require('body-parser');
 
 const callbacks = [];
