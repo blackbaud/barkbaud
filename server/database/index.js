@@ -7,7 +7,7 @@ function Database(options) {
     service.Promise = global.Promise;
 
     this.connect = function (callback) {
-        service.connect(uri, { useMongoClient: true });
+        service.connect(uri, { useNewUrlParser: true });
         callback();
     };
 
