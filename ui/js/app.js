@@ -587,7 +587,7 @@ angular.module('md5', []).constant('md5', (function() {
                 data: 'auth/authenticated?' + (new Date().getTime())
             }).then(function (result) {
                 service.authenticated = result.data.authenticated;
-                service.tenantId = result.data.tenant_id;
+                service.environmentId = result.data.environment_id;
                 deferred.resolve(result.data.authenticated);
             });
             return deferred.promise;
@@ -646,8 +646,8 @@ angular.module('md5', []).constant('md5', (function() {
             return [
                 'https://renxt.blackbaud.com/constituents/',
                 encodeURIComponent(constituentId),
-                '?tenantid=',
-                barkbaudAuthService.tenantId
+                '?envid=',
+                barkbaudAuthService.environmentId
             ].join('');
         };
     }
