@@ -41,7 +41,7 @@ function getAuthenticated(request, response) {
         };
 
         if (success) {
-            json.tenant_id = request.session.ticket.tenant_id;
+            json.environment_id = request.session.ticket.environment_id;
         }
 
         response.json(json);

@@ -7,7 +7,7 @@ module.exports = function (grunt) {
             '(function () {',
             '    \'use strict\';',
             '    function config(barkbaudConfig) {',
-            '        barkbaudConfig.apiUrl = '/';',
+            '        barkbaudConfig.apiUrl = \'/\';',
             '    }',
             '    config.$inject = [\'barkbaudConfig\'];',
             '    angular.module(\'barkbaud\')',
