@@ -6,7 +6,7 @@
   "extends": ["standard"],
   "rules": {
     "semi": 0,
-    "indent": ["error", 4],
+    "indent": ["error", 2],
     "object-curly-spacing": ["error", "always"],
     "space-before-function-paren": ["error", {"anonymous": "always", "named": "never", "asyncArrow": "always"}]
   }

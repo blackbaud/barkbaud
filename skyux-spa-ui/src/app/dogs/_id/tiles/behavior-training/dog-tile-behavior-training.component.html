@@ -1,0 +1,28 @@
+<sky-tile>
+  <sky-tile-title>
+    {{ 'tile_title_behavior_training' | skyAppResources }}
+  </sky-tile-title>
+  <sky-tile-summary>
+    $123.4m
+  </sky-tile-summary>
+  <sky-tile-content>
+    <sky-toolbar>
+      <sky-toolbar-item>
+        <button
+          class="sky-btn sky-btn-default"
+          type="button"
+          (click)="openAddModal()"
+        >
+          <sky-icon
+            icon="plus-circle"
+          >
+          </sky-icon>
+          {{ 'btn_add_behavior_training' | skyAppResources }}
+        </button>
+      </sky-toolbar-item>
+    </sky-toolbar>
+    <sky-tile-content-section>
+      <span class="sky-deemphasized">Functionality coming soon.</span>
+    </sky-tile-content-section>
+  </sky-tile-content>
+</sky-tile>

@@ -1,0 +1,33 @@
+@import '~@skyux/theme/scss/mixins';
+@import '~@skyux/theme/css/sky';
+
+.app-repeater-item-title {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.app-repeater-item-title div:first-child {
+  flex-grow: 1;
+}
+
+.app-dog-card-title {
+  @extend .sky-page-heading;
+  margin: 0 0 $sky-margin-stacked-separate;
+}
+
+.app-dog-card-info {
+  @extend .sky-deemphasized;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Pull the avatar all the way to the right
+.app-dog-card-avatar ::ng-deep .sky-avatar-wrapper {
+  float: right;
+}
+
+// Hides the "See more" link
+.app-dog-card-bio ::ng-deep .sky-text-expand-see-more {
+  display: none;
+}

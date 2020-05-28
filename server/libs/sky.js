@@ -12,32 +12,32 @@ const requestPromise = require('request-promise');
  * @param {Object} body
  */
 function proxy(request, method, endpoint, body) {
-    function makeRequest() {
-        return requestPromise({
-            json: true,
-            method: method,
-            body: body,
-            timeout: 29000,
-            url: 'https://api.sky.blackbaud.com/' + endpoint,
-            headers: {
-                'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
-                'Authorization': 'Bearer ' + request.session.ticket.access_token
-            }
-        });
-    }
+  function makeRequest() {
+    return requestPromise({
+      json: true,
+      method: method,
+      body: body,
+      timeout: 29000,
+      url: 'https://api.sky.blackbaud.com/' + endpoint,
+      headers: {
+        'bb-api-subscription-key': process.env.AUTH_SUBSCRIPTION_KEY,
+        'Authorization': 'Bearer ' + request.session.ticket.access_token
+      }
+    });
+  }
 
-    return makeRequest()
-        .catch((error) => {
-            return new Promise((resolve, reject) => {
-                if (error.response.statuscode === 429) {
-                    setTimeout(() => {
-                        resolve(makeRequest());
-                    }, parseInt(error.response.headers['retry-after']) * 1000);
-                } else {
-                    reject(error);
-                }
-            });
-        });
+  return makeRequest()
+    .catch((error) => {
+      return new Promise((resolve, reject) => {
+        if (error.response.statuscode === 429) {
+          setTimeout(() => {
+            resolve(makeRequest());
+          }, parseInt(error.response.headers['retry-after']) * 1000);
+        } else {
+          reject(error);
+        }
+      });
+    });
 }
 
 /**
@@ -48,7 +48,7 @@ function proxy(request, method, endpoint, body) {
  * @param {String} endpoint
  */
 function get(request, endpoint) {
-    return proxy(request, 'GET', endpoint, '');
+  return proxy(request, 'GET', endpoint, '');
 }
 
 /**
@@ -59,7 +59,7 @@ function get(request, endpoint) {
  * @param {String} endpoint
  */
 function post(request, endpoint, body) {
-    return proxy(request, 'POST', endpoint, body);
+  return proxy(request, 'POST', endpoint, body);
 }
 
 /**
@@ -70,7 +70,7 @@ function post(request, endpoint, body) {
  * @param {String} endpoint
  */
 function patch(request, endpoint, body) {
-    return proxy(request, 'PATCH', endpoint, body);
+  return proxy(request, 'PATCH', endpoint, body);
 }
 
 /**
@@ -81,21 +81,26 @@ function patch(request, endpoint, body) {
  * @param {String} endpoint
  */
 function del(request, endpoint) {
-    return proxy(request, 'DELETE', endpoint, '');
+  return proxy(request, 'DELETE', endpoint, '');
 }
 
 /**
- * Gets the requested constituent
+ * Gets the requested constituent.
  * @name getConstituent
  * @param {Object} request
  * @param {string} constituentId Id of the constituent to retrieve
  */
 function getConstituent(request, constituentId) {
-    return get(request, `${constituentBaseUri}constituents/${constituentId}`);
+  return get(request, `${constituentBaseUri}constituents/${constituentId}`);
 }
 
+/**
+ * Gets the constituent note types.
+ * @name getConstituentNoteTypes
+ * @param {Object} request
+ */
 function getConstituentNoteTypes(request) {
-    return get(request, `${constituentBaseUri}notetypes`);
+  return get(request, `${constituentBaseUri}notetypes`);
 }
 
 /**
@@ -105,11 +110,29 @@ function getConstituentNoteTypes(request) {
  * @param {string} name Name of the constituent to search for.
  */
 function getConstituentSearch(request, name) {
-    return get(request, `${constituentBaseUri}constituents/search?search_text=${name}`);
+  return get(request, `${constituentBaseUri}constituents/search?search_text=${name}`);
 }
 
+/**
+ * Searches for a constituent.
+ * @name getConstituent
+ * @param {Object} request
+ * @param {string} name Name of the constituent to search for.
+ */
+function getConstituentByIds(request, ids) {
+  const searchIds = ids.map(id => `constituent_id=${id}`).join('&');
+  const url = `${constituentBaseUri}constituents?${searchIds}`;
+  return get(request, url);
+}
+
+/**
+ * Gets the requested constituent profile picture.
+ * @name getConstituentProfilePicture
+ * @param {Object} request
+ * @param {string} constituentId Id of the constituent to retrieve
+ */
 function getConstituentProfilePicture(request, constituentId) {
-    return get(request, `${constituentBaseUri}constituents/${constituentId}/profilepicture`);
+  return get(request, `${constituentBaseUri}constituents/${constituentId}/profilepicture`);
 }
 
 /**
@@ -119,7 +142,7 @@ function getConstituentProfilePicture(request, constituentId) {
  * @param {string} constituentId Id of the constituent to retrieve
  */
 function postNotes(request, body) {
-    return post(request, `${constituentBaseUri}notes`, body);
+  return post(request, `${constituentBaseUri}notes`, body);
 }
 
 /**
@@ -129,7 +152,7 @@ function postNotes(request, body) {
  * @param {string} constituentId Id of the constituent to retrieve
  */
 function getConstituentRatings(request, constituentId) {
-    return get(request, `${constituentBaseUri}${constituentId}/ratings`);
+  return get(request, `${constituentBaseUri}${constituentId}/ratings`);
 }
 
 /**
@@ -139,7 +162,7 @@ function getConstituentRatings(request, constituentId) {
  * @param {string} sources Name of the source associated with the category
  */
 function getConstituentRatingCategories(request, sourceName) {
-    return get(request, `${constituentBaseUri}/ratings/categories?source_name=${sourceName}` || '');
+  return get(request, `${constituentBaseUri}/ratings/categories?source_name=${sourceName}` || '');
 }
 
 /**
@@ -148,7 +171,7 @@ function getConstituentRatingCategories(request, sourceName) {
  * @param {Object} request
  */
 function getConstituentRatingSources(request) {
-    return get(request, `${constituentBaseUri}/ratings/sources`);
+  return get(request, `${constituentBaseUri}/ratings/sources`);
 }
 
 /**
@@ -159,13 +182,13 @@ function getConstituentRatingSources(request) {
  * @param {string} sourceName
  */
 function getConstituentRatingCategoryValues(request, categoryName, sourceName) {
-    let optional = '';
+  let optional = '';
 
-    if (sourceName) {
-        optional = '&source_name=' + encodeURIComponent(sourceName);
-    }
+  if (sourceName) {
+    optional = '&source_name=' + encodeURIComponent(sourceName);
+  }
 
-    return get(request, `${constituentBaseUri}ratings/categories/values?category_name=${encodeURIComponent(categoryName)}${optional}`);
+  return get(request, `${constituentBaseUri}ratings/categories/values?category_name=${encodeURIComponent(categoryName)}${optional}`);
 }
 
 /**
@@ -174,7 +197,7 @@ function getConstituentRatingCategoryValues(request, categoryName, sourceName) {
  * @param {Object} request
  */
 function postConstituentRatings(request, body) {
-    return post(request, `${constituentBaseUri}ratings`, body);
+  return post(request, `${constituentBaseUri}ratings`, body);
 }
 
 /**
@@ -184,7 +207,7 @@ function postConstituentRatings(request, body) {
  * @param {string} ratingId Id of the rating to edit
  */
 function patchConstituentRating(request, ratingId, body) {
-    return patch(request, `${constituentBaseUri}ratings/${ratingId}`, body);
+  return patch(request, `${constituentBaseUri}ratings/${ratingId}`, body);
 }
 
 /**
@@ -194,20 +217,21 @@ function patchConstituentRating(request, ratingId, body) {
  * @param {string} ratingId Id of the rating to delete
  */
 function deleteConstituentRating(request, ratingId) {
-    return del(request, `${constituentBaseUri}ratings/${ratingId}`);
+  return del(request, `${constituentBaseUri}ratings/${ratingId}`);
 }
 
 module.exports = {
-    getConstituent,
-    getConstituentNoteTypes,
-    getConstituentSearch,
-    getConstituentProfilePicture,
-    postNotes,
-    getConstituentRatings,
-    getConstituentRatingCategories,
-    getConstituentRatingSources,
-    getConstituentRatingCategoryValues,
-    postConstituentRatings,
-    patchConstituentRating,
-    deleteConstituentRating
+  getConstituent,
+  getConstituentByIds,
+  getConstituentNoteTypes,
+  getConstituentSearch,
+  getConstituentProfilePicture,
+  postNotes,
+  getConstituentRatings,
+  getConstituentRatingCategories,
+  getConstituentRatingSources,
+  getConstituentRatingCategoryValues,
+  postConstituentRatings,
+  patchConstituentRating,
+  deleteConstituentRating
 };

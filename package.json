@@ -6,7 +6,7 @@
   "scripts": {
     "build": "grunt build",
     "setup": "node ./bin/setup.js",
-    "start": "node ./bin/start.js",
+    "start": "nodemon ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
     "heroku-postbuild": "echo Skip build on Heroku"
@@ -36,7 +36,8 @@
     "eslint-plugin-promise": "4.0.1",
     "eslint-plugin-standard": "4.0.0",
     "grunt": "1.0.3",
-    "grunt-contrib-copy": "1.0.0"
+    "grunt-contrib-copy": "1.0.0",
+    "nodemon": "2.0.3"
   },
   "engines": {
     "node": ">=6.11.1"

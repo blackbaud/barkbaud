@@ -1,0 +1,92 @@
+<sky-tile>
+  <sky-tile-title>
+    {{ 'tile_title_current_home' | skyAppResources }}
+  </sky-tile-title>
+  <sky-tile-summary>
+    <sky-icon *ngIf="owner"
+      icon="check"
+    >
+    </sky-icon>
+  </sky-tile-summary>
+  <sky-tile-content>
+    <sky-toolbar>
+      <sky-toolbar-item>
+        <button
+          class="sky-btn sky-btn-default"
+          type="button"
+          (click)="openAddModal()"
+        >
+          <sky-icon
+            icon="plus-circle"
+          >
+          </sky-icon>
+          {{ 'btn_find_home' | skyAppResources }}
+        </button>
+      </sky-toolbar-item>
+    </sky-toolbar>
+    <app-loading
+      [isLoading]="isLoading"
+    >
+
+      <sky-tile-content-section *ngIf="!owner"
+        class="sky-deemphasized"
+      >
+        {{ 'no_owner' | skyAppResources }}
+      </sky-tile-content-section>
+
+      <sky-repeater *ngIf="owner">
+        <sky-repeater-item *ngIf="owner.constituent">
+          <sky-repeater-item-title>
+            <div class="pull-left">
+              <a *ngIf="owner.constituentLink"
+                [href]="owner.constituentLink"
+              >
+                {{ owner.constituent.name }}
+              </a>
+              <span *ngIf="!owner.constituentLink">
+                {{ owner.constituent.name }}
+              </span>
+            </div>
+            <div class="pull-right">
+              {{ owner.fromDate | skyDate:'shortDate' }}
+            </div>
+          </sky-repeater-item-title>
+          <sky-repeater-item-content>
+            <sky-fluid-grid *ngIf="owner && owner.constituent"
+              disableMargin="true"
+            >
+              <sky-row>
+                <sky-column
+                  screenXSmall="9"
+                >
+                  <p *ngIf="owner.constituent.address"
+                    class="app-address"
+                  >{{ owner.constituent.address.formatted_address }}</p>
+                  <p *ngIf="owner.constituent.phone">
+                    {{ owner.constituent.phone.number }}
+                  </p>
+                  <p *ngIf="owner.constituent.email">
+                    <a href="mailto:{{ owner.constituent.email.address }}">
+                      {{ owner.constituent.email.address }}
+                    </a>
+                  </p>
+                </sky-column>
+                <sky-column *ngIf="owner.constituent.profile_picture"
+                  screenXSmall="3"
+                >
+                  <div class="app-constituent-avatar">
+                    <sky-avatar
+                      [name]="owner.constituent.name"
+                      [src]="owner.constituent.profile_picture.thumbnail_url"
+                    >
+                    </sky-avatar>
+                  </div>
+                </sky-column>
+              </sky-row>
+            </sky-fluid-grid>
+          </sky-repeater-item-content>
+        </sky-repeater-item>
+      </sky-repeater>
+    </app-loading>
+  </sky-tile-content>
+</sky-tile>

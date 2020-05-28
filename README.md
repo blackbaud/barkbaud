@@ -9,7 +9,7 @@ Blackbaud SKY API / SKY UX sample application.
 
 <h2 id="about">About</h2>
 
-This sample application showcases the [Blackbaud SKY API](https://developer.blackbaud.com/skyapi/) and [Blackbaud SKY UX](http://developer.blackbaud.com/skyux). Both technologies function completely independent of one another.  The Blackbaud SKY API currently supports the [Authorization Code Flow](https://developer.blackbaud.com/skyapi/docs/authorization/auth-code-flow), which requires us to have a back-end server component where we're able to securely store the client secret. We've implemented the server component using [NodeJS](https://nodejs.org/).  Our front-end is stored and built in the [barkbaud-ui repository](https://github.com/blackbaud/barkbaud-ui). Using [Bower](http://bower.io/), we consume the front-end components and move it to the Barkbaud application's **ui/** folder during the install and build steps.
+This sample application showcases the [Blackbaud SKY API](https://developer.blackbaud.com/skyapi/) and [Blackbaud SKY UX](http://developer.blackbaud.com/skyux). Both technologies function completely independent of one another.  The Blackbaud SKY API currently supports the [Authorization Code Flow](https://developer.blackbaud.com/skyapi/docs/authorization/auth-code-flow), which requires us to have a backend server component where we're able to securely store the client secret. We've implemented the server component using [NodeJS](https://nodejs.org/).  Our front-end a SKY UX SPA, stored in the `skyux-spa-ui` folder.
 
 ### Features:
 - The Barkbaud application starts by requesting authorization to your Blackbaud Raiser's Edge NXT data.

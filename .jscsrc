@@ -1,6 +1,0 @@
-{
-    "preset": "crockford",
-    "disallowDanglingUnderscores": null,
-    "disallowTrailingWhitespace": null,
-    "requireLineFeedAtFileEnd": null
-}

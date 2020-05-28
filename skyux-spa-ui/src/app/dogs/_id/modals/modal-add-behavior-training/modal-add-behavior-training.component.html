@@ -1,0 +1,24 @@
+<sky-modal>
+  <sky-modal-header>
+    {{ 'modal_add_behavior-training' | skyAppResources }}
+  </sky-modal-header>
+  <sky-modal-content>
+
+  </sky-modal-content>
+  <sky-modal-footer>
+    <button
+      class="sky-btn sky-btn-primary"
+      type="button"
+      (click)="save()"
+    >
+      {{ 'btn_modal_save' | skyAppResources }}
+    </button>
+    <button
+      class="sky-btn sky-btn-link"
+      type="button"
+      (click)="cancel()"
+    >
+      {{ 'btn_modal_cancel' | skyAppResources }}
+    </button>
+  </sky-modal-footer>
+</sky-modal>

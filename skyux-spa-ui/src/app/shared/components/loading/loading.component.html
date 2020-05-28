@@ -1,0 +1,13 @@
+<div
+  [ngClass]="{
+    'app-loading': isLoading
+  }"
+>
+  <sky-wait
+    [isWaiting]="isLoading"
+  >
+  </sky-wait>
+</div>
+
+<ng-content>
+</ng-content>

@@ -1,0 +1,30 @@
+<div *ngIf="user">
+  <p>Logged in as user:</p>
+  <ul>
+    <li *ngFor="let prop of user | keyvalue">
+      {{ prop.key }}: {{ prop.value }}
+    </li>
+  </ul>
+  <app-logout>
+  </app-logout>
+</div>
+
+<div *ngIf="!user">
+  <sky-error
+    errorType="security"
+  >
+    <sky-error-title
+      replaceDefaultTitle="true"
+    >
+    You must authorize with Blackbaud to continue.
+    </sky-error-title>
+    <sky-error-action>
+      <a
+        class="sky-btn sky-btn-primary"
+        [href]="loginUri"
+      >
+        {{ 'btn_login' | skyAppResources }}
+      </a>
+    </sky-error-action>
+  </sky-error>
+</div>

@@ -1,0 +1,101 @@
+<app-nav>
+</app-nav>
+
+<sky-hero overlayOpacity="0.4" backgroundImageUrl="~/assets/img/white-short-coated-dog-160846.jpg">
+  <sky-hero-heading heroTextColor="#efefef">
+    Barkbaud
+  </sky-hero-heading>
+  <sky-hero-subheading heroTextColor="#efefef">
+    SKY Developer Demo Application
+  </sky-hero-subheading>
+</sky-hero>
+
+<sky-page>
+  <sky-fluid-grid
+    disableMargin="true"
+  >
+    <sky-row>
+      <sky-column
+        screenMedium="6"
+      >
+        <h2 class="sky-section-heading">
+          Welcome<span *ngIf="user"> {{ user.given_name }}</span>!
+        </h2>
+        <p>Welcome to Barkbaud, Blackbaud's Open Source application highlighting the <a href="https://developer.blackbaud.com">SKY Developer platform</a>. It is built on the <abbr title="Mongo, Express, Angular, and NodeJS">MEAN</abbr> stack and includes examples of <a href="https://developer.blackbaud.com/skyapi">SKY API</a>, <a href="https://developer.blackbaud.com/skyapi/docs/addins">SKY Add-ins</a>, and <a href="https://developer.blackbaud.com/skyux">SKY UX</a>.</p>
+        <p>Feel free to poke around or checkout the <a href="https://github.com/blackbaud/barkbaud/">README</a> for more information, including how to run the application yourself.</p>
+      </sky-column>
+      <sky-column
+        screenMedium="6"
+      >
+        <h2 class="sky-section-heading">
+          Getting started
+        </h2>
+        <sky-alert
+          alertType="info"
+        >
+          Barkbaud uses the <a href="https://developer.blackbaud.com/skyapi/docs/authorization/auth-code-flow">authorization code flow</a> to securely access your Blackbaud data.
+        </sky-alert>
+        <p *ngIf="user">
+          <a
+            class="sky-btn sky-btn-primary sky-margin-inline-default"
+            routerLink="/dogs"
+          >
+            {{ 'btn_dashboard' | skyAppResources }}
+          </a>
+          <app-logout
+            [isPrimaryButton]="false"
+          >
+          </app-logout>
+        </p>
+        <p *ngIf="!user">
+          <a
+            class="sky-btn sky-btn-primary"
+            [href]="loginUri"
+          >
+            {{ 'btn_login' | skyAppResources }}
+          </a>
+        </p>
+      </sky-column>
+    </sky-row>
+    <!-- <sky-row>
+      <sky-column
+        screenSmall="6"
+      >
+        <h2 class="sky-section-heading">
+          Development
+        </h2>
+        <ul>
+          <li>
+            <strong>April 20, 2020</strong> - Rewrote Barkbaud UI in latest SKY UX.
+          </li>
+          <li>
+            <strong>October 8, 2015</strong> - Barkbaud is born.
+          </li>
+        </ul>
+        <p>
+          <a href="https://heroku.com/deploy?template=https://github.com/blackbaud/barkbaud">
+            <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+          </a>
+        </p>
+        <p>
+          <iframe
+            src="https://ghbtns.com/github-btn.html?user=blackbaud&repo=barkbaud&type=star&size=small&v=2"
+            frameborder="0"
+            scrolling="0"
+            width="58px"
+            height="20px"
+          >
+          </iframe>
+          <iframe
+            src="https://ghbtns.com/github-btn.html?user=blackbaud&repo=barkbaud&type=fork&size=small"
+            frameborder="0"
+            scrolling="0"
+            width="58px"
+            height="20px"
+          >
+          </iframe>
+        </p>
+      </sky-column>
+    </sky-row> -->
+  </sky-fluid-grid>
+</sky-page>

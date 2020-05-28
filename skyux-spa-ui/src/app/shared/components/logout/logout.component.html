@@ -1,0 +1,11 @@
+<button *ngIf="authenticated"
+  type="button"
+  class="sky-btn"
+  [ngClass]="{
+    'sky-btn-primary': isPrimaryButton,
+    'sky-btn-secondary': !isPrimaryButton
+  }"
+  (click)="confirmLogout()"
+>
+  {{ 'btn_logout' | skyAppResources }}
+</button>

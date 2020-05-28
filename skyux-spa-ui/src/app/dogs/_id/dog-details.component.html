@@ -1,0 +1,77 @@
+<div *ngIf="dog"
+  class="app-dog-details"
+>
+  <sky-page-summary>
+    <sky-page-summary-image>
+      <sky-avatar
+        [name]="dog.name"
+        [src]="dog.image.src"
+      >
+      </sky-avatar>
+    </sky-page-summary-image>
+    <sky-page-summary-title>
+      {{ dog.name }}
+    </sky-page-summary-title>
+    <sky-page-summary-key-info>
+      <sky-key-info>
+        <sky-key-info-value>
+          {{ dog.breed }}
+        </sky-key-info-value>
+        <sky-key-info-label>
+          Breed
+        </sky-key-info-label>
+      </sky-key-info>
+      <sky-key-info>
+        <sky-key-info-value>
+          {{ dog.gender }}
+        </sky-key-info-value>
+        <sky-key-info-label>
+          Gender
+        </sky-key-info-label>
+      </sky-key-info>
+    </sky-page-summary-key-info>
+    <sky-page-summary-content>
+      {{ dog.bio }}
+    </sky-page-summary-content>
+  </sky-page-summary>
+  <sky-toolbar>
+    <sky-toolbar-item>
+      <a
+        routerLink="../"
+        class="sky-btn sky-btn-default"
+        type="button"
+      >
+        {{ 'btn_back_to_dashboard' | skyAppResources }}
+      </a>
+    </sky-toolbar-item>
+    <sky-toolbar-view-actions>
+      <button
+        class="sky-btn sky-btn-default sky-margin-inline-default"
+        title="Expand all"
+        type="button"
+        (click)="setDashboardState(false)"
+      >
+        <sky-icon
+          icon="angle-double-down"
+        >
+        </sky-icon>
+      </button>
+      <button
+        class="sky-btn sky-btn-default sky-margin-inline-default"
+        title="Collapse all"
+        type="button"
+        (click)="setDashboardState(true)"
+      >
+        <sky-icon
+          icon="angle-double-up"
+        >
+        </sky-icon>
+      </button>
+    </sky-toolbar-view-actions>
+  </sky-toolbar>
+  <sky-tile-dashboard
+    [messageStream]="dashboardStream"
+    [(config)]="dashboardConfig"
+  >
+  </sky-tile-dashboard>
+</div>
