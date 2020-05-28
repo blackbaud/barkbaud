@@ -1,4 +1,3 @@
-const async = require('async');
 const mongoose = require('mongoose');
 const Dog = require('../database/models/dog');
 const Sky = require('../libs/sky');

@@ -110,7 +110,6 @@ function getCallback(request, response) {
     };
 
     oauth2.authorizationCode.getToken(options, function (errorToken, ticket) {
-
       if (errorToken) {
         error = errorToken.message;
       } else {

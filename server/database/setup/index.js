@@ -457,12 +457,12 @@ function addImages(callback) {
 
     files.forEach(function (file) {
       switch (path.extname(file)) {
-        case '.gif':
-        case '.jpeg':
-        case '.jpg':
-        case '.png':
-          images.push(file);
-          break;
+      case '.gif':
+      case '.jpeg':
+      case '.jpg':
+      case '.png':
+        images.push(file);
+        break;
       }
     });
 
