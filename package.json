@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "setup": "node ./bin/setup.js",
-    "start": "nodemon ./bin/start.js",
+    "dev": "nodemon ./bin/start.js",
+    "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
-    "heroku-prebuild": "cd skyux-spa-ui && npm i && npm i -g @skyux-sdk/cli && cd skyux-spa-ui && skyux build",
-    "heroku-postbuild": "skyux version --logLevel verbose"
+    "heroku-release": "cd skyux-spa-ui && npm i && npm i -g @skyux-sdk/cli && cd skyux-spa-ui && skyux build",
+    "heroku-postbuild": "echo Build handled through Profile"
   },
   "dependencies": {
     "body-parser": "1.18.3",
