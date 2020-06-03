@@ -79,6 +79,7 @@ function getLogin(request, response) {
   };
 
   // A bit hacky, but needed currently to support Heroku Preview Apps
+  // You will need to manually add each pr-preview URL to your app's redirect URI list.
   if (process.env.HEROKU_APP_NAME) {
     authorizationOptions.redirect_uri = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/auth/callback`;
   }
@@ -100,6 +101,8 @@ function getLogin(request, response) {
 function getCallback(request, response) {
   const redirect = request.session.redirect || '/';
   let error;
+
+  console.log(request.session, 'vs', request.query);
 
   if (request.query.error) {
     error = request.query.error;
