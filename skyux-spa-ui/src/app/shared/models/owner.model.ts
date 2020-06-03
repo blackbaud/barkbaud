@@ -1,10 +1,11 @@
 
 export interface Owner {
+  isActive: boolean;
+  constituentId: string;
   constituent?: any;
   constituentLink?: string;
-  constituentId: string;
-  createdAt: string;
-  isActive: boolean;
-  toDate: string;
-  updatedAt: string;
+  createdAt?: Date;
+  toDate?: Date;
+  fromDate?: Date;
+  updatedAt?: Date;
 }

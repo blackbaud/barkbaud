@@ -1,10 +1,49 @@
 <div *ngIf="user">
   <p>Logged in as user:</p>
-  <ul>
-    <li *ngFor="let prop of user | keyvalue">
-      {{ prop.key }}: {{ prop.value }}
-    </li>
-  </ul>
+  <dl>
+    <dt>
+      Environment ID
+    </dt>
+    <dd>
+      {{ user.environment_id }}
+    </dd>
+    <dt>
+      Environment name
+    </dt>
+    <dd>
+      {{ user.environment_name }}
+    </dd>
+    <dt>
+      Legal Entity ID
+    </dt>
+    <dd>
+      {{ user.legal_entity_id }}
+    </dd>
+    <dt>
+      Legal Entity Name
+    </dt>
+    <dd>
+      {{ user.legal_entity_name }}
+    </dd>
+    <dt>
+      User ID
+    </dt>
+    <dd>
+      {{ user.user_id }}
+    </dd>
+    <dt>
+      Given name
+    </dt>
+    <dd>
+      {{ user.given_name }}
+    </dd>
+    <dt>
+      Family name
+    </dt>
+    <dd>
+      {{ user.family_name }}
+    </dd>
+  </dl>
   <app-logout>
   </app-logout>
 </div>

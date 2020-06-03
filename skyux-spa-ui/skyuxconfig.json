@@ -4,11 +4,15 @@
   "mode": "easy",
   "app": {
     "styles": [
-      "@skyux/theme/css/sky.css",
       "src/app/app.scss"
     ]
   },
   "appSettings": {
     "bffUrl": "/"
+  },
+  "host": {
+    "frameOptions": {
+      "none": true
+    }
   }
 }
