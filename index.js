@@ -26,6 +26,8 @@ const sessionConfig = {
   }
 };
 
+console.log(`Environment: ${environment}`);
+
 // Check if database URI has been provided.
 if (databaseUri === null) {
   console.log(colors.red('Please specify a DATABASE_URI in .env!'));
