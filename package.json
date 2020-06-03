@@ -9,8 +9,7 @@
     "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
-    "heroku-release": "cd skyux-spa-ui && npm i && npm i -g @skyux-sdk/cli && skyux build",
-    "heroku-postbuild": "echo Build handled through Profile"
+    "build": "cd skyux-spa-ui && npm i && npm i -g @skyux-sdk/cli && skyux build",
   },
   "dependencies": {
     "body-parser": "1.18.3",
