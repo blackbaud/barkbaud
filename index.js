@@ -2,6 +2,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const cors = require('cors');
+const http = require('http');
 const https = require('https');
 const routes = require('./server/routes');
 const colors = require('colors');
@@ -110,18 +111,25 @@ database.connect(() => {
       process.exit();
     });
   } else {
-    const serverOptions = {};
+    let server;
 
     // Using SKY UX local development certificate
     if (environment !== 'production') {
+      console.log('Using HTTPS protocol');
       console.log('Using SKY UX development certificates.');
-
       const skyuxCerts = path.join(os.homedir(), '.skyux/certs/');
-      serverOptions.cert = fs.readFileSync(path.join(skyuxCerts, '/skyux-server.crt'));
-      serverOptions.key = fs.readFileSync(path.join(skyuxCerts, '/skyux-server.key'));
-    }
+      server = https.createServer(
+        {
+          cert: fs.readFileSync(path.join(skyuxCerts, '/skyux-server.crt')),
+          key: fs.readFileSync(path.join(skyuxCerts, '/skyux-server.key'))
+        },
+        app
+      );
+    } else {
+      console.log('Using HTTP protocol');
+      server = http.createServer({}, app);
 
-    const server = https.createServer(serverOptions, app);
+    }
 
     // Listen to the port.
     server.listen(port, function () {
