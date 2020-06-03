@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 
 dotenv.config({
-    path: 'barkbaud.env'
+  path: 'barkbaud.env'
 });
 
 require('../index');

@@ -93,6 +93,7 @@ app.delete('/api/dogs/:dogId/ratings/:dogRatingId', routes.auth.checkSession, ro
 
 // Last, Angular Routes.
 const ui = './skyux-spa-ui/dist';
+app.get('/monitor', (req, res) => res.json({ running: true }));
 app.use('/', express.static(ui));
 app.all('*', (req, res) => res.status(200).sendFile('/', { root: ui }));
 
