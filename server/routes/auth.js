@@ -73,10 +73,18 @@ function getLogin(request, response) {
   request.session.redirect = request.query.redirect;
   request.session.state = crypto.randomBytes(48).toString('hex');
 
-  const authorizationUri = oauth2.authorizationCode.authorizeURL({
-    redirect_uri: process.env.AUTH_REDIRECT_URI,
-    state: request.session.state
-  });
+  const authorizationOptions = {
+    state: request.session.state,
+    redirect_uri: process.env.AUTH_REDIRECT_URI
+  };
+
+  // A bit hacky, but needed currently to support Heroku Preview Apps
+  if (process.env.HEROKU_APP_NAME) {
+    authorizationOptions.redirect_uri = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/auth/callback`;
+  }
+
+  const authorizationUri = oauth2.authorizationCode
+    .authorizeURL(authorizationOptions);
 
   response.redirect(authorizationUri);
 }
