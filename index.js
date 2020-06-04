@@ -21,13 +21,8 @@ const port = process.env.PORT || 5000;
 const sessionConfig = {
   resave: false,
   saveUninitialized: false,
-  secret: '+rEchas&-wub24dR',
-  cookie: {
-    secure: true
-  }
+  secret: '+rEchas&-wub24dR'
 };
-
-console.log(`Environment: ${environment}`);
 
 // Check if database URI has been provided.
 if (databaseUri === null) {
@@ -37,6 +32,10 @@ if (databaseUri === null) {
 
 // Only cache the authorized session in production.
 if (environment === 'production') {
+  sessionConfig.cookie = {
+    secure: true
+  };
+
   sessionConfig.store = new MongoStore({
     url: databaseUri,
     autoRemove: 'native'
