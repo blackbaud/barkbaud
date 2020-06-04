@@ -32,14 +32,14 @@ if (databaseUri === null) {
 
 // Only cache the authorized session in production.
 if (environment === 'production') {
-  sessionConfig.cookie = {
-    secure: true
-  };
-
   sessionConfig.store = new MongoStore({
     url: databaseUri,
     autoRemove: 'native'
   });
+} else {
+  sessionConfig.cookie = {
+    secure: true
+  };
 }
 
 // Connect to the database.
