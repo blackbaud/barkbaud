@@ -11,6 +11,13 @@ const oauth2 = require('simple-oauth2').create({
   }
 });
 
+// A bit hacky, but needed currently to support Heroku Preview Apps
+// You will need to manually add each pr-preview URL to your app's redirect URI list.
+const redirectURI = process.env.HEROKU_APP_NAME 
+  ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/auth/callback` 
+  : process.env.AUTH_REDIRECT_URI;
+
+
 // Properties we expose from the JWT to our session
 const jwtToSessionProps = [
   'environment_id',
@@ -73,19 +80,11 @@ function getLogin(request, response) {
   request.session.redirect = request.query.redirect;
   request.session.state = crypto.randomBytes(48).toString('hex');
 
-  const authorizationOptions = {
-    state: request.session.state,
-    redirect_uri: process.env.AUTH_REDIRECT_URI
-  };
-
-  // A bit hacky, but needed currently to support Heroku Preview Apps
-  // You will need to manually add each pr-preview URL to your app's redirect URI list.
-  if (process.env.HEROKU_APP_NAME) {
-    authorizationOptions.redirect_uri = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/auth/callback`;
-  }
-
   const authorizationUri = oauth2.authorizationCode
-    .authorizeURL(authorizationOptions);
+    .authorizeURL({
+      state: request.session.state,
+      redirect_uri: redirectURI
+    });
 
   response.redirect(authorizationUri);
 }
@@ -117,7 +116,7 @@ function getCallback(request, response) {
   if (!error) {
     const options = {
       code: request.query.code,
-      redirect_uri: process.env.AUTH_REDIRECT_URI
+      redirect_uri: redirectURI
     };
 
     oauth2.authorizationCode.getToken(options, function (errorToken, ticket) {
