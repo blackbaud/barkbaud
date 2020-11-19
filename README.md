@@ -13,7 +13,7 @@ This sample application showcases the [Blackbaud SKY API](https://developer.blac
 
 ### Features:
 - The Barkbaud application starts by requesting authorization to your Blackbaud Raiser's Edge NXT data.
-- A dashboard provides a listing of dogs that are looking for a good home. Selecting a dog will take you to a page which lists the animal's owner and medical history. Biographies, owner and medical history for each animal are stored in a MongoDB database at [mLab](https://www.mlab.com).
+- A dashboard provides a listing of dogs that are looking for a good home. Selecting a dog will take you to a page which lists the animal's owner and medical history. Biographies, owner and medical history for each animal are stored in a MongoDB database at [mongoDB](https://www.mongodb.com/).
 - Blackbaud SKY API provides access to the constituent data. The application then uses the API to search for a constituent and retrieve the constituent ID which is used to pair the constituent record to a dog within mLab.
 - Medical history is stored as a subdocument for each dog in mLab. Upon adding medical history, the user has the option of storing the information as a note on the current owner's Raiser's Edge NXT constituent record.
 
@@ -54,7 +54,7 @@ $  git clone https://github.com/blackbaud/barkbaud.git
 $  cd barkbaud
 ```
 
-#### 2)  Register for a free mLab account
+#### 2)  Register for a free mongoDB account
 
 - Create a [free mongoDB account](https://www.mongodb.com/cloud/atlas/signup).
 - With this account, [create a new cluster](https://docs.atlas.mongodb.com/tutorial/deploy-free-tier-cluster/) named "barkbaud" (the "Sandbox" tier is free).
