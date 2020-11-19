@@ -56,10 +56,10 @@ $  cd barkbaud
 
 #### 2)  Register for a free mLab account
 
-- Create a [free mLab account](https://mlab.com/signup/) (formally known as "MongoLab").
-- Once logged into mLab, [create a new database subscription](http://docs.mlab.com/#create-sub) (the "Sandbox" tier is free).
-- Within this subscription, create a new database named "barkbaud".
-- Open the database and click "Users > Add database user" to create a database user (the username and password is your preference).
+- Create a [free mongoDB account](https://www.mongodb.com/cloud/atlas/signup).
+- With this account, [create a new cluster](https://docs.atlas.mongodb.com/tutorial/deploy-free-tier-cluster/) named "barkbaud" (the "Sandbox" tier is free).
+- [Add your connection](https://docs.atlas.mongodb.com/security/add-ip-address-to-list/) IP address to IP Acccess list.
+- [Create a new database user](https://docs.atlas.mongodb.com/tutorial/create-mongodb-user-for-cluster/) (the username and password is your preference).
 
 #### 3)  Prepare your environment
 
@@ -74,7 +74,7 @@ $  cd barkbaud
 | **`AUTH_CLIENT_SECRET`** | Your registered application's **Application Secret**.<br>(See, [Managing your apps](https://developer.blackbaud.com/apps/).) |
 | **`AUTH_REDIRECT_URI`** | One of your registered application's **Redirect URIs**. <br>For local development, use `http://localhost:5000/auth/callback`. <br>(See, [Managing your apps](https://developer.blackbaud.com/apps/).)  |
 | **`AUTH_SUBSCRIPTION_KEY`** | Your Blackbaud Developer **Subscription Key**.<br>Use either the **Primary key** or **Secondary key**, visible on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer). |
-| **`DATABASE_URI`** | A MongoDB connection string, which points to your mLab database.<br>The string must follow this format: <br>`mongodb://<dbuser>:<dbpassword>@<dbaddress>/<dbname>`<br>More details about how to find your connection string can be found on [mLab's Documentation](http://docs.mlab.com/connecting/#connect-string). |
+| **`DATABASE_URI`** | A MongoDB connection string, which points to your mongoDB database.<br>The string must follow this format: <br>`mongodb+srv://<dbuser>:<dbpassword>@<dbname>?retryWrites=true&w=majority`<br>More details about how to find your connection string can be found on [mongoDB's Documentation](https://docs.atlas.mongodb.com/tutorial/connect-to-your-cluster/). |
 
 - Save the **barkbaud.env** file.
 - Review the **.gitignore** file.  The purpose of this file is to specify which directories and files Git should ignore when performing a commit. Note that the **barkbaud.env** file is ignored. This prevents the file from being synced to your repository and protects your registered application's keys and other sensitive data from being exposed.
