@@ -10,7 +10,12 @@
     >
       <sky-row>
         <sky-column screenXSmall="7">
-          <h3 class="app-dog-card-title">{{ dog.name }}</h3>
+          <h3 class="app-dog-card-title">
+          <a routerLink="/dogs/{{ dog._id }}"
+                                    queryParamsHandling="preserve">
+                                      {{ dog.name }}
+                                    </a>
+                                  </h3>
           <ul class="app-dog-card-info">
             <li>{{ dog.breed }}</li>
             <li>{{ dog.gender }}</li>

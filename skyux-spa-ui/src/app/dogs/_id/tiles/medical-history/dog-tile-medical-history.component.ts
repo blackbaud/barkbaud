@@ -57,6 +57,13 @@ export class DogTileMedicalHistoryComponent implements OnInit {
 
   public openAddModal() {
     this.skyModalService
-      .open(ModalAddMedicalHistoryComponent);
+      .open(
+        ModalAddMedicalHistoryComponent,
+        [
+          {
+            provide: DOG_ID,
+            useValue: this.dogId
+          }
+        ]);
   }
 }

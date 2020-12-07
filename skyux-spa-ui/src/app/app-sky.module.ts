@@ -11,6 +11,7 @@ import {
 } from '@skyux/avatar';
 
 import {
+  SkyDatepickerModule,
   SkyDatePipeModule
 } from '@skyux/datetime';
 
@@ -64,13 +65,29 @@ import {
   SkyTilesModule
 } from '@skyux/tiles';
 
+import {
+  SkyCheckboxModule
+} from '@skyux/forms';
+
+import {
+  SkyAutonumericModule
+} from '@skyux/autonumeric';
+
+import {
+  SkyDropdownModule
+} from '@skyux/popovers';
+
 @NgModule({
   exports: [
     SkyAvatarModule,
     SkyAlertModule,
+    SkyAutonumericModule,
     SkyCardModule,
+    SkyCheckboxModule,
     SkyConfirmModule,
     SkyDatePipeModule,
+    SkyDatepickerModule,
+    SkyDropdownModule,
     SkyErrorModule,
     SkyFluidGridModule,
     SkyHeroModule,

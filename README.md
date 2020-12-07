@@ -14,8 +14,8 @@ This sample application showcases the [Blackbaud SKY API](https://developer.blac
 ### Features:
 - The Barkbaud application starts by requesting authorization to your Blackbaud Raiser's Edge NXT data.
 - A dashboard provides a listing of dogs that are looking for a good home. Selecting a dog will take you to a page which lists the animal's owner and medical history. Biographies, owner and medical history for each animal are stored in a MongoDB database at [mongoDB](https://www.mongodb.com/).
-- Blackbaud SKY API provides access to the constituent data. The application then uses the API to search for a constituent and retrieve the constituent ID which is used to pair the constituent record to a dog within mLab.
-- Medical history is stored as a subdocument for each dog in mLab. Upon adding medical history, the user has the option of storing the information as a note on the current owner's Raiser's Edge NXT constituent record.
+- Blackbaud SKY API provides access to the constituent data. The application then uses the API to search for a constituent and retrieve the constituent ID which is used to pair the constituent record to a dog within mongoDb.
+- Medical history is stored as a subdocument for each dog in MongoDb. Upon adding medical history, the user has the option of storing the information as a note on the current owner's Raiser's Edge NXT constituent record.
 
 ### View the [live demo](https://barkbaud.herokuapp.com)
 We've deployed Barkbaud to Heroku. Feel free to checkout the live demo of our application at [https://barkbaud.herokuapp.com](https://barkbaud.herokuapp.com).

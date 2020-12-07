@@ -25,8 +25,17 @@ import {
 } from './user.service';
 
 import {
+  BehaviorTraining
+} from '../models/behavior-training.model';
+
+import {
+  Category
+} from '../models/category.model';
+
+import {
   Dog,
   DogResponse,
+  MedicalHistory,
   Owner,
   Response
 } from '../models';
@@ -110,6 +119,64 @@ export class DogService {
     return this.previousHomes;
   }
 
+  public getNoteTypes(): Observable<string[]> {
+    return this.get(`dogs/notetypes`)
+      .pipe(
+        map(response => response.value)
+      );
+  }
+
+  public getSources(): Observable<string[]> {
+    return this.get(`dogs/ratings/sources`)
+      .pipe(
+        map(response => response.value)
+      );
+  }
+
+  public getCategories(sourceName: string): Observable<Category[]> {
+    return this.get(`dogs/ratings/categories?sourceName=${sourceName}`)
+      .pipe(
+        map(response => response.value)
+      );
+  }
+
+  public getCategoryValues(categoryName: string): Observable<string[]> {
+    return this.get(`dogs/ratings/categories/values?categoryName=${categoryName}`)
+      .pipe(
+        map(response => response.value)
+      );
+  }
+
+  public addMedicalHistory(dogId: string, medHistory: MedicalHistory): Observable<Dog> {
+    return this.post<Dog>(`dogs/${dogId}/notes`, medHistory);
+  }
+
+  public getMedicalHistory(dogId: string): Observable<MedicalHistory[]> {
+    return this.get(`dogs/${dogId}/notes`)
+      .pipe(
+        map(response => response.value)
+      );
+  }
+
+  public addBehaviorTraining(dogId: string, rating: BehaviorTraining): Observable<Dog> {
+    return this.post<Dog>(`dogs/${dogId}/ratings`, rating);
+  }
+
+  public editBehaviorTraining(dogId: string, behaviorTrainingId: string, rating: BehaviorTraining): Observable<Dog> {
+    return this.patch<Dog>(`dogs/${dogId}/ratings/${behaviorTrainingId}`, rating);
+  }
+
+  public deleteBehaviorTraining(dogId: string, behaviorTrainingId: string): Observable<Response> {
+    return this.delete(`dogs/${dogId}/ratings/${behaviorTrainingId}`);
+  }
+
+  public getBehaviorTrainings(dogId: string): Observable<BehaviorTraining[]> {
+    return this.get(`dogs/${dogId}/ratings`)
+      .pipe(
+        map(response => response.value)
+      );
+  }
+
   private addConstituentLink(owner: Owner): void {
     if (owner.constituentId) {
       owner.constituentLink = `https://renxt.blackbaud.com/constituents/${owner.constituentId}?envid=${this.envid}`;
@@ -149,6 +216,33 @@ export class DogService {
         {
           withCredentials: true
         }
+      );
+  }
+
+  private patch<T>(
+    endpoint: string,
+    data: any
+  ): Observable<T> {
+    return this.httpClient
+      .patch<T>(
+        `${this.skyAppConfig.skyux.appSettings.bffUrl}api/${endpoint}`,
+        data,
+        {
+          withCredentials: true
+        }
+      );
+  }
+
+  private delete(endpoint: string): Observable<Response> {
+    return this.httpClient
+      .delete<Response>(
+        `${this.skyAppConfig.skyux.appSettings.bffUrl}api/${endpoint}`,
+        {
+          withCredentials: true
+        }
+      )
+      .pipe(
+        shareReplay(1)
       );
   }
 }

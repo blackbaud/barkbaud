@@ -32,6 +32,7 @@
     "@blackbaud/skyux-lib-media": "4.0.0",
     "@skyux/animations": "4.0.1",
     "@skyux/assets": "4.0.1",
+    "@skyux/autonumeric": "^4.0.2",
     "@skyux/avatar": "4.1.2",
     "@skyux/config": "4.2.0",
     "@skyux/core": "4.3.1",
