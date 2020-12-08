@@ -1,9 +1,7 @@
 import {
   Component,
-  EventEmitter,
   Inject,
-  OnInit,
-  Output
+  OnInit
 } from '@angular/core';
 
 import {
@@ -19,6 +17,7 @@ import {
 } from 'rxjs/operators';
 
 import {
+  Dog,
   DOG_ID
 } from '../../../../shared/models';
 
@@ -33,7 +32,9 @@ import {
 import {
   ModalAddBehaviorTrainingComponent
 } from '../../modals/modal-add-behavior-training/modal-add-behavior-training.component';
-import { ModalAddBehaviorTrainingContext } from '../../modals/modal-add-behavior-training/modal-add-behavior-training.context';
+
+import { ModalEditBehaviorTrainingComponent } from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.component';
+import { ModalEditBehaviorTrainingContext } from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.context';
 
 @Component({
   // tslint:disable-next-line
@@ -43,11 +44,9 @@ import { ModalAddBehaviorTrainingContext } from '../../modals/modal-add-behavior
 })
 export class DogTileBehaviorTrainingComponent implements OnInit {
 
-  @Output()
-  public reload = new EventEmitter<boolean>();
-
   public isLoading = true;
   public behaviorTrainings: BehaviorTraining[];
+  public dog: Dog;
 
   constructor (
     private skyModalService: SkyModalService,
@@ -62,8 +61,9 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
       .pipe(
         map(dog => dog.ratings)
       )
-      .subscribe(behaviorTraining => {
-        this.behaviorTrainings = behaviorTraining;
+      .subscribe(behaviorTrainings => {
+        this.behaviorTrainings = behaviorTrainings;
+        console.log(this.behaviorTrainings);
         this.isLoading = false;
       });
   }
@@ -77,28 +77,38 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
             provide: DOG_ID,
             useValue: this.dogId
           }
-        ]);
+        ]
+      )
+    .closed
+    .subscribe((result: SkyModalCloseArgs) => {
+      if (result.data) {
+        this.loadBehaviorTrainings();
+      }
+    });
   }
 
-  public editBehaviorTraining(behaviorTraining: BehaviorTraining) {
-    let context: ModalAddBehaviorTrainingContext = {
-      dogId: this.dogId,
+ public editBehaviorTraining(behaviorTraining: BehaviorTraining) {
+    let context: ModalEditBehaviorTrainingContext = {
       behaviorTraining: behaviorTraining
-    };
-    let windowContext = [{ provide: DOG_ID, ModalAddBehaviorTrainingContext, useValue: this.dogId, context }];
-    let modalInstance = this.skyModalService.open(ModalAddBehaviorTrainingComponent, windowContext);
-    // let modalInstance = this.skyModalService
-    // .open(
-    //  ModalAddBehaviorTrainingComponent,
-    //  [
-    //    {
-     //     provide: DOG_ID, ModalAddBehaviorTrainingContext,
-     //     useValue: this.dogId, context
-     //  }
-    // ]);
+     };
+     console.log(this.dogId);
+     console.log(behaviorTraining);
+    let modalInstance = this.skyModalService
+     .open(
+      ModalEditBehaviorTrainingComponent,
+      [
+        {
+          provide: DOG_ID,
+          useValue: this.dogId
+        },
+        {
+          provide: ModalEditBehaviorTrainingContext,
+          useValue: context
+        }
+    ]);
     modalInstance.closed.pipe(take(1)).subscribe((result: SkyModalCloseArgs) => {
       if (result.reason === 'save') {
-        this.reload.next(true);
+        this.loadBehaviorTrainings();
       }
     });
   }
@@ -113,7 +123,7 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     dialog.closed.subscribe((result: any) => {
       if (result.action === 'yes') {
         this.deleteRating(behaviorTraining);
-        this.reload.next(true);
+        this.loadBehaviorTrainings();
       }
     });
   }
@@ -123,5 +133,13 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     .subscribe(() => {
       this.isLoading = false;
     });
+  }
+
+  public loadBehaviorTrainings() {
+    this.dogService
+    .getBehaviorTrainings(this.dogId)
+      .subscribe(behaviorTrainings => {
+        this.behaviorTrainings = behaviorTrainings;
+      });
   }
 }

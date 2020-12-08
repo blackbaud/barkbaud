@@ -151,7 +151,7 @@ export class DogService {
     return this.post<Dog>(`dogs/${dogId}/notes`, medHistory);
   }
 
-  public getMedicalHistory(dogId: string): Observable<MedicalHistory[]> {
+  public getMedicalHistories(dogId: string): Observable<MedicalHistory[]> {
     return this.get(`dogs/${dogId}/notes`)
       .pipe(
         map(response => response.value)
@@ -172,6 +172,13 @@ export class DogService {
 
   public getBehaviorTrainings(dogId: string): Observable<BehaviorTraining[]> {
     return this.get(`dogs/${dogId}/ratings`)
+      .pipe(
+        map(response => response.value)
+      );
+  }
+
+  public getBehaviorTraining(dogId: string, behaviorTrainingId: string): Observable<BehaviorTraining> {
+    return this.get(`dogs/${dogId}/ratings/${behaviorTrainingId}`)
       .pipe(
         map(response => response.value)
       );

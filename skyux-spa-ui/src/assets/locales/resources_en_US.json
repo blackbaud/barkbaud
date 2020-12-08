@@ -91,5 +91,11 @@
   },
   "no_owner": {
     "message": "No current owner"
+  },
+  "added_to_owner": {
+    "message": "Added to Owner"
+  },
+  "added_as_rating_to_owner": {
+    "message": "Added as rating on current owner's Raisers Edge NXT record."
   }
 }

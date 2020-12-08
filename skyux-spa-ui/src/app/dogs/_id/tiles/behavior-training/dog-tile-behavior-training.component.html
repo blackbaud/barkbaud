@@ -42,13 +42,21 @@
               </sky-dropdown-menu>
             </sky-dropdown>
           </sky-repeater-item-context-menu>
-          <sky-repeater-item-title class="sky-section-heading">
-            <div>
-              {{ behaviorTraining.value }} {{ behaviorTraining.category.name }}
-            </div>
+          <sky-repeater-item-title class="repeater-flex">
+            <span class="sky-section-heading">
+               {{ behaviorTraining.category.name }}
+            </span>
+            <span>
+              {{ behaviorTraining.value }}
+            </span>
           </sky-repeater-item-title>
           <sky-repeater-item-content>
             {{ 'add_behavior_training_source' | skyAppResources }} {{ behaviorTraining.source }}
+            <div class="pull-right Field label">
+              <span *ngIf="behaviorTraining.constituentRatingId">
+                {{ 'added_to_owner' | skyAppResources}}
+              </span>
+            </div>
           </sky-repeater-item-content>
         </sky-repeater-item>
       </sky-repeater>

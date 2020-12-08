@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 
 import {
+  SkyModalCloseArgs,
   SkyModalService
 } from '@skyux/modals';
 
@@ -35,7 +36,7 @@ export class DogTileMedicalHistoryComponent implements OnInit {
 
   public isLoading = true;
 
-  public medicalHistory: MedicalHistory[];
+  public medicalHistories: MedicalHistory[];
 
   constructor (
     private skyModalService: SkyModalService,
@@ -49,8 +50,8 @@ export class DogTileMedicalHistoryComponent implements OnInit {
       .pipe(
         map(dog => dog.notes)
       )
-      .subscribe(medicalHistory => {
-        this.medicalHistory = medicalHistory;
+      .subscribe(medicalHistories => {
+        this.medicalHistories = medicalHistories;
         this.isLoading = false;
       });
   }
@@ -64,6 +65,21 @@ export class DogTileMedicalHistoryComponent implements OnInit {
             provide: DOG_ID,
             useValue: this.dogId
           }
-        ]);
+        ]
+      )
+    .closed
+    .subscribe((result: SkyModalCloseArgs) => {
+      if (result.data) {
+        this.loadMedicalHistories();
+      }
+    });
+  }
+
+  public loadMedicalHistories() {
+    this.dogService
+    .getMedicalHistories(this.dogId)
+      .subscribe(medicalHistories => {
+        this.medicalHistories = medicalHistories;
+      });
   }
 }

@@ -66,20 +66,11 @@ export class ModalAddMedicalHistoryComponent implements OnInit {
     .subscribe((dog: Dog) => {
       this.instance
         .save(dog);
-        this.loadMedicalHistories();
     });
   }
 
   public cancel() {
     this.instance
       .cancel();
-  }
-
-  public loadMedicalHistories() {
-    this.dogService
-    .getMedicalHistory(this.dogId)
-      .subscribe(medicalHistories => {
-        this.medicalHistories = medicalHistories;
-      });
   }
 }

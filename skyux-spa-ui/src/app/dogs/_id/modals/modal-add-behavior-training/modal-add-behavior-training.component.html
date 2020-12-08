@@ -1,6 +1,6 @@
 <sky-modal>
   <sky-modal-header>
-    {{ title }}
+    {{ 'modal_add_behavior_training' | skyAppResources }}
   </sky-modal-header>
   <sky-modal-content>
     <sky-fluid-grid [disableMargin]="true">
@@ -40,6 +40,16 @@
           </div>
         </sky-column>
       </sky-row>
+      <sky-row *ngIf="!ratingDataTypeEnum">
+        <sky-column screenSmall="12" screenXSmall="12">
+          <div class="sky-form-group">
+            <label class="sky-control-label">
+              {{ 'add_behavior_training_value' | skyAppResources }}
+            </label>
+            <input disabled="true" class="sky-form-control" id="rating-description" type="text"/>
+          </div>
+          </sky-column>
+      </sky-row>
       <sky-row *ngIf="ratingDataTypeEnum">
         <sky-column screenSmall="12" screenXSmall="12">
         <div class="sky-form-group">
@@ -48,7 +58,7 @@
           </label>
           <span [ngSwitch]="ratingDataTypeEnum">
             <!--None selected -->
-            <input *ngSwitchDefault [attr.disabled]="true" class="sky-form-control" id="rating-description" type="text"/>
+            <input *ngSwitchDefault disabled="true" class="sky-form-control" id="rating-description" type="text"/>
             <!--Unknown = 0 -->
             <input *ngSwitchCase="0" class="sky-form-control" id="rating-description" type="text" />
             <!--Text = 1 -->
@@ -84,7 +94,8 @@
       </sky-row>
     </sky-fluid-grid>
     <div>
-      <sky-checkbox class="setting-suffix"><sky-checkbox-label>{{ 'add_medical_history_add_note_to_constituent_label' | skyAppResources }}</sky-checkbox-label>
+      <sky-checkbox class="add-note-to-constituent" [checked]="addConstituentRating" (change)="addConstituentRatingEnabled($event)">
+        <sky-checkbox-label>{{ 'add_medical_history_add_note_to_constituent_label' | skyAppResources }}</sky-checkbox-label>
       </sky-checkbox>
     </div>
   </sky-modal-content>

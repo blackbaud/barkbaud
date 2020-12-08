@@ -2,8 +2,8 @@
   <sky-tile-title>
     {{ 'tile_title_medical_history' | skyAppResources }}
   </sky-tile-title>
-  <sky-tile-summary *ngIf="medicalHistory">
-    {{ medicalHistory.length }}
+  <sky-tile-summary *ngIf="medicalHistories">
+    {{ medicalHistories.length }}
   </sky-tile-summary>
   <sky-tile-content>
     <sky-toolbar>
@@ -25,7 +25,7 @@
       [isLoading]="isLoading"
     >
       <sky-repeater>
-        <sky-repeater-item *ngFor="let medicalHistoryItem of medicalHistory">
+        <sky-repeater-item *ngFor="let medicalHistoryItem of medicalHistories">
           <sky-repeater-item-title>
             <div class="pull-left">
               {{ medicalHistoryItem.title }}

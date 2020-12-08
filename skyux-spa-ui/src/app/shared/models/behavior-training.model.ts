@@ -7,4 +7,6 @@ export interface BehaviorTraining {
   category: Category;
   source: string;
   value: any;
+  addConstituentRating: boolean;
+  constituentRatingId: string;
 }

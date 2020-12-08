@@ -8,10 +8,6 @@ import {
 import * as moment from 'moment';
 
 import {
-  SkyAppResourcesService
-} from '@skyux/i18n';
-
-import {
   SkyModalInstance
 } from '@skyux/modals';
 
@@ -34,6 +30,7 @@ import {
 import {
   RatingDataType
 } from '../../../../shared/models/category-data-type.model';
+import { SkyCheckboxChange } from '@skyux/forms';
 
 @Component({
   selector: 'app-modal-add-behavior-training',
@@ -57,6 +54,7 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   public behaviorTrainings: BehaviorTraining[];
   public id: string;
   public source: string;
+  public addConstituentRating: boolean;
   public category: Category;
   public textCategoryValue: string;
   public numberCategoryValue: string;
@@ -78,7 +76,6 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   constructor (
     private instance: SkyModalInstance,
     private dogService: DogService,
-    private appResources: SkyAppResourcesService,
     @Inject(DOG_ID) private dogId: string
   ) { }
 
@@ -86,7 +83,6 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
     this.dogService.getSources()
       .subscribe(value => this.sources = value);
 
-    // this.loadBehaviorTraining();
   }
 
   public onSourceChanged() {
@@ -139,11 +135,14 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
     let behaviorTraining: BehaviorTraining = {
       category: this.category,
       source: this.source,
-      value: this.getCategoryValue(this.category.type.toString())
+      value: this.getCategoryValue(this.category.type.toString()),
+      addConstituentRating: this.addConstituentRating,
+      constituentRatingId: undefined
     };
 
-  if (!this.isEdit) {
-      this.dogService
+  console.log(behaviorTraining);
+
+    this.dogService
       .addBehaviorTraining(
         this.dogId,
         behaviorTraining
@@ -151,21 +150,7 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
       .subscribe((dog: Dog) => {
         this.instance
           .save(dog);
-          this.loadBehaviorTrainings();
       });
-} else {
-    this.dogService
-    .editBehaviorTraining(
-      this.dogId,
-      behaviorTraining._id,
-      behaviorTraining
-    )
-    .subscribe((dog: Dog) => {
-      this.instance
-        .save(dog);
-        this.loadBehaviorTrainings();
-    });
-}
 }
 
  public cancel() {
@@ -173,26 +158,8 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
       .cancel();
   }
 
-  public loadBehaviorTrainings() {
-    this.dogService
-    .getBehaviorTrainings(this.dogId)
-      .subscribe(behaviorTrainings => {
-        this.behaviorTrainings = behaviorTrainings;
-      });
-  }
-
-  public getTitle() {
-    if (this.isEdit) {
-        this.appResources.getString('modal_add_behavior_training')
-        .subscribe((value) => {
-            this.title = value;
-        });
-    } else {
-        this.appResources.getString('modal_edit_behavior_training')
-        .subscribe((value) => {
-            this.title = value;
-        });
-    }
+  public addConstituentRatingEnabled($event: SkyCheckboxChange) {
+    this.addConstituentRating = $event.checked;
   }
 
   private getRatingDataTypeEnum(ratingDataType: RatingDataType): RatingDataType {
