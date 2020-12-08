@@ -23,6 +23,7 @@ import {
   SkyAlertModule,
   SkyIconModule,
   SkyKeyInfoModule,
+  SkyLabelModule,
   SkyTokensModule,
   SkyWaitModule
 } from '@skyux/indicators';
@@ -93,6 +94,7 @@ import {
     SkyHeroModule,
     SkyIconModule,
     SkyKeyInfoModule,
+    SkyLabelModule,
     SkyListModule,
     SkyListViewChecklistModule,
     SkyModalModule,

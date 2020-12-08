@@ -9,6 +9,8 @@ import {
   SkyModalInstance
 } from '@skyux/modals';
 
+import * as moment from 'moment';
+
 import {
   Dog,
   DOG_ID
@@ -44,7 +46,7 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
   public numberCategoryValue: string;
 
   @Input()
-  public dateCategoryValue: string;
+  public dateCategoryValue: any;
 
   @Input()
   public currencyCategoryValue: string;
@@ -55,7 +57,6 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
   @Input()
   public codeTableCategoryValue: string;
 
-  private _codeTableEntriesCache: any = {};
   private readonly MAXINT = 2147483647;
   public behaviorTraining: BehaviorTraining;
   public numberValueOptions = { minimumValue: 0, maximumValue: this.MAXINT, decimalPlaces: 0 };
@@ -81,48 +82,32 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
       this.behaviorTraining = this.context.behaviorTraining;
     }
 
-    // If selected category has data type CodeTable, look up the entries for that code table
-    if (this.behaviorTraining.category.type === RatingDataType.CodeTable) {
-    if (!this._codeTableEntriesCache[this.behaviorTraining.category.name]) {
-      this.dogService.getCategoryValues(this.behaviorTraining.category.name)
-        .subscribe((result: string[]) => {
-          this.categoryValues = result;
-          console.log(this.categoryValues);
-          this._codeTableEntriesCache[this.behaviorTraining.category.name] = result;
-        });
-    } else {
-      this.categoryValues = this._codeTableEntriesCache[this.behaviorTraining.category.name];
+    if (this.behaviorTraining.category.type.toString() === 'CodeTable') {
+      this.getCodeTableEntryValues(this.behaviorTraining.category.name);
     }
-    return;
-  }
 
     switch (this.behaviorTraining.category.type.toString()) {
       case 'Text':
         this.textCategoryValue = this.behaviorTraining.value;
-        console.log(this.textCategoryValue);
         break;
       case 'Number':
         this.numberCategoryValue = this.behaviorTraining.value;
-        console.log(this.numberCategoryValue);
         break;
-      case 'Date':
+      case 'DateTime':
         this.dateCategoryValue = this.behaviorTraining.value;
-        console.log(this.dateCategoryValue);
         break;
       case 'Currency':
         this.currencyCategoryValue = this.behaviorTraining.value;
-        console.log(this.currencyCategoryValue);
         break;
       case 'Boolean':
         this.booleanCategoryValue = this.behaviorTraining.value;
-        console.log(this.booleanCategoryValue);
         break;
       case 'CodeTable':
         this.codeTableCategoryValue = this.behaviorTraining.value;
-        console.log(this.codeTableCategoryValue);
         break;
       default: break;
     }
+
   }
 
   public save() {
@@ -130,27 +115,21 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
     switch (this.behaviorTraining.category.type.toString()) {
       case 'Text':
         this.behaviorTraining.value = this.textCategoryValue;
-        console.log(this.behaviorTraining.value);
         break;
       case 'Number':
         this.behaviorTraining.value = this.numberCategoryValue;
-        console.log(this.behaviorTraining.value);
         break;
-      case 'Date':
-        this.behaviorTraining.value = this.dateCategoryValue;
-        console.log(this.behaviorTraining.value);
+      case 'DateTime':
+        this.behaviorTraining.value = moment(this.dateCategoryValue).format('YYYY-MM-DD');
         break;
       case 'Currency':
         this.behaviorTraining.value = this.currencyCategoryValue;
-        console.log(this.behaviorTraining.value);
         break;
       case 'Boolean':
         this.behaviorTraining.value = this.booleanCategoryValue;
-        console.log(this.behaviorTraining.value);
         break;
       case 'CodeTable':
         this.behaviorTraining.value = this.codeTableCategoryValue;
-        console.log(this.behaviorTraining.value);
         break;
       default: break;
     }
@@ -192,4 +171,13 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
         return 1;
     }
   }
+
+  private getCodeTableEntryValues(codeTableName: string): string[] {
+    this.dogService.getCategoryValues(codeTableName)
+        .subscribe((result: string[]) => {
+          this.categoryValues = result;
+        });
+    return this.categoryValues;
+  }
+
 }

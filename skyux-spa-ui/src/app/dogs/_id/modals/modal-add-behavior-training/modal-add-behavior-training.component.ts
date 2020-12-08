@@ -94,8 +94,6 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   }
 
   public onCategoryChanged() {
-    // Clear any previously selected rating value
-    // this.addRatingForm.get('ratingValue').setValue(undefined);
 
     this.ratingDataType = this.getSelectedRatingDataType();
     this.ratingDataTypeEnum = this.getSelectedRatingDataTypeEnum();
@@ -139,8 +137,6 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
       addConstituentRating: this.addConstituentRating,
       constituentRatingId: undefined
     };
-
-  console.log(behaviorTraining);
 
     this.dogService
       .addBehaviorTraining(

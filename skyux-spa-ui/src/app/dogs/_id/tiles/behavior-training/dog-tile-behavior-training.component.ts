@@ -63,7 +63,6 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
       )
       .subscribe(behaviorTrainings => {
         this.behaviorTrainings = behaviorTrainings;
-        console.log(this.behaviorTrainings);
         this.isLoading = false;
       });
   }
@@ -91,8 +90,6 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     let context: ModalEditBehaviorTrainingContext = {
       behaviorTraining: behaviorTraining
      };
-     console.log(this.dogId);
-     console.log(behaviorTraining);
     let modalInstance = this.skyModalService
      .open(
       ModalEditBehaviorTrainingComponent,
@@ -116,7 +113,7 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
   public deleteBehaviorTraining(behaviorTraining: BehaviorTraining) {
     const dialog: SkyConfirmInstance = this.confirmService.open({
       message: `Are you sure you want to delete the following rating?`,
-      body: behaviorTraining.category.name + `\n` + behaviorTraining.value,
+      body: behaviorTraining.category.name + ' ' + '(' + behaviorTraining.value + ')',
       type: SkyConfirmType.YesCancel
     });
 

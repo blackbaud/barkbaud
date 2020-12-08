@@ -65,8 +65,7 @@
           </option>
         </select>
         <!--CodeTableEntry = 6 -->
-        <select [(ngModel)]="codeTableCategoryValue" *ngSwitchCase="6" class="sky-form-control" id="rating-description">
-        <option></option>
+        <select [(ngModel)]="codeTableCategoryValue" *ngSwitchCase="6" class="sky-form-control" name="Value" id="rating-description">
         <option *ngFor="let categoryValue of categoryValues" [ngValue]="categoryValue">
           {{ categoryValue }}
           </option>

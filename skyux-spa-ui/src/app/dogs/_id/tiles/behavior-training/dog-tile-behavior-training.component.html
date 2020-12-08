@@ -54,7 +54,12 @@
             {{ 'add_behavior_training_source' | skyAppResources }} {{ behaviorTraining.source }}
             <div class="pull-right Field label">
               <span *ngIf="behaviorTraining.constituentRatingId">
+                <sky-label
+                  class="sky-margin-inline-default"
+                  labelType="info"
+                >
                 {{ 'added_to_owner' | skyAppResources}}
+                </sky-label>
               </span>
             </div>
           </sky-repeater-item-content>
