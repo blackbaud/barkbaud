@@ -1,7 +1,9 @@
 import {
   Component,
+  EventEmitter,
   Inject,
-  OnInit
+  OnInit,
+  Output
 } from '@angular/core';
 
 import {
@@ -26,6 +28,10 @@ import {
 } from '../../../../shared/models/behavior-training.model';
 
 import {
+  CustomError
+} from '../../../../shared/models/custom-error';
+
+import {
   DogService
 } from '../../../../shared/services';
 
@@ -33,8 +39,13 @@ import {
   ModalAddBehaviorTrainingComponent
 } from '../../modals/modal-add-behavior-training/modal-add-behavior-training.component';
 
-import { ModalEditBehaviorTrainingComponent } from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.component';
-import { ModalEditBehaviorTrainingContext } from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.context';
+import {
+  ModalEditBehaviorTrainingComponent
+} from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.component';
+
+import {
+  ModalEditBehaviorTrainingContext
+} from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.context';
 
 @Component({
   // tslint:disable-next-line
@@ -46,7 +57,12 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
 
   public isLoading = true;
   public behaviorTrainings: BehaviorTraining[];
+  public behaviorTrainingCount = 0;
   public dog: Dog;
+  public showError: boolean = false;
+
+  @Output()
+  public error = new EventEmitter<CustomError>();
 
   constructor (
     private skyModalService: SkyModalService,
@@ -63,6 +79,7 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
       )
       .subscribe(behaviorTrainings => {
         this.behaviorTrainings = behaviorTrainings;
+        this.behaviorTrainingCount = this.behaviorTrainings.length;
         this.isLoading = false;
       });
   }
@@ -82,6 +99,8 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     .subscribe((result: SkyModalCloseArgs) => {
       if (result.data) {
         this.loadBehaviorTrainings();
+      } else if (result.data && result.data.error)  {
+        this.handleError(result.data.error);
       }
     });
   }
@@ -106,6 +125,8 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     modalInstance.closed.pipe(take(1)).subscribe((result: SkyModalCloseArgs) => {
       if (result.reason === 'save') {
         this.loadBehaviorTrainings();
+      } else if (result.data && result.data.error)  {
+        this.error.next(result.data.error);
       }
     });
   }
@@ -120,7 +141,6 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     dialog.closed.subscribe((result: any) => {
       if (result.action === 'yes') {
         this.deleteRating(behaviorTraining);
-        this.loadBehaviorTrainings();
       }
     });
   }
@@ -129,6 +149,7 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     this.dogService.deleteBehaviorTraining(this.dogId, behaviorTraining._id)
     .subscribe(() => {
       this.isLoading = false;
+      this.loadBehaviorTrainings();
     });
   }
 
@@ -137,6 +158,11 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
     .getBehaviorTrainings(this.dogId)
       .subscribe(behaviorTrainings => {
         this.behaviorTrainings = behaviorTrainings;
+        this.behaviorTrainingCount = behaviorTrainings.length;
       });
+  }
+
+  public handleError(error: CustomError) {
+    this.showError = true;
   }
 }

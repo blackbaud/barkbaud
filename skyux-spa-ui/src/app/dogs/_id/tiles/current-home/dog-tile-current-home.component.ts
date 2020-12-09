@@ -22,6 +22,10 @@ import {
   Owner
 } from '../../../../shared/models';
 
+import {
+  CustomError
+} from '../../../../shared/models/custom-error';
+
 @Component({
   // tslint:disable-next-line
   selector: 'div.app-dog-tile-current-home',
@@ -31,6 +35,7 @@ import {
 export class DogTileCurrentHomeComponent implements OnInit {
 
   public isLoading = true;
+  public showError: boolean = false;
 
   public owner: Owner;
 
@@ -59,8 +64,14 @@ export class DogTileCurrentHomeComponent implements OnInit {
     .subscribe((result: SkyModalCloseArgs) => {
       if (result.data) {
         this.getCurrentHome();
+      } else if (result.data && result.data.error)  {
+        this.handleError(result.data.error);
       }
     });
+  }
+
+  public handleError(error: CustomError) {
+    this.showError = true;
   }
 
   private getCurrentHome() {
@@ -68,7 +79,6 @@ export class DogTileCurrentHomeComponent implements OnInit {
       .getCurrentHome(this.dogId)
       .subscribe(owner => {
         this.owner = owner;
-        console.log('current owner in dog tile', this.owner);
         this.isLoading = false;
       });
   }

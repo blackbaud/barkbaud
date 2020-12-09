@@ -5,4 +5,5 @@ export interface MedicalHistory {
   type: string;
   title: string;
   updatedAt: string;
+  addConstituentNote: boolean;
 }

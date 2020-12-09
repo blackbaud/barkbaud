@@ -70,7 +70,6 @@ export class ModalAddCurrentHomeComponent {
         this.ownerSelectedId
       )
       .subscribe((dog: Dog) => {
-        console.log('setCurrentHome response', dog);
         this.instance
           .save(dog);
       });

@@ -57,6 +57,7 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
   @Input()
   public codeTableCategoryValue: string;
 
+  private _codeTableEntriesCache: any = {};
   private readonly MAXINT = 2147483647;
   public behaviorTraining: BehaviorTraining;
   public numberValueOptions = { minimumValue: 0, maximumValue: this.MAXINT, decimalPlaces: 0 };
@@ -107,32 +108,11 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
         break;
       default: break;
     }
-
   }
 
   public save() {
 
-    switch (this.behaviorTraining.category.type.toString()) {
-      case 'Text':
-        this.behaviorTraining.value = this.textCategoryValue;
-        break;
-      case 'Number':
-        this.behaviorTraining.value = this.numberCategoryValue;
-        break;
-      case 'DateTime':
-        this.behaviorTraining.value = moment(this.dateCategoryValue).format('YYYY-MM-DD');
-        break;
-      case 'Currency':
-        this.behaviorTraining.value = this.currencyCategoryValue;
-        break;
-      case 'Boolean':
-        this.behaviorTraining.value = this.booleanCategoryValue;
-        break;
-      case 'CodeTable':
-        this.behaviorTraining.value = this.codeTableCategoryValue;
-        break;
-      default: break;
-    }
+    this.behaviorTraining.value = this.getCategoryValue(this.behaviorTraining.category.type.toString());
 
     this.dogService
     .editBehaviorTraining(
@@ -172,11 +152,35 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
     }
   }
 
+  private getCategoryValue(categoryDataType: string): any {
+    switch (categoryDataType) {
+      case 'Text':
+        return this.textCategoryValue;
+      case 'Number':
+        return this.numberCategoryValue;
+      case 'DateTime':
+        return moment(this.dateCategoryValue).format('YYYY-MM-DD');
+      case 'Currency':
+        return this.currencyCategoryValue;
+      case 'Boolean':
+        return this.booleanCategoryValue;
+      case 'CodeTable':
+        return this.codeTableCategoryValue;
+      default: break;
+    }
+  }
+
   private getCodeTableEntryValues(codeTableName: string): string[] {
-    this.dogService.getCategoryValues(codeTableName)
+
+    if (!this._codeTableEntriesCache[codeTableName]) {
+      this.dogService.getCategoryValues(codeTableName)
         .subscribe((result: string[]) => {
           this.categoryValues = result;
+          this._codeTableEntriesCache[codeTableName] = result;
         });
+    } else {
+      this.categoryValues = this._codeTableEntriesCache[codeTableName];
+    }
     return this.categoryValues;
   }
 

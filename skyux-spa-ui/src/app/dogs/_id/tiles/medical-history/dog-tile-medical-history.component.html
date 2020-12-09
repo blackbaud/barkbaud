@@ -24,6 +24,12 @@
     <app-loading
       [isLoading]="isLoading"
     >
+    <div *ngIf="medicalHistoryCount === 0">
+      <sky-tile-content-section class="medical-history-tile-no-medical-history sky-deemphasized">
+        {{ 'no_medical_history_message' | skyAppResources }}
+      </sky-tile-content-section>
+    </div>
+    <div *ngIf="medicalHistoryCount > 0">
       <sky-repeater>
         <sky-repeater-item *ngFor="let medicalHistoryItem of medicalHistories">
           <sky-repeater-item-title>
@@ -39,6 +45,7 @@
           </sky-repeater-item-content>
         </sky-repeater-item>
       </sky-repeater>
+    </div>
     </app-loading>
   </sky-tile-content>
 </sky-tile>

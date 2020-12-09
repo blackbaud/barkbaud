@@ -12,9 +12,8 @@
             </label>
             <select
             [(ngModel)]="source"
-            id="source-dropdown"
             class="sky-form-control"
-            data-sky-id="source-dropdown"
+            data-sky-id="behavior-training-source"
             (change)="onSourceChanged()">
             <option *ngFor="let source of sources" [ngValue]="source">
               {{ source }}
@@ -29,9 +28,8 @@
             </label>
             <select
             [(ngModel)]="category"
-            id="category-dropdown"
             class="sky-form-control"
-            data-sky-id="category-dropdown"
+            data-sky-id="behavior-training-category"
             (change)="onCategoryChanged()">
             <option *ngFor="let category of categories" [ngValue]="category">
               {{ category.name }}
@@ -46,7 +44,7 @@
             <label class="sky-control-label">
               {{ 'add_behavior_training_value' | skyAppResources }}
             </label>
-            <input disabled="true" class="sky-form-control" id="rating-description" type="text"/>
+            <input disabled="true" class="sky-form-control" type="text"/>
           </div>
           </sky-column>
       </sky-row>
@@ -58,31 +56,31 @@
           </label>
           <span [ngSwitch]="ratingDataTypeEnum">
             <!--None selected -->
-            <input *ngSwitchDefault disabled="true" class="sky-form-control" id="rating-description" type="text"/>
+            <input *ngSwitchDefault disabled="true" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text"/>
             <!--Unknown = 0 -->
-            <input *ngSwitchCase="0" class="sky-form-control" id="rating-description" type="text" />
+            <input *ngSwitchCase="0" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text" />
             <!--Text = 1 -->
-            <input [(ngModel)]="textCategoryValue" *ngSwitchCase="1" class="sky-form-control" id="rating-description" type="text"
+            <input [(ngModel)]="textCategoryValue" *ngSwitchCase="1" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text"
             #textCategoryValueField="ngModel"/>
             <!--Number = 2 -->
-            <input [(ngModel)]="numberCategoryValue" *ngSwitchCase="2" class="sky-form-control" id="rating-description" type="text"
+            <input [(ngModel)]="numberCategoryValue" *ngSwitchCase="2" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text"
               [skyAutonumeric]="numberValueOptions"  #numberCategoryValueField="ngModel"/>
             <!--Date = 3 -->
             <sky-datepicker *ngSwitchCase="3">
-              <input [(ngModel)]="dateCategoryValue" id="rating-description" class="sky-form-control" skyDatepickerInput
+              <input [(ngModel)]="dateCategoryValue" data-sky-id="behavior-training-category-value" class="sky-form-control" skyDatepickerInput
               #dateCategoryValueField="ngModel"/>
             </sky-datepicker>
             <!--Currency = 4 -->
-            <input [(ngModel)]="currencyCategoryValue" *ngSwitchCase="4" class="sky-form-control" id="rating-description" type="text"
+            <input [(ngModel)]="currencyCategoryValue" *ngSwitchCase="4" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text"
               [skyAutonumeric]="currencyValueOptions" #currencyCategoryValueField="ngModel"/>
             <!--Boolean = 5 -->
-            <select  [(ngModel)]="booleanCategoryValue" *ngSwitchCase="5" class="sky-form-control" id="rating-description">
+            <select  [(ngModel)]="booleanCategoryValue" *ngSwitchCase="5" class="sky-form-control" data-sky-id="behavior-training-category-value">
               <option *ngFor="let booleanOption of booleanValueOptions" [ngValue]="booleanOption.value">
                 {{ booleanOption.label | skyLibResources }}
               </option>
             </select>
              <!--CodeTableEntry = 6 -->
-             <select [(ngModel)]="codeTableCategoryValue" *ngSwitchCase="6" class="sky-form-control" id="rating-description">
+             <select [(ngModel)]="codeTableCategoryValue" *ngSwitchCase="6" class="sky-form-control" data-sky-id="behavior-training-category-value">
              <option *ngFor="let categoryValue of categoryValues" [ngValue]="categoryValue">
                {{ categoryValue }}
               </option>
@@ -93,7 +91,7 @@
       </sky-row>
     </sky-fluid-grid>
     <div>
-      <sky-checkbox class="add-note-to-constituent" [checked]="addConstituentRating" (change)="addConstituentRatingEnabled($event)">
+      <sky-checkbox [checked]="addConstituentRating" (change)="addConstituentRatingEnabled($event)">
         <sky-checkbox-label>{{ 'add_medical_history_add_note_to_constituent_label' | skyAppResources }}</sky-checkbox-label>
       </sky-checkbox>
     </div>

@@ -97,5 +97,11 @@
   },
   "added_as_rating_to_owner": {
     "message": "Added as rating on current owner's Raisers Edge NXT record."
+  },
+  "no_medical_history_message": {
+    "message": "This dog has no medical history."
+  },
+  "no_behavior_training_message": {
+    "message": "This dog has no behaviors/trainings."
   }
 }

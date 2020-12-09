@@ -26,6 +26,10 @@ import {
   MedicalHistory
 } from '../../../../shared/models';
 
+import {
+  CustomError
+} from '../../../../shared/models/custom-error';
+
 @Component({
   // tslint:disable-next-line
   selector: 'div.app-dog-tile-medical-history',
@@ -35,8 +39,10 @@ import {
 export class DogTileMedicalHistoryComponent implements OnInit {
 
   public isLoading = true;
+  public showError: boolean = false;
 
   public medicalHistories: MedicalHistory[];
+  public medicalHistoryCount = 0;
 
   constructor (
     private skyModalService: SkyModalService,
@@ -52,6 +58,7 @@ export class DogTileMedicalHistoryComponent implements OnInit {
       )
       .subscribe(medicalHistories => {
         this.medicalHistories = medicalHistories;
+        this.medicalHistoryCount = this.medicalHistories.length;
         this.isLoading = false;
       });
   }
@@ -71,6 +78,8 @@ export class DogTileMedicalHistoryComponent implements OnInit {
     .subscribe((result: SkyModalCloseArgs) => {
       if (result.data) {
         this.loadMedicalHistories();
+      } else if (result.data && result.data.error)  {
+        this.handleError(result.data.error);
       }
     });
   }
@@ -80,6 +89,11 @@ export class DogTileMedicalHistoryComponent implements OnInit {
     .getMedicalHistories(this.dogId)
       .subscribe(medicalHistories => {
         this.medicalHistories = medicalHistories;
+        this.medicalHistoryCount = medicalHistories.length;
       });
+  }
+
+  public handleError(error: CustomError) {
+    this.showError = true;
   }
 }

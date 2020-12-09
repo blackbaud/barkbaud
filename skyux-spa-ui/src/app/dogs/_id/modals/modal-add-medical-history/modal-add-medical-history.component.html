@@ -13,7 +13,7 @@
             <input
             [(ngModel)]="title"
             class="sky-form-control"
-            id="form-group-first-input-example"
+            data-sky-id="medical-history-title"
             type="text"
             #titleField="ngModel">
           </div>
@@ -27,7 +27,7 @@
             [(ngModel)]="type"
             id="note-type-dropdown"
             class="sky-form-control"
-            data-sky-id="note-type-dropdown">
+            data-sky-id="medical-history-note-type">
               <option *ngFor="let type of noteTypes" [ngValue]="type">
                   {{ type }}
               </option>
@@ -46,14 +46,15 @@
           class="sky-form-control control-editor-textarea"
           rows="3"
           maxlength="300"
-          id="form-group-first-input-example"
+          data-sky-id="medical-history-description"
           #descriptionField="ngModel"></textarea>
         </div>
       </sky-column>
       </sky-row>
     </sky-fluid-grid>
     <div>
-      <sky-checkbox class="setting-suffix"><sky-checkbox-label>{{ 'add_medical_history_add_note_to_constituent_label' | skyAppResources }}</sky-checkbox-label>
+      <sky-checkbox [checked]="addConstituentNote" (change)="addConstituentNoteEnabled($event)">
+        <sky-checkbox-label>{{ 'add_medical_history_add_note_to_constituent_label' | skyAppResources }}</sky-checkbox-label>
       </sky-checkbox>
     </div>
   </sky-modal-content>

@@ -5,6 +5,10 @@ import {
 } from '@angular/core';
 
 import {
+  SkyCheckboxChange
+} from '@skyux/forms';
+
+import {
   SkyModalInstance
 } from '@skyux/modals';
 
@@ -35,6 +39,7 @@ export class ModalAddMedicalHistoryComponent implements OnInit {
   public title: string;
   public updatedAt: string;
   public medicalHistories: MedicalHistory[];
+  public addConstituentNote: boolean;
 
    constructor (
     private instance: SkyModalInstance,
@@ -55,7 +60,8 @@ export class ModalAddMedicalHistoryComponent implements OnInit {
       description: this.description,
       type: this.type,
       title: this.title,
-      updatedAt: undefined
+      updatedAt: undefined,
+      addConstituentNote: this.addConstituentNote
   };
 
     this.dogService
@@ -72,5 +78,9 @@ export class ModalAddMedicalHistoryComponent implements OnInit {
   public cancel() {
     this.instance
       .cancel();
+  }
+
+  public addConstituentNoteEnabled($event: SkyCheckboxChange) {
+    this.addConstituentNote = $event.checked;
   }
 }

@@ -12,6 +12,10 @@ import {
 } from '@skyux/modals';
 
 import {
+  SkyCheckboxChange
+} from '@skyux/forms';
+
+import {
   BehaviorTraining
 } from '../../../../shared/models/behavior-training.model';
 
@@ -20,7 +24,8 @@ import {
 } from '../../../../shared/models/category.model';
 
 import {
-  Dog, DOG_ID
+  Dog,
+  DOG_ID
 } from '../../../../shared/models';
 
 import {
@@ -30,7 +35,6 @@ import {
 import {
   RatingDataType
 } from '../../../../shared/models/category-data-type.model';
-import { SkyCheckboxChange } from '@skyux/forms';
 
 @Component({
   selector: 'app-modal-add-behavior-training',
@@ -46,13 +50,10 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   private categoryName: string;
   private _codeTableEntriesCache: any = {};
 
-  public isEdit = false;
-  public title: string;
   public sources: Array<string> = [];
   public categories: Category[];
   public categoryValues: string[];
   public behaviorTrainings: BehaviorTraining[];
-  public id: string;
   public source: string;
   public addConstituentRating: boolean;
   public category: Category;
@@ -80,26 +81,26 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    // get rating Sources
     this.dogService.getSources()
       .subscribe(value => this.sources = value);
-
   }
 
   public onSourceChanged() {
 
     const selectedSourceId = this.source;
 
+    // get rating categories
     this.dogService.getCategories(selectedSourceId)
       .subscribe(value => this.categories = value);
   }
 
   public onCategoryChanged() {
 
-    this.ratingDataType = this.getSelectedRatingDataType();
     this.ratingDataTypeEnum = this.getSelectedRatingDataTypeEnum();
 
      // If selected category has data type CodeTable, look up the entries for that code table
-     if (this.ratingDataType === RatingDataType.CodeTable) {
+     if (this.ratingDataTypeEnum === RatingDataType.CodeTable) {
       if (!this._codeTableEntriesCache[this.category.name]) {
         this.dogService.getCategoryValues(this.category.name)
           .subscribe((result: string[]) => {
@@ -111,14 +112,6 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
       }
       return;
     }
-  }
-
-  public getSelectedRatingDataType(): RatingDataType {
-    this.categoryName = this.category.name;
-    if (this.categoryName) {
-      return this.getRatingDataTypeEnum(this.categories.find(x => x.name === this.categoryName).type);
-    }
-    return undefined;
   }
 
   public getSelectedRatingDataTypeEnum(): RatingDataType {
@@ -147,7 +140,7 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
         this.instance
           .save(dog);
       });
-}
+ }
 
  public cancel() {
     this.instance
