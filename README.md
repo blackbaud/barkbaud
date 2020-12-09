@@ -90,11 +90,9 @@ barkbaud $  npm run setup
 
 - The first command installs all of Barkbaud's dependencies. It may take a few minutes to complete.
 - The second command builds and configures the database, so it should be executed only once.
-- (Optional) Run `bower install`.
-    - Our front-end is stored and built in the [barkbaud-ui repository](https://github.com/blackbaud/barkbaud-ui).
-    - Using Bower, we pull down the front-end components from Barkbaud UI into this project's **bower_components/** folder.
-- (Optional) Run `npm build`.
-    - This copies the front-end build components from the **bower_components/barkbaud-ui/** directory into our application's **ui/** folder.
+- (Optional) Run `skyux install`.
+    - Our front-end is a SKY UX SPA which stored in the `skyux-spa-ui` folder.
+- (Optional) Run `skyux build`.
 
 Now that all the dependencies have been installed and the database created, we can run the application with:
 
