@@ -57,7 +57,8 @@ export class DogTileMedicalHistoryComponent implements OnInit {
         map(dog => dog.notes)
       )
       .subscribe(medicalHistories => {
-        this.medicalHistories = medicalHistories;
+        this.medicalHistories = medicalHistories.sort((medhis2, medhis1) =>
+        medhis1.date && medhis2.date ? medhis1.date.localeCompare(medhis2.date) : 0);
         this.medicalHistoryCount = this.medicalHistories.length;
         this.isLoading = false;
       });
@@ -88,7 +89,8 @@ export class DogTileMedicalHistoryComponent implements OnInit {
     this.dogService
     .getMedicalHistories(this.dogId)
       .subscribe(medicalHistories => {
-        this.medicalHistories = medicalHistories;
+        this.medicalHistories = medicalHistories.sort((medhis2, medhis1) =>
+        medhis1.date && medhis2.date ? medhis1.date.localeCompare(medhis2.date) : 0);
         this.medicalHistoryCount = medicalHistories.length;
       });
   }

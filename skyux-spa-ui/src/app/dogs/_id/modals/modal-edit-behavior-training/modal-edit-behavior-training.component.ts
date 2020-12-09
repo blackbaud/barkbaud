@@ -132,20 +132,20 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
   }
 
   public getRatingDataTypeEnum(ratingDataType: RatingDataType): RatingDataType {
-    switch (ratingDataType.toString()) {
-      case 'Unknown':
+    switch (ratingDataType.toString().toLowerCase()) {
+      case 'unknown':
         return 0;
-      case 'Text':
+      case 'text':
         return 1;
-      case 'Number':
+      case 'number':
         return 2;
-      case 'DateTime':
+      case 'datetime':
         return 3;
-      case 'Currency':
+      case 'currency':
         return 4;
-      case 'Boolean':
+      case 'boolean':
         return 5;
-      case 'CodeTable':
+      case 'codetable':
         return 6;
       default:
         return 1;
@@ -153,18 +153,18 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
   }
 
   private getCategoryValue(categoryDataType: string): any {
-    switch (categoryDataType) {
-      case 'Text':
+    switch (categoryDataType.toLowerCase()) {
+      case 'text':
         return this.textCategoryValue;
-      case 'Number':
+      case 'number':
         return this.numberCategoryValue;
-      case 'DateTime':
+      case 'datetime':
         return moment(this.dateCategoryValue).format('YYYY-MM-DD');
-      case 'Currency':
+      case 'currency':
         return this.currencyCategoryValue;
-      case 'Boolean':
+      case 'boolean':
         return this.booleanCategoryValue;
-      case 'CodeTable':
+      case 'codetable':
         return this.codeTableCategoryValue;
       default: break;
     }

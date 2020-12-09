@@ -152,20 +152,20 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   }
 
   private getRatingDataTypeEnum(ratingDataType: RatingDataType): RatingDataType {
-    switch (ratingDataType.toString()) {
-      case 'Unknown':
+    switch (ratingDataType.toString().toLowerCase()) {
+      case 'unknown':
         return this.ratingDataTypeEnum = 0;
-      case 'Text':
+      case 'text':
         return this.ratingDataTypeEnum = 1;
-      case 'Number':
+      case 'number':
         return this.ratingDataTypeEnum = 2;
-      case 'DateTime':
+      case 'datetime':
         return this.ratingDataTypeEnum = 3;
-      case 'Currency':
+      case 'currency':
         return this.ratingDataTypeEnum = 4;
-      case 'Boolean':
+      case 'boolean':
         return this.ratingDataTypeEnum = 5;
-      case 'CodeTable':
+      case 'codetable':
         return this.ratingDataTypeEnum = 6;
       default:
         return this.ratingDataTypeEnum = 1;
@@ -173,18 +173,18 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   }
 
   private getCategoryValue(categoryDataType: string): any {
-    switch (categoryDataType) {
-      case 'Text':
+    switch (categoryDataType.toLowerCase()) {
+      case 'text':
         return this.textCategoryValue;
-      case 'Number':
+      case 'number':
         return this.numberCategoryValue;
-      case 'DateTime':
+      case 'datetime':
         return moment(this.dateCategoryValue).format('YYYY-MM-DD');
-      case 'Currency':
+      case 'currency':
         return this.currencyCategoryValue;
-      case 'Boolean':
+      case 'boolean':
         return this.booleanCategoryValue;
-      case 'CodeTable':
+      case 'codeTable':
         return this.codeTableCategoryValue;
       default: break;
     }
