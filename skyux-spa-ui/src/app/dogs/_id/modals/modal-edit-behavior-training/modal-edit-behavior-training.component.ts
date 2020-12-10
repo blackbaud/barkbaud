@@ -83,27 +83,27 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
       this.behaviorTraining = this.context.behaviorTraining;
     }
 
-    if (this.behaviorTraining.category.type.toString() === 'CodeTable') {
+    if (this.behaviorTraining.category.type.toString().toLowerCase() === 'codetable') {
       this.getCodeTableEntryValues(this.behaviorTraining.category.name);
     }
 
     switch (this.behaviorTraining.category.type.toString()) {
-      case 'Text':
+      case 'text':
         this.textCategoryValue = this.behaviorTraining.value;
         break;
-      case 'Number':
+      case 'number':
         this.numberCategoryValue = this.behaviorTraining.value;
         break;
-      case 'DateTime':
+      case 'datetime':
         this.dateCategoryValue = this.behaviorTraining.value;
         break;
-      case 'Currency':
+      case 'currency':
         this.currencyCategoryValue = this.behaviorTraining.value;
         break;
-      case 'Boolean':
+      case 'boolean':
         this.booleanCategoryValue = this.behaviorTraining.value;
         break;
-      case 'CodeTable':
+      case 'codetable':
         this.codeTableCategoryValue = this.behaviorTraining.value;
         break;
       default: break;
