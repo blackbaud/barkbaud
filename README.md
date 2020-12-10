@@ -13,9 +13,9 @@ This sample application showcases the [Blackbaud SKY API](https://developer.blac
 
 ### Features:
 - The Barkbaud application starts by requesting authorization to your Blackbaud Raiser's Edge NXT data.
-- A dashboard provides a listing of dogs that are looking for a good home. Selecting a dog will take you to a page which lists the animal's owner and medical history. Biographies, owner and medical history for each animal are stored in a MongoDB database at [mongoDB](https://www.mongodb.com/).
-- Blackbaud SKY API provides access to the constituent data. The application then uses the API to search for a constituent and retrieve the constituent ID which is used to pair the constituent record to a dog within mongoDb.
-- Medical history is stored as a subdocument for each dog in MongoDb. Upon adding medical history, the user has the option of storing the information as a note on the current owner's Raiser's Edge NXT constituent record.
+- A dashboard provides a listing of dogs that are looking for a good home. Selecting a dog will take you to a page which lists the animal's owner and medical history. Biographies, owner and medical history for each animal are stored in a MongoDB database at [MongoDB](https://www.mongodb.com/).
+- Blackbaud SKY API provides access to the constituent data. The application then uses the API to search for a constituent and retrieve the constituent ID which is used to pair the constituent record to a dog within MongoDB.
+- Medical history is stored as a subdocument for each dog in MongoDB. Upon adding medical history, the user has the option of storing the information as a note on the current owner's Raiser's Edge NXT constituent record.
 
 ### View the [live demo](https://barkbaud.herokuapp.com)
 We've deployed Barkbaud to Heroku. Feel free to checkout the live demo of our application at [https://barkbaud.herokuapp.com](https://barkbaud.herokuapp.com).
@@ -54,9 +54,9 @@ $  git clone https://github.com/blackbaud/barkbaud.git
 $  cd barkbaud
 ```
 
-#### 2)  Register for a free mongoDB account
+#### 2)  Register for a free MongoDB account
 
-- Create a [free mongoDB account](https://www.mongodb.com/cloud/atlas/signup).
+- Create a [free MongoDB account](https://www.mongodb.com/cloud/atlas/signup).
 - With this account, [create a new cluster](https://docs.atlas.mongodb.com/tutorial/deploy-free-tier-cluster/) named "barkbaud" (the "Sandbox" tier is free).
 - [Add your connection](https://docs.atlas.mongodb.com/security/add-ip-address-to-list/) IP address to IP Acccess list.
 - [Create a new database user](https://docs.atlas.mongodb.com/tutorial/create-mongodb-user-for-cluster/) (the username and password is your preference).
@@ -74,7 +74,7 @@ $  cd barkbaud
 | **`AUTH_CLIENT_SECRET`** | Your registered application's **Application Secret**.<br>(See, [Managing your apps](https://developer.blackbaud.com/apps/).) |
 | **`AUTH_REDIRECT_URI`** | One of your registered application's **Redirect URIs**. <br>For local development, use `http://localhost:5000/auth/callback`. <br>(See, [Managing your apps](https://developer.blackbaud.com/apps/).)  |
 | **`AUTH_SUBSCRIPTION_KEY`** | Your Blackbaud Developer **Subscription Key**.<br>Use either the **Primary key** or **Secondary key**, visible on your [Blackbaud Developer Profile](https://developer.sky.blackbaud.com/developer). |
-| **`DATABASE_URI`** | A MongoDB connection string, which points to your mongoDB database.<br>The string must follow this format: <br>`mongodb+srv://<dbuser>:<dbpassword>@<dbname>?retryWrites=true&w=majority`<br>More details about how to find your connection string can be found on [mongoDB's Documentation](https://docs.atlas.mongodb.com/tutorial/connect-to-your-cluster/). |
+| **`DATABASE_URI`** | A MongoDB connection string, which points to your MongoDB database.<br>The string must follow this format: <br>`mongodb+srv://<dbuser>:<dbpassword>@<dbname>?retryWrites=true&w=majority`<br>More details about how to find your connection string can be found on [MongoDB's Documentation](https://docs.atlas.mongodb.com/tutorial/connect-to-your-cluster/). |
 
 - Save the **barkbaud.env** file.
 - Review the **.gitignore** file.  The purpose of this file is to specify which directories and files Git should ignore when performing a commit. Note that the **barkbaud.env** file is ignored. This prevents the file from being synced to your repository and protects your registered application's keys and other sensitive data from being exposed.
