@@ -12,7 +12,7 @@
     "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
-    "build": "cd skyux-spa-ui && npm i && npm i -g @skyux-sdk/cli@next && skyux build"
+    "build": "cd skyux-spa-ui && npm i && npm i -g @skyux-sdk/cli@latest && skyux build"
   },
   "dependencies": {
     "@skyux/layout": "4.3.1",
