@@ -3,13 +3,16 @@
   "version": "0.0.3",
   "description": "A Blackbaud Sky API/UX demo application.",
   "main": "index.js",
+  "engines": {
+    "node": "12.20.0"
+  },
   "scripts": {
     "setup": "node ./bin/setup.js",
     "dev": "nodemon ./bin/start.js",
     "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
-    "build": "cd skyux-spa-ui && npm i && npm i -g @skyux-sdk/cli@next && skyux build"
+    "build": "cd skyux-spa-ui && npm i -g @skyux-sdk/cli@next && skyux build"
   },
   "dependencies": {
     "@skyux/layout": "4.3.1",

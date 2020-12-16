@@ -2,6 +2,9 @@
   "name": "blackbaud-skyux-spa-ui",
   "version": "0.0.1",
   "description": "A single-page application (SPA) named skyux-spa-ui",
+  "engines": {
+    "node": "12.20.0"
+  },
   "scripts": {
     "build": "skyux build",
     "test": "skyux test",
