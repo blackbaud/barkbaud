@@ -13,9 +13,11 @@ const oauth2 = require('simple-oauth2').create({
 
 // A bit hacky, but needed currently to support Heroku Preview Apps
 // You will need to manually add each pr-preview URL to your app's redirect URI list.
-const redirectURI = process.env.HEROKU_APP_NAME
-  ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/auth/callback`
-  : process.env.AUTH_REDIRECT_URI;
+// const redirectURI = process.env.HEROKU_APP_NAME
+//   ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/auth/callback`
+//   : process.env.AUTH_REDIRECT_URI;
+
+const redirectURI = process.env.AUTH_REDIRECT_URI;
 
 // Properties we expose from the JWT to our session
 const jwtToSessionProps = [
