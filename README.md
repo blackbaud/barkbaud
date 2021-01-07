@@ -90,6 +90,7 @@ barkbaud $  npm run setup
 
 - The first command installs all of Barkbaud's dependencies. It may take a few minutes to complete.
 - The second command builds and configures the database, so it should be executed only once.
+- (Optional) Run `npm install -g @skyux-sdk/cli`.
 - (Optional) Run `skyux install`.
     - Our front-end is a SKY UX SPA which stored in the `skyux-spa-ui` folder.
 - (Optional) Run `skyux build`.
