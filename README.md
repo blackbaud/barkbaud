@@ -124,6 +124,11 @@ $  heroku login
 
 ```
 barkbaud $  heroku git:remote -a your-app-name
+```
+
+- Set the following config varaible for your heroku app
+
+```
 barkbaud $  heroku config:set NPM_CONFIG_PRODUCTION=false
 ```
 
