@@ -9,7 +9,7 @@
     "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
-    "build": "cd skyux-spa-ui && npm install && npm ls @skyux-sdk/builder && npx -p @skyux-sdk/cli version && npx -p @skyux-sdk/cli skyux build"
+    "build": "cd skyux-spa-ui && npm install && npm ls @skyux-sdk/builder && npx -p @skyux-sdk/cli skyux version && npx -p @skyux-sdk/cli skyux build"
   },
   "dependencies": {
     "body-parser": "1.18.3",
