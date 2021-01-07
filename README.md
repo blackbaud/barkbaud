@@ -123,6 +123,7 @@ $  heroku login
 
 ```
 barkbaud $  heroku git:remote -a your-app-name
+barkbaud $  heroku config:set NPM_CONFIG_PRODUCTION=false
 ```
 
 - Finally, in the **barkbaud/** working directory, type:
