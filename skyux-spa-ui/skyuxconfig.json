@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/@skyux/config/skyuxconfig-schema.json",
+  "compileMode": "aot",
+  "mode": "easy",
+  "app": {
+    "styles": [
+      "src/app/app.scss"
+    ]
+  },
+  "appSettings": {
+    "bffUrl": "/"
+  },
+  "host": {
+    "frameOptions": {
+      "none": true
+    }
+  }
+}

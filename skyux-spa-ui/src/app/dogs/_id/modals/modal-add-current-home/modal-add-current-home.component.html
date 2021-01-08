@@ -1,0 +1,55 @@
+<sky-modal>
+  <sky-modal-header>
+    {{ 'modal_add_current_home' | skyAppResources }}
+  </sky-modal-header>
+  <sky-modal-content>
+    <sky-toolbar>
+      <sky-toolbar-item>
+        <sky-search
+          expandMode="fit"
+          placeholderText="Search by name"
+          [searchText]="searchText"
+          [debounceTime]="500"
+          (searchApply)="searchApplied($event)"
+          (searchChange)="searchApplied($event)">
+        </sky-search>
+      </sky-toolbar-item>
+    </sky-toolbar>
+
+    <app-loading
+      [isLoading]="isSearching"
+    >
+    </app-loading>
+
+    <sky-list *ngIf="owners"
+      [data]="owners"
+      (selectedIdsChange)="setSelected($event)"
+    >
+      <sky-list-view-checklist
+        description="address"
+        label="name"
+        selectMode="single">
+      </sky-list-view-checklist>
+    </sky-list>
+  </sky-modal-content>
+  <sky-modal-footer>
+    <button
+      class="sky-btn sky-btn-primary"
+      type="button"
+      [disabled]="!ownerSelectedId"
+      [ngClass]="{
+        'sky-btn-disabled': !ownerSelectedId
+      }"
+      (click)="save()"
+    >
+      {{ 'btn_modal_save' | skyAppResources }}
+    </button>
+    <button
+      class="sky-btn sky-btn-link"
+      type="button"
+      (click)="cancel()"
+    >
+      {{ 'btn_modal_cancel' | skyAppResources }}
+    </button>
+  </sky-modal-footer>
+</sky-modal>

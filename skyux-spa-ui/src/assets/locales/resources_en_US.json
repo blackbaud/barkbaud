@@ -1,0 +1,107 @@
+{
+  "nav_home": {
+    "message": "Home"
+  },
+  "nav_dashboard": {
+    "message": "Dashboard"
+  },
+  "btn_login": {
+    "message": "Authorize with Blackbaud"
+  },
+  "btn_logout": {
+    "message": "Logout"
+  },
+  "btn_dashboard": {
+    "message": "Visit Dashboard"
+  },
+  "btn_profile": {
+    "message": "View profile"
+  },
+  "btn_back_to_dashboard": {
+    "message": "Back to Dashboard"
+  },
+  "btn_find_home": {
+    "message": "Find home"
+  },
+  "btn_add_medical_history": {
+    "message": "Add history"
+  },
+  "btn_add_behavior_training": {
+    "message": "Add behavior/training"
+  },
+  "btn_modal_save": {
+    "message": "Save"
+  },
+  "btn_modal_cancel": {
+    "message": "Cancel"
+  },
+  "heading_dashboard": {
+    "message": "Dashboard"
+  },
+  "confirm_logout": {
+    "message": "Are you sure you want to logout?"
+  },
+  "modal_add_behavior_training": {
+    "message": "Add behavior/training"
+  },
+  "modal_edit_behavior_training": {
+    "message": "Edit behavior/training"
+  },
+  "modal_delete_behavior_training": {
+    "message": "Delete behavior/training"
+  },
+  "modal_add_current_home": {
+    "message": "Find a home"
+  },
+  "modal_add_medical_history": {
+    "message": "Add medical history"
+  },
+  "add_medical_history_title": {
+    "message": "Title"
+  },
+  "add_medical_history_note_type": {
+    "message": "Note Type"
+  },
+  "add_medical_history_description": {
+    "message": "Description"
+  },
+  "add_medical_history_add_note_to_constituent_label" : {
+    "message": "Add as note on current owner's Raisers Edge NXT record."
+  },
+  "tile_title_current_home": {
+    "message": "Current Home"
+  },
+  "tile_title_previous_homes": {
+    "message": "Previous Homes"
+  },
+  "tile_title_medical_history": {
+    "message": "Medical History"
+  },
+  "tile_title_behavior_training": {
+    "message": "Behavior Training"
+  },
+  "add_behavior_training_source": {
+    "message": "Source:"
+  },
+  "add_behavior_training_category": {
+    "message": "Category:"
+  },
+  "add_behavior_training_value": {
+    "message": "Value:"
+  },
+  "no_owner": {
+    "message": "No current owner"
+  },
+  "added_to_owner": {
+    "message": "Added to Owner"
+  },
+  "added_as_rating_to_owner": {
+    "message": "Added as rating on current owner's Raisers Edge NXT record."
+  },
+  "no_medical_history_message": {
+    "message": "This dog has no medical history."
+  },
+  "no_behavior_training_message": {
+    "message": "This dog has no behaviors/trainings."
+  }
+}

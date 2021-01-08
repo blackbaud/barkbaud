@@ -1,0 +1,51 @@
+<sky-tile>
+  <sky-tile-title>
+    {{ 'tile_title_medical_history' | skyAppResources }}
+  </sky-tile-title>
+  <sky-tile-summary *ngIf="medicalHistories">
+    {{ medicalHistories.length }}
+  </sky-tile-summary>
+  <sky-tile-content>
+    <sky-toolbar>
+      <sky-toolbar-item>
+        <button
+          class="sky-btn sky-btn-default"
+          type="button"
+          (click)="openAddModal()"
+        >
+          <sky-icon
+            icon="plus-circle"
+          >
+          </sky-icon>
+          {{ 'btn_add_medical_history' | skyAppResources }}
+        </button>
+      </sky-toolbar-item>
+    </sky-toolbar>
+    <app-loading
+      [isLoading]="isLoading"
+    >
+    <div *ngIf="medicalHistoryCount === 0">
+      <sky-tile-content-section class="medical-history-tile-no-medical-history sky-deemphasized">
+        {{ 'no_medical_history_message' | skyAppResources }}
+      </sky-tile-content-section>
+    </div>
+    <div *ngIf="medicalHistoryCount > 0">
+      <sky-repeater>
+        <sky-repeater-item *ngFor="let medicalHistoryItem of medicalHistories">
+          <sky-repeater-item-title>
+            <div class="pull-left">
+              {{ medicalHistoryItem.title }}
+            </div>
+            <div class="pull-right">
+              {{ medicalHistoryItem.date | skyDate:'mediumDate' }}
+            </div>
+          </sky-repeater-item-title>
+          <sky-repeater-item-content>
+            {{ medicalHistoryItem.description }}
+          </sky-repeater-item-content>
+        </sky-repeater-item>
+      </sky-repeater>
+    </div>
+    </app-loading>
+  </sky-tile-content>
+</sky-tile>

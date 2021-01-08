@@ -3,19 +3,24 @@
   "version": "0.0.3",
   "description": "A Blackbaud Sky API/UX demo application.",
   "main": "index.js",
+  "engines": {
+    "node": "12.20.0"
+  },
   "scripts": {
-    "build": "grunt build",
     "setup": "node ./bin/setup.js",
+    "dev": "nodemon ./bin/start.js",
     "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
-    "heroku-postbuild": "echo Skip build on Heroku"
+    "prebuild": "cd skyux-spa-ui && npm install && npm ls @skyux-sdk/builder && npx -p @skyux-sdk/cli skyux version",
+    "build": "cd skyux-spa-ui && npx -p @skyux-sdk/cli skyux build",
+    "heroku-prebuild": "npm run prebuild",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
-    "async": "2.6.1",
     "body-parser": "1.18.3",
     "colors": "1.3.3",
-    "connect-mongo": "2.0.3",
+    "connect-mongo": "3.2.0",
     "connect-timeout": "1.9.0",
     "continuation-local-storage": "3.2.1",
     "cors": "2.8.5",
@@ -35,11 +40,7 @@
     "eslint-plugin-node": "8.0.1",
     "eslint-plugin-promise": "4.0.1",
     "eslint-plugin-standard": "4.0.0",
-    "grunt": "1.0.3",
-    "grunt-contrib-copy": "1.0.0"
-  },
-  "engines": {
-    "node": ">=6.11.1"
+    "nodemon": "2.0.3"
   },
   "repository": {
     "type": "git",

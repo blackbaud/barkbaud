@@ -1,0 +1,15 @@
+{
+  "name": "Barkbaud",
+  "description": "SKY Developer sample application using MEAN stack.",
+  "keywords": [
+    "SKY",
+    "SKY Developer",
+    "SKY API",
+    "SKY UX",
+    "SKY Add-Ins",
+    "Barkbaud",
+    "Blackbaud"
+  ],
+  "website": "https://barkbaud.herokuapp.com",
+  "repository": "https://github.com/blackbaud/barkbaud"
+}

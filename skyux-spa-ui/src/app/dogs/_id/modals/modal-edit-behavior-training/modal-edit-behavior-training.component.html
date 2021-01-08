@@ -1,0 +1,100 @@
+<sky-modal>
+  <sky-modal-header>
+    {{ 'modal_edit_behavior_training' | skyAppResources }}
+  </sky-modal-header>
+  <sky-modal-content>
+   <sky-fluid-grid [disableMargin]="true">
+    <sky-row>
+      <sky-column screenSmall="6" screenXSmall="6">
+        <div class="sky-form-group">
+          <label class="sky-control-label">
+            {{ 'add_behavior_training_source' | skyAppResources }}
+          </label>
+          <select disabled="true" class="sky-form-control">
+            <option>
+              {{ behaviorTraining.source }}
+            </option>
+            </select>
+        </div>
+      </sky-column>
+      <sky-column screenSmall="6" screenXSmall="6">
+        <div class="sky-form-group">
+          <label class="sky-control-label">
+            {{ 'add_behavior_training_category' | skyAppResources }}
+          </label>
+          <select disabled="true" class="sky-form-control">
+            <option>
+              {{ behaviorTraining.category.name }}
+            </option>
+          </select>
+        </div>
+      </sky-column>
+    </sky-row>
+    <sky-row>
+      <sky-column screenSmall="12" screenXSmall="12">
+      <div class="sky-form-group">
+        <label class="sky-control-label">
+          {{ 'add_behavior_training_value' | skyAppResources }}
+        </label>
+        <span [ngSwitch]="getRatingDataTypeEnum(behaviorTraining.category.type)">
+          <!--Text = 1 -->
+          <input
+          *ngSwitchCase="1"
+          type="text"
+          [(ngModel)]="textCategoryValue"
+          class="sky-form-control"
+          id="rating-description"
+          name="Value"
+          #textCategoryValueField="ngModel"
+          >
+        <!--Number = 2 -->
+        <input [(ngModel)]="numberCategoryValue" *ngSwitchCase="2" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text"
+        [skyAutonumeric]="numberValueOptions" name="Value" #numberCategoryValueField="ngModel"/>
+        <!--Date = 3 -->
+        <sky-datepicker *ngSwitchCase="3">
+          <input [(ngModel)]="dateCategoryValue" data-sky-id="behavior-training-category-value" class="sky-form-control" skyDatepickerInput
+          name="Value" #dateCategoryValueField="ngModel"/>
+        </sky-datepicker>
+        <!--Currency = 4 -->
+        <input [(ngModel)]="currencyCategoryValue" *ngSwitchCase="4" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text"
+        [skyAutonumeric]="currencyValueOptions" name="Value" #currencyCategoryValueField="ngModel"/>
+        <!--Boolean = 5 -->
+        <select  [(ngModel)]="booleanCategoryValue" *ngSwitchCase="5" class="sky-form-control" name="Value" data-sky-id="behavior-training-category-value">
+          <option *ngFor="let booleanOption of booleanValueOptions" [ngValue]="booleanOption.value">
+            {{ booleanOption.label | skyLibResources }}
+          </option>
+        </select>
+        <!--CodeTableEntry = 6 -->
+        <select [(ngModel)]="codeTableCategoryValue" *ngSwitchCase="6" class="sky-form-control" name="Value" data-sky-id="behavior-training-category-value">
+        <option *ngFor="let categoryValue of categoryValues" [ngValue]="categoryValue">
+          {{ categoryValue }}
+          </option>
+        </select>
+        </span>
+      </div>
+      </sky-column>
+    </sky-row>
+   </sky-fluid-grid>
+   <div class="form-group" *ngIf="behaviorTraining.constituentRatingId">
+    <label class="sky-control-label">
+      <span>{{ 'added_as_rating_to_owner' | skyAppResources}}</span>
+    </label>
+  </div>
+  </sky-modal-content>
+  <sky-modal-footer>
+    <button
+      class="sky-btn sky-btn-primary"
+      type="button"
+      (click)="save()"
+    >
+      {{ 'btn_modal_save' | skyAppResources }}
+    </button>
+    <button
+      class="sky-btn sky-btn-link"
+      type="button"
+      (click)="cancel()"
+    >
+      {{ 'btn_modal_cancel' | skyAppResources }}
+    </button>
+  </sky-modal-footer>
+</sky-modal>

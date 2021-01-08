@@ -1,0 +1,18 @@
+@import '~@skyux/theme/scss/mixins';
+
+.app-navbar ::ng-deep .sky-navbar {
+  display: flex;
+}
+
+.app-navbar .app-navbar-right {
+  margin-left: auto;
+}
+
+.app-info {
+  display: flex;
+  padding: $sky-padding-squish-default;
+}
+
+.app-info .app-info-envid {
+  margin-left: auto;
+}

@@ -1,15 +1,35 @@
 const crypto = require('crypto');
 const oauth2 = require('simple-oauth2').create({
-    client: {
-        id: process.env.AUTH_CLIENT_ID,
-        secret: process.env.AUTH_CLIENT_SECRET
-    },
-    auth: {
-        tokenHost: process.env.AUTH_SITE_URL || 'https://oauth2.sky.blackbaud.com',
-        tokenPath: process.env.AUTH_TOKEN_PATH || '/token',
-        authorizePath: process.env.AUTH_PATH || '/authorization'
-    }
+  client: {
+    id: process.env.AUTH_CLIENT_ID,
+    secret: process.env.AUTH_CLIENT_SECRET
+  },
+  auth: {
+    tokenHost: process.env.AUTH_SITE_URL || 'https://oauth2.sky.blackbaud.com',
+    tokenPath: process.env.AUTH_TOKEN_PATH || '/token',
+    authorizePath: process.env.AUTH_PATH || '/authorization'
+  }
 });
+
+// A bit hacky, but needed currently to support Heroku Preview Apps
+// You will need to manually add each pr-preview URL to your app's redirect URI list.
+// const redirectURI = process.env.HEROKU_APP_NAME
+//   ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/auth/callback`
+//   : process.env.AUTH_REDIRECT_URI;
+
+const redirectURI = process.env.AUTH_REDIRECT_URI;
+
+// Properties we expose from the JWT to our session
+const jwtToSessionProps = [
+  'environment_id',
+  'environment_name',
+  'legal_entity_id',
+  'legal_entity_name',
+  'user_id',
+  'email',
+  'family_name',
+  'given_name'
+];
 
 /**
  *
@@ -19,33 +39,35 @@ const oauth2 = require('simple-oauth2').create({
  * @param {Object} next
  */
 function checkSession(request, response, next) {
-    validate(request, function (valid) {
-        if (valid) {
-            next();
-        } else {
-            response.sendStatus(401);
-        }
-    });
+  validate(request, function (valid) {
+    if (valid) {
+      next();
+    } else {
+      response.sendStatus(401);
+    }
+  });
 }
 
 /**
  * An interface for our front-end to see if we're authenticated.
- * @name getAuthenticated
+ * @name getUser
  * @param {Object} request
  * @param {Object} response
  */
-function getAuthenticated(request, response) {
-    validate(request, function (success) {
-        const json = {
-            authenticated: success
-        };
+function getUser(request, response) {
+  validate(request, function (success) {
+    const json = {
+      authenticated: success
+    };
 
-        if (success) {
-            json.environment_id = request.session.ticket.environment_id;
-        }
+    if (success) {
+      jwtToSessionProps.forEach(key => {
+        json[key] = request.session.ticket[key];
+      });
+    }
 
-        response.json(json);
-    });
+    response.json(json);
+  });
 }
 
 /**
@@ -56,15 +78,16 @@ function getAuthenticated(request, response) {
  * @param {Object} response
  */
 function getLogin(request, response) {
-    request.session.redirect = request.query.redirect;
-    request.session.state = crypto.randomBytes(48).toString('hex');
+  request.session.redirect = request.query.redirect;
+  request.session.state = crypto.randomBytes(48).toString('hex');
 
-    const authorizationUri = oauth2.authorizationCode.authorizeURL({
-        redirect_uri: process.env.AUTH_REDIRECT_URI,
-        state: request.session.state
+  const authorizationUri = oauth2.authorizationCode
+    .authorizeURL({
+      state: request.session.state,
+      redirect_uri: redirectURI
     });
 
-    response.redirect(authorizationUri);
+  response.redirect(authorizationUri);
 }
 
 /**
@@ -76,42 +99,43 @@ function getLogin(request, response) {
  * @param {Object} response
  */
 function getCallback(request, response) {
-    let error;
+  const redirect = request.session.redirect || '/';
+  let error;
 
-    if (request.query.error) {
-        error = request.query.error;
-    } else if (!request.query.code) {
-        error = 'auth_missing_code';
-    } else if (!request.query.state) {
-        error = 'auth_missing_state';
-    } else if (request.session.state !== request.query.state) {
-        error = 'auth_invalid_state';
-    }
+  if (request.query.error) {
+    error = request.query.error;
+  } else if (!request.query.code) {
+    error = 'auth_missing_code';
+  } else if (!request.query.state) {
+    error = 'auth_missing_state';
+  } else if (request.session.state !== request.query.state) {
+    error = 'auth_invalid_state';
+  }
 
-    if (!error) {
-        const options = {
-            code: request.query.code,
-            redirect_uri: process.env.AUTH_REDIRECT_URI
-        };
+  if (!error) {
+    const options = {
+      code: request.query.code,
+      redirect_uri: redirectURI
+    };
 
-        oauth2.authorizationCode.getToken(options, function (errorToken, ticket) {
-            if (errorToken) {
-                error = errorToken.message;
-            } else {
-                let redirect = request.session.redirect || '/';
+    oauth2.authorizationCode.getToken(options, function (errorToken, ticket) {
+      if (errorToken) {
+        error = errorToken.message;
+      } else {
+        request.session.redirect = '';
+        request.session.state = '';
 
-                request.session.redirect = '';
-                request.session.state = '';
+        saveTicket(request, ticket);
+        response.redirect(redirect);
+      }
+    });
+  }
 
-                saveTicket(request, ticket);
-                response.redirect(redirect);
-            }
-        });
-    }
-
-    if (error) {
-        response.redirect('/#?error=' + error);
-    }
+  if (error) {
+    const delimiter = redirect.indexOf('?') > -1 ? '&' : '?';
+    const url = redirect + delimiter + 'error=' + error;
+    response.redirect(url);
+  }
 }
 
 /**
@@ -122,21 +146,21 @@ function getCallback(request, response) {
  * @param {Object} response
  */
 function getLogout(request, response) {
-    const redirect = request.session.redirect || '/';
+  const redirect = request.query.redirect || '/';
 
-    function go() {
-        request.session.destroy();
-        response.redirect(redirect);
-    }
+  function go() {
+    request.session.destroy();
+    response.redirect(redirect);
+  }
 
-    if (!request.session.ticket) {
-        go();
-    } else {
-        const token = oauth2.accessToken.create(request.session.ticket);
-        token.revoke('access_token', function () {
-            token.revoke('refresh_token', go);
-        });
-    }
+  if (!request.session.ticket) {
+    go();
+  } else {
+    const token = oauth2.accessToken.create(request.session.ticket);
+    token.revoke('access_token', function () {
+      token.revoke('refresh_token', go);
+    });
+  }
 }
 
 /**
@@ -147,8 +171,8 @@ function getLogout(request, response) {
  * @param {Object} ticket
  */
 function saveTicket(request, ticket) {
-    request.session.ticket = ticket;
-    request.session.expires = (new Date().getTime() + (1000 * ticket.expires_in));
+  request.session.ticket = ticket;
+  request.session.expires = (new Date().getTime() + (1000 * ticket.expires_in));
 }
 
 /**
@@ -159,37 +183,37 @@ function saveTicket(request, ticket) {
  * @param {Object} onComplete
  */
 function validate(request, onComplete) {
-    if (request && request.session && request.session.ticket && request.session.expires) {
-        const dtCurrent = new Date();
-        const dtExpires = new Date(request.session.expires);
+  if (request && request.session && request.session.ticket && request.session.expires) {
+    const dtCurrent = new Date();
+    const dtExpires = new Date(request.session.expires);
 
-        if (dtCurrent >= dtExpires) {
-            console.log('BARKBAUD - Token expired');
-            try {
-                const token = oauth2.accessToken.create(request.session.ticket);
-                token.refresh(function (error, ticket) {
-                    if (!ticket || !ticket.token) {
-                        return onComplete(false);
-                    }
+    if (dtCurrent >= dtExpires) {
+      console.log('BARKBAUD - Token expired');
+      try {
+        const token = oauth2.accessToken.create(request.session.ticket);
+        token.refresh(function (error, ticket) {
+          if (!ticket || !ticket.token) {
+            return onComplete(false);
+          }
 
-                    saveTicket(request, ticket.token);
-                    return onComplete(!error);
-                });
-            } catch (e) {
-                onComplete(false);
-            }
-        } else {
-            onComplete(true);
-        }
-    } else {
+          saveTicket(request, ticket.token);
+          return onComplete(!error);
+        });
+      } catch (e) {
         onComplete(false);
+      }
+    } else {
+      onComplete(true);
     }
+  } else {
+    onComplete(false);
+  }
 }
 
 module.exports = {
-    checkSession,
-    getAuthenticated,
-    getCallback,
-    getLogin,
-    getLogout
+  checkSession,
+  getCallback,
+  getLogin,
+  getLogout,
+  getUser
 };
