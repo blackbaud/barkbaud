@@ -7,21 +7,6 @@ function start() {
   console.log('Setup started (this may take a few minutes)...'.cyan);
 
   const commands = [];
-  let configVars = [];
-
-  // Heroku deployment configurations.
-  if (process.env.npm_config_heroku) {
-    configVars = [
-      'AUTH_CLIENT_ID=' + process.env.AUTH_CLIENT_ID,
-      'AUTH_CLIENT_SECRET=' + process.env.AUTH_CLIENT_SECRET,
-      'AUTH_SUBSCRIPTION_KEY=' + process.env.AUTH_SUBSCRIPTION_KEY,
-      'AUTH_REDIRECT_URI=' + process.env.AUTH_REDIRECT_URI,
-      'DATABASE_URI=' + process.env.DATABASE_URI
-    ];
-
-    // Set the Heroku app config vars.
-    commands.push('heroku config:set ' + configVars.join(' '));
-  }
 
   sequence(commands, function () {
     // Setting this config var will tell Barkbaud to build the database.
