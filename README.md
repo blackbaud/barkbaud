@@ -5,7 +5,6 @@ Blackbaud SKY API / SKY UX sample application.
 ## Contents
 - [About](#about)
 - [Run Barkbaud on your server](#getting-started)
-- [Deploy to Heroku](#deploy)
 
 <h2 id="about">About</h2>
 
@@ -16,9 +15,6 @@ This sample application showcases [Blackbaud SKY API](https://developer.blackbau
 - A dashboard provides a listing of dogs that are looking for a good home. Selecting a dog will take you to a page which lists the animal's owner and medical history. Biographies, owner, and medical history for each animal are stored in a [MongoDB](https://www.mongodb.com/).
 - Blackbaud SKY API provides access to the constituent data. The application then uses the API to search for a constituent and retrieve the constituent ID, which is used to pair the constituent record to a dog within MongoDB.
 - Medical history is stored as a subdocument for each dog in MongoDB. Upon adding medical history, the user has the option of storing the information as a note on the current owner's Raiser's Edge NXT constituent record.
-
-### View the [live demo](https://barkbaud.herokuapp.com)
-We've deployed Barkbaud to Heroku. Check out the live demo of our application at [https://barkbaud.herokuapp.com](https://barkbaud.herokuapp.com).
 
 ### Questions or comments?
 Leave feedback or ask a question by [filing an issue](https://github.com/blackbaud/barkbaud/issues).
@@ -102,43 +98,3 @@ barkbaud $  npm start
 ```
 
 Open a Web browser to <a href="http://localhost:5000">http://localhost:5000</a>.
-
-<h2 id="deploy">Deploy Barkbaud to Heroku</h2>
-
-- Create a [free Heroku account](https://signup.heroku.com/login).
-- From your Heroku Dashboard, [create a new Heroku application](https://dashboard.heroku.com/new).
-- Edit your [Blackbaud SKY API application](https://developer.blackbaud.com/apps/) and add a new **Redirect URL** that points to your Heroku application's URL. This URL should also include the path "/auth/callback". For example:
-```
-https://your-heroku-app-name.herokuapp.com/auth/callback
-```
-- Open **barkbaud.env** and change the variable **`AUTH_REDIRECT_URI`** to reference this new URL.
-- Install the [Heroku Toolbelt](https://toolbelt.heroku.com/) on your local machine. It's a command line interface (CLI) built specifically for Heroku applications.
-- Open Terminal/Command Prompt and login to Heroku via the Toolbelt:
-
-```
-$  heroku login
-```
-
-- Change your working directory to **barkbaud/** (`cd barkbaud`) and type `git status` to make sure Git is working properly.
-- Add a Git remote that references your Heroku application's Git repository:
-
-```
-barkbaud $  heroku git:remote -a your-app-name
-```
-
-- Set the following config variable for your heroku app:
-
-```
-barkbaud $  heroku config:set NPM_CONFIG_PRODUCTION=false
-```
-
-- Finally, in the **barkbaud/** working directory, type:
-
-```
-barkbaud $  npm run setup --heroku
-barkbaud $  git add .
-barkbaud $  git commit -m "Made it better."
-barkbaud $  git push heroku master
-barkbaud $  heroku open
-```
-Visit your Heroku application's URL to view a public version of your Barkbaud application!

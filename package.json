@@ -13,9 +13,7 @@
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
     "prebuild": "cd skyux-spa-ui && npm install && npm ls @skyux-sdk/builder && npx -p @skyux-sdk/cli skyux version",
-    "build": "cd skyux-spa-ui && npx -p @skyux-sdk/cli skyux build",
-    "heroku-prebuild": "npm run prebuild",
-    "heroku-postbuild": "npm run build"
+    "build": "cd skyux-spa-ui && npx -p @skyux-sdk/cli skyux build"
   },
   "dependencies": {
     "body-parser": "1.18.3",
@@ -51,6 +49,5 @@
     "renxt",
     "skyux"
   ],
-  "license": "MIT",
-  "heroku-run-build-script": true
+  "license": "MIT"
 }
