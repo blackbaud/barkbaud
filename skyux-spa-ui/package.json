@@ -39,7 +39,7 @@
     "@skyux/avatar": "4.1.2",
     "@skyux/config": "4.2.0",
     "@skyux/core": "4.3.2",
-    "@skyux/datetime": "4.7.0",
+    "@skyux/datetime": "10.4.0",
     "@skyux/errors": "4.0.1",
     "@skyux/forms": "4.14.0",
     "@skyux/http": "4.1.0",
