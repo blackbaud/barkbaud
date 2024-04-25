@@ -120,3 +120,5 @@ Now that all the dependencies have been installed and SSL is configured, we can 
 skyux-spa-ui $  ng serve
 ```
 
+Open a Web browser to <a href="https://localhost:4200">https://localhost:4200</a>.
+
