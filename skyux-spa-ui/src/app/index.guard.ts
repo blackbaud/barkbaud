@@ -1,30 +1,28 @@
 import {
   Injectable
 } from '@angular/core';
-
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
-  CanActivateChild,
   Params,
   Router,
   RouterStateSnapshot
 } from '@angular/router';
 
 import {
-  Observable
+  Observable,
+  of
 } from 'rxjs';
-
 import {
+  catchError,
+  finalize,
   tap
 } from 'rxjs/operators';
-
 import {
   UserService
 } from './shared/services';
 
 @Injectable()
-export class AppRouteGuard implements CanActivate, CanActivateChild {
+export class AppRouteGuard {
 
   private authRoute = '/auth';
   private protectedRoutes = [
@@ -39,28 +37,19 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
   public canActivate (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
-    return this._canActivate(state);
-  }
-
-  public canActivateChild (
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
-    return this._canActivate(state);
-  }
-
-  private _canActivate (
-    state: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
+  ): Observable<boolean> {
+    // always allow nagivation to the error page
+    if (state.url.startsWith('/error')) {
+      return of(true);
+    }
 
     if (!this.protectedRoutes
-        .some(protectedRoute => state.url
-          .startsWith(protectedRoute)
-        )
-    ) {
-      return true;
-    }
+      .some(protectedRoute => state.url
+        .startsWith(protectedRoute)
+      )
+  ) {
+    return of(true);
+  }
 
     const queryParams: Params = {};
 
@@ -68,14 +57,15 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
     const requestedUrlParts = state.url.split('?error=');
 
     // Add back real url regardless
-    queryParams.route = requestedUrlParts[0];
+    queryParams['route'] = requestedUrlParts[0];
 
     // Add back error if it exists
     if (requestedUrlParts.length === 2) {
-      queryParams.error = requestedUrlParts[1];
+      queryParams['error'] = requestedUrlParts[1];
     }
 
-    return this.userService
+    return new Observable((obs) => {
+      this.userService
       .isUserAuthenticated()
       .pipe(
         tap(authenticated => {
@@ -87,8 +77,15 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
                   queryParams
                 }
               );
+          } else {
+            obs.next(true);
           }
+        }),
+        finalize(() => obs.complete()),
+        catchError(() => {
+          return of(false);
         })
       );
+    });
   }
 }

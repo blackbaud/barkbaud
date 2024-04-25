@@ -1,37 +1,18 @@
 import {
-  Injectable
-} from '@angular/core';
-
-import {
   HttpClient
 } from '@angular/common/http';
-
 import {
-  Observable, BehaviorSubject
+  Injectable
+} from '@angular/core';
+import {
+  BehaviorSubject,
+  Observable
 } from 'rxjs';
-
 import {
   map,
   shareReplay,
   tap
 } from 'rxjs/operators';
-
-import {
-  SkyAppConfig
-} from '@skyux/config';
-
-import {
-  UserService
-} from './user.service';
-
-import {
-  BehaviorTraining
-} from '../models/behavior-training.model';
-
-import {
-  Category
-} from '../models/category.model';
-
 import {
   Dog,
   DogResponse,
@@ -39,20 +20,31 @@ import {
   Owner,
   Response
 } from '../models';
+import {
+  BehaviorTraining
+} from '../models/behavior-training.model';
+import {
+  Category
+} from '../models/category.model';
+import { BaseService } from './base.service';
+import {
+  UserService
+} from './user.service';
 
 @Injectable()
-export class DogService {
+export class DogService extends BaseService {
   private dogs: Observable<Dog[]>;
 
-  private envid: string;
+  private envid: string | undefined;
 
   private previousHomes = new BehaviorSubject<Owner[]>([]);
 
   constructor(
-    private httpClient: HttpClient,
-    private skyAppConfig: SkyAppConfig,
+    httpClient: HttpClient,
     private userService: UserService
   ) {
+    super(httpClient);
+
     this.userService
       .getAuthenticatedUser()
       .pipe(
@@ -62,7 +54,7 @@ export class DogService {
 
     this.dogs = this.httpClient
       .get<DogResponse>(
-        `${this.skyAppConfig.skyux.appSettings.bffUrl}api/dogs`,
+        `${this.bffUrl}api/dogs`,
         {
           withCredentials: true
         }
@@ -202,7 +194,7 @@ export class DogService {
   private get(endpoint: string): Observable<Response> {
     return this.httpClient
       .get<Response>(
-        `${this.skyAppConfig.skyux.appSettings.bffUrl}api/${endpoint}`,
+        `${this.bffUrl}api/${endpoint}`,
         {
           withCredentials: true
         }
@@ -218,7 +210,7 @@ export class DogService {
   ): Observable<T> {
     return this.httpClient
       .post<T>(
-        `${this.skyAppConfig.skyux.appSettings.bffUrl}api/${endpoint}`,
+        `${this.bffUrl}api/${endpoint}`,
         data,
         {
           withCredentials: true
@@ -232,7 +224,7 @@ export class DogService {
   ): Observable<T> {
     return this.httpClient
       .patch<T>(
-        `${this.skyAppConfig.skyux.appSettings.bffUrl}api/${endpoint}`,
+        `${this.bffUrl}api/${endpoint}`,
         data,
         {
           withCredentials: true
@@ -243,7 +235,7 @@ export class DogService {
   private delete(endpoint: string): Observable<Response> {
     return this.httpClient
       .delete<Response>(
-        `${this.skyAppConfig.skyux.appSettings.bffUrl}api/${endpoint}`,
+        `${this.bffUrl}api/${endpoint}`,
         {
           withCredentials: true
         }

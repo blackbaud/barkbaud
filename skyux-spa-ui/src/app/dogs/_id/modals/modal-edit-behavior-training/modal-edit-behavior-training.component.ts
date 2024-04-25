@@ -9,7 +9,7 @@ import {
   SkyModalInstance
 } from '@skyux/modals';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 import {
   Dog,

@@ -28,14 +28,11 @@ export class AuthComponent {
     route: ActivatedRoute,
     userService: UserService
   ) {
-    console.log('route in auth.component constructor',
       route.snapshot
-        .queryParams
-        .route
+        .queryParams['route']
     );
     this.loginUri = userService.getLoginUri(route.snapshot
-        .queryParams
-        .route
+        .queryParams['route']
     );
 
     userService.getAuthenticatedUser()

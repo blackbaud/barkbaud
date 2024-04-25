@@ -57,7 +57,7 @@ app.use(session(sessionConfig));
 app.use(cors({
   credentials: true,
   origin: [
-    'https://localhost:8000',
+    'https://localhost:4200',
     'https://host.nxt.blackbaud.com'
   ]
 }));
@@ -101,7 +101,6 @@ app.all('*', (req, res) => res.status(200).sendFile('/', { root: ui }));
 
 // Connect to the database.
 database.connect(() => {
-
   // If we're running database setup, we don't need to start the server.
   // `node index.js --build-database`
   if (process.env.npm_config_build_database) {
@@ -127,7 +126,6 @@ database.connect(() => {
     } else {
       console.log('Using HTTP protocol');
       server = http.createServer({}, app);
-
     }
 
     // Listen to the port.

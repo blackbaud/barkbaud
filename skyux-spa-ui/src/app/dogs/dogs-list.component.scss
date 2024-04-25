@@ -1,5 +1,6 @@
-@import '~@skyux/theme/scss/mixins';
-@import '~@skyux/theme/css/sky';
+@import 'node_modules/@skyux/theme/scss/mixins';
+@import 'node_modules/@skyux/theme/scss/variables';
+@import 'node_modules/@skyux/theme/css/sky';
 
 .app-repeater-item-title {
   display: flex;
