@@ -5,7 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 import {
   SkyModalInstance

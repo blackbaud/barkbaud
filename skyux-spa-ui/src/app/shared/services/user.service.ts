@@ -1,42 +1,35 @@
 import {
-  Injectable
-} from '@angular/core';
-
-import {
   Location
 } from '@angular/common';
-
 import {
   HttpClient
 } from '@angular/common/http';
-
+import {
+  Injectable
+} from '@angular/core';
 import {
   Observable
 } from 'rxjs';
-
 import {
   filter,
   map,
   shareReplay
 } from 'rxjs/operators';
-
-import {
-  SkyAppConfig
-} from '@skyux/config';
-
 import {
   User
 } from '../models';
+import { BaseService } from './base.service';
 
 @Injectable()
-export class UserService {
-  private user: Observable<User>;
+export class UserService extends BaseService {
+  private user: Observable<User> | undefined;
 
   constructor(
     private location: Location,
-    private httpClient: HttpClient,
-    private skyAppConfig: SkyAppConfig
-  ) { }
+    httpClient: HttpClient
+  ) {
+    super(httpClient);
+  }
 
   public getLoginUri(route?: string): string {
     return this.getAuthUri('login', route);
@@ -65,7 +58,7 @@ export class UserService {
     if (!this.user) {
       this.user = this.httpClient
         .get<User>(
-          `${this.skyAppConfig.skyux.appSettings.bffUrl}auth/user`,
+          `${this.bffUrl}auth/user`,
           {
             withCredentials: true
           }
@@ -82,7 +75,7 @@ export class UserService {
     action: string,
     route?: string
   ): string {
-    return this.skyAppConfig.skyux.appSettings.bffUrl
+    return this.bffUrl
       + `auth/${action}?redirect=`
       + window.location.href.replace(this.location.path(), '')
       + (route ? route : '');

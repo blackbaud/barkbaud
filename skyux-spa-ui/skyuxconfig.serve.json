@@ -1,6 +1,0 @@
-{
-  "$schema": "./node_modules/@skyux/config/skyuxconfig-schema.json",
-  "appSettings": {
-    "bffUrl": "https://localhost:5000/"
-  }
-}

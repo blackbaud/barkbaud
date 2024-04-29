@@ -1,4 +1,5 @@
-@import '~@skyux/theme/scss/mixins';
+@import 'node_modules/@skyux/theme/scss/mixins';
+@import 'node_modules/@skyux/theme/scss/variables';
 
 .app-navbar ::ng-deep .sky-navbar {
   display: flex;

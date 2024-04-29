@@ -1,50 +1,22 @@
 import {
   NgModule
 } from '@angular/core';
-
-import {
-  HttpClientModule
-} from '@angular/common/http';
-
 import {
   AppSkyModule
 } from './app-sky.module';
+import { DogService, UserService } from './shared/services';
 
-import {
-  DogService,
-  UserService
-} from './shared/services';
-
-import {
-  ModalAddBehaviorTrainingComponent,
-  ModalAddCurrentHomeComponent,
-  ModalAddMedicalHistoryComponent
-} from './dogs/_id/modals';
-
-import {
-  DogTileCurrentHomeComponent,
-  DogTilePreviousHomesComponent,
-  DogTileMedicalHistoryComponent,
-  DogTileBehaviorTrainingComponent
-} from './dogs/_id/tiles';
-
+/**
+ * @deprecated Provided services, imported modules, etc. should be moved to
+ * their respective feature modules, and this module should be removed.
+ */
 @NgModule({
-  exports: [
-    AppSkyModule,
-    HttpClientModule
-  ],
-  entryComponents: [
-    DogTileCurrentHomeComponent,
-    DogTilePreviousHomesComponent,
-    DogTileMedicalHistoryComponent,
-    DogTileBehaviorTrainingComponent,
-    ModalAddBehaviorTrainingComponent,
-    ModalAddCurrentHomeComponent,
-    ModalAddMedicalHistoryComponent
-  ],
-  providers: [
-    DogService,
-    UserService
-  ]
+    exports: [
+      AppSkyModule
+    ],
+    providers: [
+      DogService,
+      UserService
+    ]
 })
 export class AppExtrasModule { }

@@ -1,6 +1,3 @@
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
 const cors = require('cors');
 const http = require('http');
 const https = require('https');
@@ -20,7 +17,7 @@ const environment = process.env.NODE_ENV || 'development';
 const port = process.env.PORT || 5000;
 const sessionConfig = {
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   secret: '+rEchas&-wub24dR'
 };
 
@@ -38,7 +35,7 @@ if (environment === 'production') {
   });
 } else {
   sessionConfig.cookie = {
-    secure: true
+    secure: false // only false when using http in local development
   };
 }
 
@@ -57,7 +54,6 @@ app.use(session(sessionConfig));
 app.use(cors({
   credentials: true,
   origin: [
-    'https://localhost:8000',
     'https://host.nxt.blackbaud.com'
   ]
 }));
@@ -94,14 +90,13 @@ app.patch('/api/dogs/:dogId/ratings/:dogRatingId', routes.auth.checkSession, rou
 app.delete('/api/dogs/:dogId/ratings/:dogRatingId', routes.auth.checkSession, routes.api.deleteDogRating);
 
 // Last, Angular Routes.
-const ui = './skyux-spa-ui/dist';
+const ui = './skyux-spa-ui/dist/skyux-spa-ui';
 app.get('/monitor', (req, res) => res.json({ running: true }));
 app.use('/', express.static(ui));
 app.all('*', (req, res) => res.status(200).sendFile('/', { root: ui }));
 
 // Connect to the database.
 database.connect(() => {
-
   // If we're running database setup, we don't need to start the server.
   // `node index.js --build-database`
   if (process.env.npm_config_build_database) {
@@ -112,22 +107,19 @@ database.connect(() => {
   } else {
     let server;
 
-    // Using SKY UX local development certificate
-    if (environment !== 'production') {
+    if (environment === 'production') {
       console.log('Using HTTPS protocol');
-      console.log('Using SKY UX development certificates.');
-      const skyuxCerts = path.join(os.homedir(), '.skyux/certs/');
       server = https.createServer(
         {
-          cert: fs.readFileSync(path.join(skyuxCerts, '/skyux-server.crt')),
-          key: fs.readFileSync(path.join(skyuxCerts, '/skyux-server.key'))
+          cert: 'path_to_cert_file',
+          key: 'path_to_key_file'
         },
         app
       );
     } else {
+      // for local development, use HTTP
       console.log('Using HTTP protocol');
       server = http.createServer({}, app);
-
     }
 
     // Listen to the port.

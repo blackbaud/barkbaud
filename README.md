@@ -41,7 +41,7 @@ To run this application in your environment, you need a server (such as your loc
     - URIs must _exactly_ match the value your application uses in calls to the Blackbaud Authorization Service. If you plan on running Barkbaud on your local machine, supply a **Redirect URI** of "http://localhost:5000/auth/callback".
 - Add the note type, "Barkbaud", to the Constituent API **Note Types** table.
 
-### Steps to install
+### Steps to install and run the application
 
 #### 1)  Clone or fork the Barkbaud repository
 
@@ -86,15 +86,32 @@ barkbaud $  npm run setup
 
 - The first command installs all of Barkbaud's dependencies. It may take a few minutes to complete.
 - The second command builds and configures the database, so it **should be executed only once**.
-- (Optional) Run `npm install -g @skyux-sdk/cli`.
-- (Optional) Run `skyux install`.
-    - Our front-end is a SKY UX SPA and is stored in the `skyux-spa-ui` folder.
-- (Optional) Run `skyux build`.
 
-Now that all the dependencies have been installed and the database created, we can run the application with:
+Now run the prebuild step:
+
+```
+barkbaud $  npm run prebuild
+```
+
+- This command installs all of the UI dependencies for the SKY UX SPA. It may take a few minutes to complete.
+
+Build the UI application by running:
+
+```
+barkbaud $  npm run build
+```
+
+- This builds the UI to the `barkbaud\skyux-spa-ui\dist\skyux-spa-ui` location on disk.
+- Node.js will reference this build location to use as the UI when running the app.  It is not necessary to serve the Angular SPA application separately.
+
+Now that all the dependencies have been installed, the database created, and the UI SPA has been built, we can now run the application with:
 
 ```
 barkbaud $  npm start
 ```
 
 Open a Web browser to <a href="http://localhost:5000">http://localhost:5000</a>.
+
+### Notes for deploying  
+
+To simplify the demo for local development, this tutorial is written to run the application over HTTP.  When deploying to production, the application should be configured to run over HTTPS with the appropriate SSL (Secure Sockets Layer) certificate.
