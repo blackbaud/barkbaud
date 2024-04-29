@@ -87,10 +87,10 @@ barkbaud $  npm run setup
 - The first command installs all of Barkbaud's dependencies. It may take a few minutes to complete.
 - The second command builds and configures the database, so it **should be executed only once**.
 
-Using a separate Terminal/Command Prompt, change to the UI working directory (`cd barkbaud\skyux-spa-ui`) and type:
+Now run the prebuild step:
 
 ```
-barkbaud\skyux-spa-ui $  npm install
+barkbaud $  npm run prebuild
 ```
 
 - This command installs all of the UI dependencies for the SKY UX SPA. It may take a few minutes to complete.
@@ -98,13 +98,13 @@ barkbaud\skyux-spa-ui $  npm install
 Build the UI application by running:
 
 ```
-barkbaud\skyux-spa-ui $  ng build
+barkbaud $  npm run build
 ```
 
 - This builds the UI to the `barkbaud\skyux-spa-ui\dist\skyux-spa-ui` location on disk.
 - Node.js will reference this build location to use as the UI when running the app.  It is not necessary to serve the Angular SPA application separately.
 
-Now that all the dependencies have been installed, the database created, and the UI SPA has been build, we can now run the application with:
+Now that all the dependencies have been installed, the database created, and the UI SPA has been built, we can now run the application with:
 
 ```
 barkbaud $  npm start

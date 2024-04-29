@@ -12,8 +12,8 @@
     "start": "node ./bin/start.js",
     "lint": "node ./node_modules/.bin/eslint server",
     "test": "npm run lint",
-    "prebuild": "cd skyux-spa-ui && npm install && npm ls @skyux-sdk/builder && npx -p @skyux-sdk/cli skyux version",
-    "build": "cd skyux-spa-ui && npx -p @skyux-sdk/cli skyux build"
+    "prebuild": "cd skyux-spa-ui && npm install",
+    "build": "cd skyux-spa-ui && ng build"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
