@@ -75,7 +75,7 @@ $  cd barkbaud
 - Save the **barkbaud.env** file.
 - Review the **.gitignore** file.  The purpose of this file is to specify which directories and files Git should ignore when performing a commit. Note that the **barkbaud.env** file is ignored. This prevents the file from being synced to your repository and protects your registered application's keys and other sensitive data from being exposed.
 
-#### 4)  Install dependencies and run the application server
+#### 4)  Install dependencies and run the application
 
 Using Terminal/Command Prompt, change to the working directory (`cd barkbaud`) and type:
 
@@ -87,38 +87,28 @@ barkbaud $  npm run setup
 - The first command installs all of Barkbaud's dependencies. It may take a few minutes to complete.
 - The second command builds and configures the database, so it **should be executed only once**.
 
-Now that all the dependencies have been installed and the database created, we can run the application server with:
+Using a separate Terminal/Command Prompt, change to the UI working directory (`cd barkbaud\skyux-spa-ui`) and type:
+
+```
+barkbaud\skyux-spa-ui $  npm install
+```
+
+- This command installs all of the UI dependencies for the SKY UX SPA. It may take a few minutes to complete.
+
+Build the UI application by running:
+
+```
+barkbaud\skyux-spa-ui $  ng build
+```
+
+- This builds the UI to the `barkbaud\skyux-spa-ui\dist\skyux-spa-ui` location on disk.
+- Node.js will reference this build location to use as the UI when running the app.  It is not necessary to serve the Angular SPA application separately.
+
+Now that all the dependencies have been installed, the database created, and the UI SPA has been build, we can now run the application with:
 
 ```
 barkbaud $  npm start
 ```
 
-#### 5) Install dependencies and run the UX
-
-Using a separate Terminal/Command Prompt, change to the working directory (`cd skyux-spa-ui`) and type:
-```
-npm install
-```
-
-- This command installs all of SKY UX and Angular dependencies for the UX. It may take a few minutes to complete.
-
-By default, Angular applications run on the `HTTP` protocol. In order for the server to provide session cache for the UX, the application must use `HTTPS`. This also helps avoid mixed content problems in browsers. In order to serve the SPA locally using HTTPS, you'll typically use a self-signed certificate installed locally into the trusted root certification authorities store. Generating a self-signed certificate and configuring it for your machine is beyond the scope of this tutorial, but once you have a certificate configured you can set the `ssl`, `sslKey`, and `sslCert` properties in your angular.json file. This instructs Angular to serve the SPA locally over HTTPS.
-
-```
-"serve": {
-    "options": {
-      "ssl": true,
-      "sslKey": "ssl/server.key",
-      "sslCert": "ssl/server.crt",
-    }
-}
-```
-
-Now that all the dependencies have been installed and SSL is configured, we can run the SPA with:
-
-```
-skyux-spa-ui $  ng serve
-```
-
-Open a Web browser to <a href="https://localhost:4200">https://localhost:4200</a>.
+Open a Web browser to <a href="http://localhost:5000">http://localhost:5000</a>.
 

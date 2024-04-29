@@ -8,5 +8,5 @@ export class BaseService {
   ) {
   }
 
-  protected bffUrl: string = 'https://localhost:5000/';
+  protected bffUrl: string = 'http://localhost:5000/';
 }

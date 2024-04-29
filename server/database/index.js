@@ -7,7 +7,7 @@ function Database(options) {
   service.Promise = global.Promise;
 
   this.connect = function (callback) {
-    service.connect(uri, { useNewUrlParser: true });
+    service.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     callback();
   };
 

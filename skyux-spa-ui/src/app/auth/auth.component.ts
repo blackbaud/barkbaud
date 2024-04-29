@@ -28,9 +28,6 @@ export class AuthComponent {
     route: ActivatedRoute,
     userService: UserService
   ) {
-      route.snapshot
-        .queryParams['route']
-    );
     this.loginUri = userService.getLoginUri(route.snapshot
         .queryParams['route']
     );
