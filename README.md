@@ -41,7 +41,7 @@ To run this application in your environment, you need a server (such as your loc
     - URIs must _exactly_ match the value your application uses in calls to the Blackbaud Authorization Service. If you plan on running Barkbaud on your local machine, supply a **Redirect URI** of "http://localhost:5000/auth/callback".
 - Add the note type, "Barkbaud", to the Constituent API **Note Types** table.
 
-### Steps to install
+### Steps to install and run the application
 
 #### 1)  Clone or fork the Barkbaud repository
 
@@ -112,3 +112,6 @@ barkbaud $  npm start
 
 Open a Web browser to <a href="http://localhost:5000">http://localhost:5000</a>.
 
+### Notes for deploying  
+
+To simplify the demo for local development, this tutorial is written to run the application over HTTP.  When deploying to production, the application should be configured to run over HTTPS with the appropriate SSL (Secure Sockets Layer) certificate.

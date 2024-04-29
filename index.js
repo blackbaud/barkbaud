@@ -1,5 +1,6 @@
 const cors = require('cors');
 const http = require('http');
+const https = require('https');
 const routes = require('./server/routes');
 const colors = require('colors');
 const express = require('express');
@@ -34,7 +35,7 @@ if (environment === 'production') {
   });
 } else {
   sessionConfig.cookie = {
-    secure: false
+    secure: false // only false when using http in local development
   };
 }
 
@@ -106,8 +107,20 @@ database.connect(() => {
   } else {
     let server;
 
-    console.log('Using HTTP protocol');
-    server = http.createServer({}, app);
+    if (environment === 'production') {
+      console.log('Using HTTPS protocol');
+      server = https.createServer(
+        {
+          cert: 'path_to_cert_file',
+          key: 'path_to_key_file'
+        },
+        app
+      );
+    } else {
+      // for local development, use HTTP
+      console.log('Using HTTP protocol');
+      server = http.createServer({}, app);
+    }
 
     // Listen to the port.
     server.listen(port, function () {
