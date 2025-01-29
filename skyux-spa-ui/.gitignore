@@ -1,3 +1,6 @@
+# Ignore cache directory used by @angular-eslint/builder
+/.nx
+
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
