@@ -23,7 +23,9 @@ import {
 import { SkyI18nModule } from '@skyux/i18n';
 import {
   SkyAlertModule,
+  
   SkyIconModule,
+  
   SkyKeyInfoModule,
   SkyLabelModule,
   SkyTokensModule,
