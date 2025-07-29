@@ -16,9 +16,10 @@ import {
 } from '../shared/models';
 
 @Component({
-  selector: 'app-dogs-list',
-  templateUrl: './dogs-list.component.html',
-  styleUrls: ['./dogs-list.component.scss']
+    selector: 'app-dogs-list',
+    templateUrl: './dogs-list.component.html',
+    styleUrls: ['./dogs-list.component.scss'],
+    standalone: false
 })
 export class DogsListComponent implements OnInit {
   public dogs: Dog[];

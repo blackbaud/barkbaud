@@ -22,9 +22,10 @@ import {
 } from '../../models';
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './app-nav.component.html',
-  styleUrls: ['./app-nav.component.scss']
+    selector: 'app-nav',
+    templateUrl: './app-nav.component.html',
+    styleUrls: ['./app-nav.component.scss'],
+    standalone: false
 })
 export class AppNavComponent implements OnInit {
   public user: User;

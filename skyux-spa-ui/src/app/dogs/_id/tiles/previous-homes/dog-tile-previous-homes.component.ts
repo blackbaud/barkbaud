@@ -14,10 +14,11 @@ import {
 } from '../../../../shared/models';
 
 @Component({
-  // tslint:disable-next-line
-  selector: 'div.app-dog-tile-previous-homes',
-  templateUrl: './dog-tile-previous-homes.component.html',
-  styleUrls: ['./dog-tile-previous-homes.component.scss']
+    // tslint:disable-next-line
+    selector: 'div.app-dog-tile-previous-homes',
+    templateUrl: './dog-tile-previous-homes.component.html',
+    styleUrls: ['./dog-tile-previous-homes.component.scss'],
+    standalone: false
 })
 export class DogTilePreviousHomesComponent implements OnInit {
 

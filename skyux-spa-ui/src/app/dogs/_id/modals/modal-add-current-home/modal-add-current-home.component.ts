@@ -22,9 +22,10 @@ import {
 } from '../../../../shared/models';
 
 @Component({
-  selector: 'app-modal-add-current-home',
-  templateUrl: './modal-add-current-home.component.html',
-  styleUrls: ['./modal-add-current-home.component.scss']
+    selector: 'app-modal-add-current-home',
+    templateUrl: './modal-add-current-home.component.html',
+    styleUrls: ['./modal-add-current-home.component.scss'],
+    standalone: false
 })
 export class ModalAddCurrentHomeComponent {
 

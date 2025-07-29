@@ -48,10 +48,11 @@ import {
 } from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.context';
 
 @Component({
-  // tslint:disable-next-line
-  selector: 'div.app-dog-tile-behavior-training',
-  templateUrl: './dog-tile-behavior-training.component.html',
-  styleUrls: ['./dog-tile-behavior-training.component.scss']
+    // tslint:disable-next-line
+    selector: 'div.app-dog-tile-behavior-training',
+    templateUrl: './dog-tile-behavior-training.component.html',
+    styleUrls: ['./dog-tile-behavior-training.component.scss'],
+    standalone: false
 })
 export class DogTileBehaviorTrainingComponent implements OnInit {
 

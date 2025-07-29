@@ -7,8 +7,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dogs-id-route-index',
-  templateUrl: './index.component.html',
+    selector: 'app-dogs-id-route-index',
+    templateUrl: './index.component.html',
+    standalone: false
 })
 export class DogsIdRouteIndexComponent implements OnInit, OnDestroy {
   public id = '';

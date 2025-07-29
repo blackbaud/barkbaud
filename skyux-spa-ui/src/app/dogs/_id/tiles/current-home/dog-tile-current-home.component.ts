@@ -27,10 +27,11 @@ import {
 } from '../../../../shared/models/custom-error';
 
 @Component({
-  // tslint:disable-next-line
-  selector: 'div.app-dog-tile-current-home',
-  templateUrl: './dog-tile-current-home.component.html',
-  styleUrls: ['./dog-tile-current-home.component.scss']
+    // tslint:disable-next-line
+    selector: 'div.app-dog-tile-current-home',
+    templateUrl: './dog-tile-current-home.component.html',
+    styleUrls: ['./dog-tile-current-home.component.scss'],
+    standalone: false
 })
 export class DogTileCurrentHomeComponent implements OnInit {
 

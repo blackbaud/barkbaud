@@ -33,9 +33,10 @@ import {
 } from './modal-edit-behavior-training.context';
 
 @Component({
-  selector: 'app-modal-edit-behavior-training',
-  templateUrl: './modal-edit-behavior-training.component.html',
-  styleUrls: ['./modal-edit-behavior-training.component.scss']
+    selector: 'app-modal-edit-behavior-training',
+    templateUrl: './modal-edit-behavior-training.component.html',
+    styleUrls: ['./modal-edit-behavior-training.component.scss'],
+    standalone: false
 })
 export class ModalEditBehaviorTrainingComponent implements OnInit {
 
