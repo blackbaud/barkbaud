@@ -43,7 +43,7 @@
     "@skyux/lookup": "^11.0.0",
     "@skyux/modals": "^11.0.0",
     "@skyux/navbar": "^11.0.0",
-    "@skyux/omnibar-interop": "^11.0.0",
+    "@skyux/omnibar-interop": "11.0.0",
     "@skyux/packages": "^11.0.0",
     "@skyux/popovers": "^11.0.0",
     "@skyux/router": "^11.0.0",
