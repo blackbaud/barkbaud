@@ -21,10 +21,11 @@ import {
   SkyCheckboxModule
 } from '@skyux/forms';
 import { SkyI18nModule } from '@skyux/i18n';
+import { SkyIconModule } from '@skyux/icon';
 import {
   SkyAlertModule,
   
-  SkyIconModule,
+  
   
   SkyKeyInfoModule,
   SkyLabelModule,

@@ -23,9 +23,10 @@ import {
 } from '../../../../shared/services';
 
 @Component({
-  selector: 'app-modal-add-medical-history',
-  templateUrl: './modal-add-medical-history.component.html',
-  styleUrls: ['./modal-add-medical-history.component.scss']
+    selector: 'app-modal-add-medical-history',
+    templateUrl: './modal-add-medical-history.component.html',
+    styleUrls: ['./modal-add-medical-history.component.scss'],
+    standalone: false
 })
 export class ModalAddMedicalHistoryComponent implements OnInit {
 

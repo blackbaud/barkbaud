@@ -31,10 +31,11 @@ import {
 } from '../../../../shared/models/custom-error';
 
 @Component({
-  // tslint:disable-next-line
-  selector: 'div.app-dog-tile-medical-history',
-  templateUrl: './dog-tile-medical-history.component.html',
-  styleUrls: ['./dog-tile-medical-history.component.scss']
+    // tslint:disable-next-line
+    selector: 'div.app-dog-tile-medical-history',
+    templateUrl: './dog-tile-medical-history.component.html',
+    styleUrls: ['./dog-tile-medical-history.component.scss'],
+    standalone: false
 })
 export class DogTileMedicalHistoryComponent implements OnInit {
 

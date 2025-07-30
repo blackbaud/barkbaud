@@ -37,9 +37,10 @@ import {
 } from '../../../../shared/models/category-data-type.model';
 
 @Component({
-  selector: 'app-modal-add-behavior-training',
-  templateUrl: './modal-add-behavior-training.component.html',
-  styleUrls: ['./modal-add-behavior-training.component.scss']
+    selector: 'app-modal-add-behavior-training',
+    templateUrl: './modal-add-behavior-training.component.html',
+    styleUrls: ['./modal-add-behavior-training.component.scss'],
+    standalone: false
 })
 export class ModalAddBehaviorTrainingComponent implements OnInit {
 

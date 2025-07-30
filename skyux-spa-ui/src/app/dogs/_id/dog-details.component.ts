@@ -35,9 +35,10 @@ import {
 } from './tiles';
 
 @Component({
-  selector: 'app-dog-details',
-  templateUrl: './dog-details.component.html',
-  styleUrls: ['./dog-details.component.scss']
+    selector: 'app-dog-details',
+    templateUrl: './dog-details.component.html',
+    styleUrls: ['./dog-details.component.scss'],
+    standalone: false
 })
 export class DogDetailsComponent implements OnInit {
   @Input()

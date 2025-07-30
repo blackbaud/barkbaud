@@ -3,8 +3,8 @@
     {{ 'tile_title_current_home' | skyAppResources }}
   </sky-tile-title>
   <sky-tile-summary>
-    <sky-icon *ngIf="owner"
-      icon="check"
+    <sky-icon size="md" *ngIf="owner"
+      iconName="checkmark"
     >
     </sky-icon>
   </sky-tile-summary>
@@ -16,8 +16,8 @@
           type="button"
           (click)="openAddModal()"
         >
-          <sky-icon
-            icon="plus-circle"
+          <sky-icon size="md"
+            iconName="add"
           >
           </sky-icon>
           {{ 'btn_find_home' | skyAppResources }}
