@@ -1,8 +1,4 @@
-import {
-  Component,
-  Inject,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   DogService
@@ -12,26 +8,29 @@ import {
   DOG_ID,
   Owner
 } from '../../../../shared/models';
+import { λ1, λ3, λ2, λ5 } from '@skyux/tiles';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { SkyRepeaterModule } from '@skyux/lists';
+
+import { SkyDatePipe } from '@skyux/datetime';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
 
 @Component({
-    // tslint:disable-next-line
-    selector: 'div.app-dog-tile-previous-homes',
+    selector: 'app-dog-tile-previous-homes',
     templateUrl: './dog-tile-previous-homes.component.html',
     styleUrls: ['./dog-tile-previous-homes.component.scss'],
-    standalone: false
+    imports: [λ1, λ3, λ2, λ5, LoadingComponent, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTilePreviousHomesComponent implements OnInit {
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   public isLoading = true;
 
   public owners: Owner[];
 
   public ownersValidLength = 0;
-
-  constructor (
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
 
   public ngOnInit() {
     this.dogService

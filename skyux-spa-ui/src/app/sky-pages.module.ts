@@ -49,78 +49,76 @@ import { AuthRouteIndexComponent } from './auth/index.component';
  * It is highly recommended that this module be factored-out into separate, lazy-loaded feature modules.
  */
 @NgModule({
-  imports: [
-    AppExtrasModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    SkyAppLinkModule,
-    SkyI18nModule
-  ],
-  declarations: [
-    DogTileCurrentHomeComponent,
-    DogTilePreviousHomesComponent,
-    DogTileMedicalHistoryComponent,
-    DogTileBehaviorTrainingComponent,
-    ModalAddBehaviorTrainingComponent,
-    ModalAddCurrentHomeComponent,
-    ModalAddMedicalHistoryComponent,
-    ModalEditBehaviorTrainingComponent,
-    AuthComponent,
-    PageComponent,
-    AppNavComponent,
-    LoadingComponent,
-    WelcomeComponent,
-    DogsListComponent,
-    DogDetailsComponent,
-    NotFoundComponent,
-    RootRouteIndexComponent,
-    AuthRouteIndexComponent,
-    DogsRouteIndexComponent,
-    DogsIdRouteIndexComponent
-  ],
-  exports: [
-    AppExtrasModule,
-    DogTileCurrentHomeComponent,
-    DogTilePreviousHomesComponent,
-    DogTileMedicalHistoryComponent,
-    DogTileBehaviorTrainingComponent,
-    ModalAddBehaviorTrainingComponent,
-    ModalAddCurrentHomeComponent,
-    ModalAddMedicalHistoryComponent,
-    ModalEditBehaviorTrainingComponent,
-    AuthComponent,
-    PageComponent,
-    AppNavComponent,
-    LoadingComponent,
-    WelcomeComponent,
-    DogsListComponent,
-    DogDetailsComponent,
-    NotFoundComponent,
-    RootRouteIndexComponent,
-    AuthRouteIndexComponent,
-    DogsRouteIndexComponent,
-    DogsIdRouteIndexComponent
-  ],
-  providers: [
-    // This provider is to support the legacy SKY UX asset and i18n
-    // functionality. You should refactor your application to use Angular's
-    // built-in asset handling and i18n processes instead.
-    // https://angular.io/guide/file-structure#application-project-files
-    // https://angular.io/guide/i18n-overview
-    {
-      provide: SkyAppAssetsService,
-      useValue: {
-        getUrl(path: string) {
-          return '/assets/' + path;
+    imports: [
+        AppExtrasModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        SkyAppLinkModule,
+        SkyI18nModule,
+        DogTileCurrentHomeComponent,
+        DogTilePreviousHomesComponent,
+        DogTileMedicalHistoryComponent,
+        DogTileBehaviorTrainingComponent,
+        ModalAddBehaviorTrainingComponent,
+        ModalAddCurrentHomeComponent,
+        ModalAddMedicalHistoryComponent,
+        ModalEditBehaviorTrainingComponent,
+        AuthComponent,
+        PageComponent,
+        AppNavComponent,
+        LoadingComponent,
+        WelcomeComponent,
+        DogsListComponent,
+        DogDetailsComponent,
+        NotFoundComponent,
+        RootRouteIndexComponent,
+        AuthRouteIndexComponent,
+        DogsRouteIndexComponent,
+        DogsIdRouteIndexComponent
+    ],
+    exports: [
+        AppExtrasModule,
+        DogTileCurrentHomeComponent,
+        DogTilePreviousHomesComponent,
+        DogTileMedicalHistoryComponent,
+        DogTileBehaviorTrainingComponent,
+        ModalAddBehaviorTrainingComponent,
+        ModalAddCurrentHomeComponent,
+        ModalAddMedicalHistoryComponent,
+        ModalEditBehaviorTrainingComponent,
+        AuthComponent,
+        PageComponent,
+        AppNavComponent,
+        LoadingComponent,
+        WelcomeComponent,
+        DogsListComponent,
+        DogDetailsComponent,
+        NotFoundComponent,
+        RootRouteIndexComponent,
+        AuthRouteIndexComponent,
+        DogsRouteIndexComponent,
+        DogsIdRouteIndexComponent
+    ],
+    providers: [
+        // This provider is to support the legacy SKY UX asset and i18n
+        // functionality. You should refactor your application to use Angular's
+        // built-in asset handling and i18n processes instead.
+        // https://angular.io/guide/file-structure#application-project-files
+        // https://angular.io/guide/i18n-overview
+        {
+            provide: SkyAppAssetsService,
+            useValue: {
+                getUrl(path: string) {
+                    return '/assets/' + path;
+                },
+                getAllUrls() {
+                    return undefined;
+                }
+            }
         },
-        getAllUrls() {
-          return undefined;
-        }
-      }
-    },
-    SkyThemeService
-  ]
+        SkyThemeService
+    ]
 })
 export class SkyPagesModule { }

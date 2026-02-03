@@ -1,11 +1,6 @@
-import {
-  Component,
-  Inject
-} from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import {
-  SkyModalInstance
-} from '@skyux/modals';
+import { SkyModalInstance, λ5, λ4, λ2, λ3 } from '@skyux/modals';
 
 import {
   BehaviorSubject
@@ -20,14 +15,26 @@ import {
   Owner,
   Dog
 } from '../../../../shared/models';
+import { SkyResponsiveHostDirective } from '@skyux/core';
+import { SkyToolbarModule } from '@skyux/layout';
+import { SkySearchModule } from '@skyux/lookup';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { NgClass } from '@angular/common';
+import { SkyListModule } from '@skyux/list-builder';
+import { SkyListViewChecklistModule } from '@skyux/list-builder-view-checklist';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
 
 @Component({
     selector: 'app-modal-add-current-home',
     templateUrl: './modal-add-current-home.component.html',
     styleUrls: ['./modal-add-current-home.component.scss'],
-    standalone: false
+    imports: [λ5, λ4, SkyResponsiveHostDirective, λ2, SkyToolbarModule, SkySearchModule, LoadingComponent, SkyListModule, SkyListViewChecklistModule, λ3, NgClass, SkyAppResourcesPipe]
 })
 export class ModalAddCurrentHomeComponent {
+  private instance = inject(SkyModalInstance);
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   public ownerSelectedId: string;
 
@@ -36,12 +43,6 @@ export class ModalAddCurrentHomeComponent {
   public owners = new BehaviorSubject<Owner[]>([]);
 
   public isSearching = false;
-
-  constructor (
-    private instance: SkyModalInstance,
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
 
   public searchApplied(searchText: string) {
     this.owners.next([]);

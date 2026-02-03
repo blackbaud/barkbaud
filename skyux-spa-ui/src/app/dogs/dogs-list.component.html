@@ -2,37 +2,39 @@
   {{ 'heading_dashboard' | skyAppResources }}
 </h2>
 
-<sky-card *ngFor="let dog of dogs">
-  <sky-card-content>
-    <sky-fluid-grid disableMargin="true">
-      <sky-row>
-        <sky-column screenXSmall="7">
-          <h3 class="app-dog-card-title">
-            <a routerLink="/dogs/{{ dog._id }}" queryParamsHandling="preserve">
-              {{ dog.name }}
-            </a>
-          </h3>
-          <ul class="app-dog-card-info">
-            <li>{{ dog.breed }}</li>
-            <li>{{ dog.gender }}</li>
-          </ul>
-        </sky-column>
-        <sky-column screenXSmall="5">
-          <div class="app-dog-card-avatar">
-            <sky-avatar [name]="dog.name" [src]="'data:image/png;base64,' + dog.image.data">
-            </sky-avatar>
-          </div>
-        </sky-column>
-      </sky-row>
-    </sky-fluid-grid>
-    <p class="app-dog-card-bio">
-      <sky-text-expand [text]="dog.bio" [maxLength]="350">
-      </sky-text-expand>
-    </p>
-  </sky-card-content>
-  <sky-card-actions>
-    <a [routerLink]="[dog._id]" class="sky-btn sky-btn-default">
-      {{ 'btn_profile' | skyAppResources }}
-    </a>
-  </sky-card-actions>
-</sky-card>
+@for (dog of dogs; track dog) {
+  <sky-card>
+    <sky-card-content>
+      <sky-fluid-grid disableMargin="true">
+        <sky-row>
+          <sky-column screenXSmall="7">
+            <h3 class="app-dog-card-title">
+              <a routerLink="/dogs/{{ dog._id }}" queryParamsHandling="preserve">
+                {{ dog.name }}
+              </a>
+            </h3>
+            <ul class="app-dog-card-info">
+              <li>{{ dog.breed }}</li>
+              <li>{{ dog.gender }}</li>
+            </ul>
+          </sky-column>
+          <sky-column screenXSmall="5">
+            <div class="app-dog-card-avatar">
+              <sky-avatar [name]="dog.name" [src]="'data:image/png;base64,' + dog.image.data">
+              </sky-avatar>
+            </div>
+          </sky-column>
+        </sky-row>
+      </sky-fluid-grid>
+      <p class="app-dog-card-bio">
+        <sky-text-expand [text]="dog.bio" [maxLength]="350">
+        </sky-text-expand>
+      </p>
+    </sky-card-content>
+    <sky-card-actions>
+      <a [routerLink]="[dog._id]" class="sky-btn sky-btn-default">
+        {{ 'btn_profile' | skyAppResources }}
+      </a>
+    </sky-card-actions>
+  </sky-card>
+}

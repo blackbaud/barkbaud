@@ -1,12 +1,6 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkActive, RouterLink } from '@angular/router';
 
 import {
   SkyConfirmService,
@@ -20,14 +14,22 @@ import {
 import {
   User
 } from '../../models';
+import { SkyNavbarModule } from '@skyux/navbar';
+import { NgClass } from '@angular/common';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
 
 @Component({
     selector: 'app-nav',
     templateUrl: './app-nav.component.html',
     styleUrls: ['./app-nav.component.scss'],
-    standalone: false
+    imports: [SkyNavbarModule, RouterLinkActive, RouterLink, NgClass, SkyAppResourcesPipe]
 })
 export class AppNavComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private skyConfirmService = inject(SkyConfirmService);
+  private userService = inject(UserService);
+
   public user: User;
 
   public nav = [
@@ -40,13 +42,6 @@ export class AppNavComponent implements OnInit {
       path: '/dogs'
     }
   ];
-
-  constructor (
-    private route: ActivatedRoute,
-    private router: Router,
-    private skyConfirmService: SkyConfirmService,
-    private userService: UserService
-  ) { }
 
   public ngOnInit() {
     this.userService

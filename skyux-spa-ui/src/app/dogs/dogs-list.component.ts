@@ -1,7 +1,4 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   SkyWaitService
@@ -15,19 +12,23 @@ import {
   Dog
 } from '../shared/models';
 
+import { SkyCardModule, SkyFluidGridModule, SkyTextExpandModule } from '@skyux/layout';
+import { RouterLink } from '@angular/router';
+import { λ1 } from '@skyux/avatar';
+import { SkyThemeComponentClassDirective } from '@skyux/theme';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
+
 @Component({
     selector: 'app-dogs-list',
     templateUrl: './dogs-list.component.html',
     styleUrls: ['./dogs-list.component.scss'],
-    standalone: false
+    imports: [SkyCardModule, SkyFluidGridModule, RouterLink, λ1, SkyTextExpandModule, SkyThemeComponentClassDirective, SkyAppResourcesPipe]
 })
 export class DogsListComponent implements OnInit {
-  public dogs: Dog[];
+  private skyWaitService = inject(SkyWaitService);
+  private dogService = inject(DogService);
 
-  constructor (
-    private skyWaitService: SkyWaitService,
-    private dogService: DogService
-  ) { }
+  public dogs: Dog[];
 
   public ngOnInit() {
     this.skyWaitService

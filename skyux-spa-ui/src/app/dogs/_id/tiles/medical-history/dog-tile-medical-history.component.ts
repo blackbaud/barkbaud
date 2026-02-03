@@ -1,8 +1,4 @@
-import {
-  Component,
-  Inject,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   SkyModalCloseArgs,
@@ -29,27 +25,32 @@ import {
 import {
   CustomError
 } from '../../../../shared/models/custom-error';
+import { λ1, λ3, λ2, λ5, λ4 } from '@skyux/tiles';
+
+import { SkyToolbarModule } from '@skyux/layout';
+import { SkyIconModule } from '@skyux/icon';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { SkyRepeaterModule } from '@skyux/lists';
+import { SkyDatePipe } from '@skyux/datetime';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
 
 @Component({
-    // tslint:disable-next-line
-    selector: 'div.app-dog-tile-medical-history',
+    selector: 'app-dog-tile-medical-history',
     templateUrl: './dog-tile-medical-history.component.html',
     styleUrls: ['./dog-tile-medical-history.component.scss'],
-    standalone: false
+    imports: [λ1, λ3, λ2, λ5, SkyToolbarModule, SkyIconModule, LoadingComponent, λ4, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTileMedicalHistoryComponent implements OnInit {
+  private skyModalService = inject(SkyModalService);
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   public isLoading = true;
   public showError: boolean = false;
 
   public medicalHistories: MedicalHistory[];
   public medicalHistoryCount = 0;
-
-  constructor (
-    private skyModalService: SkyModalService,
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
 
   public ngOnInit() {
     this.dogService

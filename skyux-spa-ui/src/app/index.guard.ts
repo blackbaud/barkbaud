@@ -1,6 +1,4 @@
-import {
-  Injectable
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   Params,
@@ -23,16 +21,14 @@ import {
 
 @Injectable()
 export class AppRouteGuard {
+  router = inject(Router);
+  private userService = inject(UserService);
+
 
   private authRoute = '/auth';
   private protectedRoutes = [
     '/dogs'
   ];
-
-  constructor (
-    public router: Router,
-    private userService: UserService
-  ) { }
 
   public canActivate (
     route: ActivatedRouteSnapshot,

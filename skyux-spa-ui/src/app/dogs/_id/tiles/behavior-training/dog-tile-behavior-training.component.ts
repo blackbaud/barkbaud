@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnInit,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 
 import {
   SkyConfirmInstance,
@@ -46,15 +40,28 @@ import {
 import {
   ModalEditBehaviorTrainingContext
 } from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.context';
+import { λ1, λ3, λ5, λ4 } from '@skyux/tiles';
+import { SkyToolbarModule } from '@skyux/layout';
+import { SkyIconModule } from '@skyux/icon';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+
+import { SkyRepeaterModule } from '@skyux/lists';
+import { SkyDropdownModule } from '@skyux/popovers';
+import { SkyLabelModule } from '@skyux/indicators';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
 
 @Component({
-    // tslint:disable-next-line
-    selector: 'div.app-dog-tile-behavior-training',
+    selector: 'app-dog-tile-behavior-training',
     templateUrl: './dog-tile-behavior-training.component.html',
     styleUrls: ['./dog-tile-behavior-training.component.scss'],
-    standalone: false
+    imports: [λ1, λ3, λ5, SkyToolbarModule, SkyIconModule, LoadingComponent, λ4, SkyRepeaterModule, SkyDropdownModule, SkyLabelModule, SkyAppResourcesPipe]
 })
 export class DogTileBehaviorTrainingComponent implements OnInit {
+  private skyModalService = inject(SkyModalService);
+  private confirmService = inject(SkyConfirmService);
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   public isLoading = true;
   public behaviorTrainings: BehaviorTraining[];
@@ -63,14 +70,7 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
   public showError: boolean = false;
 
   @Output()
-  public error = new EventEmitter<CustomError>();
-
-  constructor (
-    private skyModalService: SkyModalService,
-    private confirmService: SkyConfirmService,
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
+  public tileError = new EventEmitter<CustomError>();
 
   public ngOnInit() {
     this.dogService
@@ -127,7 +127,7 @@ export class DogTileBehaviorTrainingComponent implements OnInit {
       if (result.reason === 'save') {
         this.loadBehaviorTrainings();
       } else if (result.data && result.data.error)  {
-        this.error.next(result.data.error);
+        this.tileError.next(result.data.error);
       }
     });
   }

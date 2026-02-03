@@ -1,13 +1,6 @@
-import {
-  Component,
-  Inject,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 
-import {
-  SkyModalInstance
-} from '@skyux/modals';
+import { SkyModalInstance, λ5, λ4, λ2, λ3 as λ3_1 } from '@skyux/modals';
 
 import moment from 'moment';
 
@@ -31,14 +24,26 @@ import {
 import {
   ModalEditBehaviorTrainingContext
 } from './modal-edit-behavior-training.context';
+import { SkyResponsiveHostDirective } from '@skyux/core';
+import { SkyFluidGridModule } from '@skyux/layout';
+import { FormsModule } from '@angular/forms';
+
+import { λ1 } from '@skyux/autonumeric';
+import { λ2 as λ2_1, λ3 } from '@skyux/datetime';
+import { SkyAppResourcesPipe, SkyLibResourcesPipe } from '@skyux/i18n';
 
 @Component({
     selector: 'app-modal-edit-behavior-training',
     templateUrl: './modal-edit-behavior-training.component.html',
     styleUrls: ['./modal-edit-behavior-training.component.scss'],
-    standalone: false
+    imports: [λ5, λ4, SkyResponsiveHostDirective, λ2, SkyFluidGridModule, FormsModule, λ1, λ2_1, λ3, λ3_1, SkyAppResourcesPipe, SkyLibResourcesPipe]
 })
 export class ModalEditBehaviorTrainingComponent implements OnInit {
+  context = inject(ModalEditBehaviorTrainingContext);
+  private instance = inject(SkyModalInstance);
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   @Input()
   public textCategoryValue: string;
@@ -71,13 +76,6 @@ export class ModalEditBehaviorTrainingComponent implements OnInit {
     label: 'No'
   }];
   public categoryValues: string[];
-
-  constructor (
-    public context: ModalEditBehaviorTrainingContext,
-    private instance: SkyModalInstance,
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
 
   public ngOnInit() {
     if (this.context && this.context.behaviorTraining) {

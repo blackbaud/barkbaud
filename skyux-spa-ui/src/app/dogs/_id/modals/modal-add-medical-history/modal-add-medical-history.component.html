@@ -11,59 +11,61 @@
               {{ 'add_medical_history_title' | skyAppResources }}
             </label>
             <input
-            [(ngModel)]="title"
-            class="sky-form-control"
-            data-sky-id="medical-history-title"
-            type="text"
-            #titleField="ngModel">
-          </div>
-        </sky-column>
-        <sky-column screenSmall="6" screenXSmall="6">
-          <div class="sky-form-group">
-            <label class="sky-control-label">
-              {{ 'add_medical_history_note_type' | skyAppResources }}
-            </label>
-            <select
-            [(ngModel)]="type"
-            id="note-type-dropdown"
-            class="sky-form-control"
-            data-sky-id="medical-history-note-type">
-              <option *ngFor="let type of noteTypes" [ngValue]="type">
-                  {{ type }}
-              </option>
-            </select>
-          </div>
-        </sky-column>
-      </sky-row>
-      <sky-row>
-        <sky-column screenSmall="12" screenXSmall="12">
-        <div class="sky-form-group">
-          <label class="sky-control-label">
-            {{ 'add_medical_history_description' | skyAppResources }}
-          </label>
-          <textarea
-          [(ngModel)]="description"
-          class="sky-form-control control-editor-textarea"
-          rows="3"
-          maxlength="300"
-          data-sky-id="medical-history-description"
-          #descriptionField="ngModel"></textarea>
-        </div>
-      </sky-column>
-      </sky-row>
-    </sky-fluid-grid>
-    <div>
-      <sky-checkbox [checked]="addConstituentNote" (change)="addConstituentNoteEnabled($event)">
-        <sky-checkbox-label>{{ 'add_medical_history_add_note_to_constituent_label' | skyAppResources }}</sky-checkbox-label>
-      </sky-checkbox>
-    </div>
-  </sky-modal-content>
-  <sky-modal-footer>
-    <button class="sky-btn sky-btn-primary" type="button" (click)="save()">
-      {{ 'btn_modal_save' | skyAppResources }}
-    </button>
-    <button class="sky-btn sky-btn-link" type="button" (click)="cancel()">
-      {{ 'btn_modal_cancel' | skyAppResources }}
-    </button>
-  </sky-modal-footer>
-</sky-modal>
+              [(ngModel)]="title"
+              class="sky-form-control"
+              data-sky-id="medical-history-title"
+              type="text"
+              #titleField="ngModel">
+            </div>
+          </sky-column>
+          <sky-column screenSmall="6" screenXSmall="6">
+            <div class="sky-form-group">
+              <label class="sky-control-label">
+                {{ 'add_medical_history_note_type' | skyAppResources }}
+              </label>
+              <select
+                [(ngModel)]="type"
+                id="note-type-dropdown"
+                class="sky-form-control"
+                data-sky-id="medical-history-note-type">
+                @for (type of noteTypes; track type) {
+                  <option [ngValue]="type">
+                    {{ type }}
+                  </option>
+                }
+              </select>
+            </div>
+          </sky-column>
+        </sky-row>
+        <sky-row>
+          <sky-column screenSmall="12" screenXSmall="12">
+            <div class="sky-form-group">
+              <label class="sky-control-label">
+                {{ 'add_medical_history_description' | skyAppResources }}
+              </label>
+              <textarea
+                [(ngModel)]="description"
+                class="sky-form-control control-editor-textarea"
+                rows="3"
+                maxlength="300"
+                data-sky-id="medical-history-description"
+              #descriptionField="ngModel"></textarea>
+            </div>
+          </sky-column>
+        </sky-row>
+      </sky-fluid-grid>
+      <div>
+        <sky-checkbox [checked]="addConstituentNote" (change)="addConstituentNoteEnabled($event)">
+          <sky-checkbox-label>{{ 'add_medical_history_add_note_to_constituent_label' | skyAppResources }}</sky-checkbox-label>
+        </sky-checkbox>
+      </div>
+    </sky-modal-content>
+    <sky-modal-footer>
+      <button class="sky-btn sky-btn-primary" type="button" (click)="save()">
+        {{ 'btn_modal_save' | skyAppResources }}
+      </button>
+      <button class="sky-btn sky-btn-link" type="button" (click)="cancel()">
+        {{ 'btn_modal_cancel' | skyAppResources }}
+      </button>
+    </sky-modal-footer>
+  </sky-modal>
