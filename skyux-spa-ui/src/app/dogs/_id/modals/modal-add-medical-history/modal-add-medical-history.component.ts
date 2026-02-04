@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 
 import { SkyCheckboxChange, SkyCheckboxModule } from '@skyux/forms';
 
-import { SkyModalInstance, λ5, λ4, λ2, λ3 } from '@skyux/modals';
+import { SkyModalInstance, SkyModalModule } from '@skyux/modals';
 
 import {
   Dog,
@@ -24,7 +24,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-modal-add-medical-history',
     templateUrl: './modal-add-medical-history.component.html',
     styleUrls: ['./modal-add-medical-history.component.scss'],
-    imports: [λ5, λ4, SkyResponsiveHostDirective, λ2, SkyFluidGridModule, FormsModule, SkyThemeComponentClassDirective, SkyCheckboxModule, λ3, SkyAppResourcesPipe]
+    imports: [SkyModalModule, SkyResponsiveHostDirective, SkyFluidGridModule, FormsModule, SkyThemeComponentClassDirective, SkyCheckboxModule, SkyAppResourcesPipe]
 })
 export class ModalAddMedicalHistoryComponent implements OnInit {
   private instance = inject(SkyModalInstance);

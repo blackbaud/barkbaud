@@ -40,7 +40,7 @@ import {
 import {
   ModalEditBehaviorTrainingContext
 } from '../../modals/modal-edit-behavior-training/modal-edit-behavior-training.context';
-import { λ1, λ3, λ5, λ4 } from '@skyux/tiles';
+import { SkyTilesModule } from '@skyux/tiles';
 import { SkyToolbarModule } from '@skyux/layout';
 import { SkyIconModule } from '@skyux/icon';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
@@ -54,7 +54,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-behavior-training',
     templateUrl: './dog-tile-behavior-training.component.html',
     styleUrls: ['./dog-tile-behavior-training.component.scss'],
-    imports: [λ1, λ3, λ5, SkyToolbarModule, SkyIconModule, LoadingComponent, λ4, SkyRepeaterModule, SkyDropdownModule, SkyLabelModule, SkyAppResourcesPipe]
+    imports: [SkyTilesModule, SkyToolbarModule, SkyIconModule, LoadingComponent, SkyRepeaterModule, SkyDropdownModule, SkyLabelModule, SkyAppResourcesPipe]
 })
 export class DogTileBehaviorTrainingComponent implements OnInit {
   private skyModalService = inject(SkyModalService);

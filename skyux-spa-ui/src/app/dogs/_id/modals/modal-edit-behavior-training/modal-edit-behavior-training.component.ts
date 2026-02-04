@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 
-import { SkyModalInstance, λ5, λ4, λ2, λ3 as λ3_1 } from '@skyux/modals';
+import { SkyModalInstance, SkyModalModule } from '@skyux/modals';
 
 import moment from 'moment';
 
@@ -27,16 +27,13 @@ import {
 import { SkyResponsiveHostDirective } from '@skyux/core';
 import { SkyFluidGridModule } from '@skyux/layout';
 import { FormsModule } from '@angular/forms';
-
-import { λ1 } from '@skyux/autonumeric';
-import { λ2 as λ2_1, λ3 } from '@skyux/datetime';
 import { SkyAppResourcesPipe, SkyLibResourcesPipe } from '@skyux/i18n';
 
 @Component({
     selector: 'app-modal-edit-behavior-training',
     templateUrl: './modal-edit-behavior-training.component.html',
     styleUrls: ['./modal-edit-behavior-training.component.scss'],
-    imports: [λ5, λ4, SkyResponsiveHostDirective, λ2, SkyFluidGridModule, FormsModule, λ1, λ2_1, λ3, λ3_1, SkyAppResourcesPipe, SkyLibResourcesPipe]
+    imports: [SkyModalModule, SkyResponsiveHostDirective, SkyFluidGridModule, FormsModule, SkyAppResourcesPipe, SkyLibResourcesPipe]
 })
 export class ModalEditBehaviorTrainingComponent implements OnInit {
   context = inject(ModalEditBehaviorTrainingContext);

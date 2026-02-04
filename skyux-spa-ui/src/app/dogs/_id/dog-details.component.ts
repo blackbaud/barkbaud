@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 
-import { SkyWaitService, λ8, λ7, λ6 } from '@skyux/indicators';
+import { SkyWaitService } from '@skyux/indicators';
 
 import { SkyTileDashboardConfig, SkyTileDashboardMessage, SkyTileDashboardMessageType, SkyTileDashboardModule } from '@skyux/tiles';
 
@@ -25,7 +25,6 @@ import {
 } from './tiles';
 
 import { SkyPageSummaryModule, SkyToolbarModule } from '@skyux/layout';
-import { λ1 } from '@skyux/avatar';
 import { RouterLink } from '@angular/router';
 import { SkyIconModule } from '@skyux/icon';
 import { SkyThemeComponentClassDirective } from '@skyux/theme';
@@ -35,7 +34,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-details',
     templateUrl: './dog-details.component.html',
     styleUrls: ['./dog-details.component.scss'],
-    imports: [SkyPageSummaryModule, λ1, λ8, λ7, λ6, SkyToolbarModule, RouterLink, SkyIconModule, SkyThemeComponentClassDirective, SkyTileDashboardModule, SkyAppResourcesPipe]
+    imports: [SkyPageSummaryModule, SkyToolbarModule, RouterLink, SkyIconModule, SkyThemeComponentClassDirective, SkyTileDashboardModule, SkyAppResourcesPipe]
 })
 export class DogDetailsComponent implements OnInit {
   skyWaitService = inject(SkyWaitService);

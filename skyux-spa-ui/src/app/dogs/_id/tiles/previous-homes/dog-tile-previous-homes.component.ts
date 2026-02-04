@@ -8,7 +8,7 @@ import {
   DOG_ID,
   Owner
 } from '../../../../shared/models';
-import { λ1, λ3, λ2, λ5 } from '@skyux/tiles';
+import { SkyTilesModule } from '@skyux/tiles';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { SkyRepeaterModule } from '@skyux/lists';
 
@@ -19,7 +19,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-previous-homes',
     templateUrl: './dog-tile-previous-homes.component.html',
     styleUrls: ['./dog-tile-previous-homes.component.scss'],
-    imports: [λ1, λ3, λ2, λ5, LoadingComponent, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
+    imports: [SkyTilesModule, LoadingComponent, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTilePreviousHomesComponent implements OnInit {
   private dogService = inject(DogService);

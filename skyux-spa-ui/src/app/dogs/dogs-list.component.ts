@@ -14,7 +14,6 @@ import {
 
 import { SkyCardModule, SkyFluidGridModule, SkyTextExpandModule } from '@skyux/layout';
 import { RouterLink } from '@angular/router';
-import { λ1 } from '@skyux/avatar';
 import { SkyThemeComponentClassDirective } from '@skyux/theme';
 import { SkyAppResourcesPipe } from '@skyux/i18n';
 
@@ -22,7 +21,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dogs-list',
     templateUrl: './dogs-list.component.html',
     styleUrls: ['./dogs-list.component.scss'],
-    imports: [SkyCardModule, SkyFluidGridModule, RouterLink, λ1, SkyTextExpandModule, SkyThemeComponentClassDirective, SkyAppResourcesPipe]
+    imports: [SkyCardModule, SkyFluidGridModule, RouterLink, SkyTextExpandModule, SkyThemeComponentClassDirective, SkyAppResourcesPipe]
 })
 export class DogsListComponent implements OnInit {
   private skyWaitService = inject(SkyWaitService);

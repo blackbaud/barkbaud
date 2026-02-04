@@ -21,13 +21,12 @@ import {
 import {
   CustomError
 } from '../../../../shared/models/custom-error';
-import { λ1, λ3, λ2, λ5, λ4 } from '@skyux/tiles';
+import { SkyTilesModule } from '@skyux/tiles';
 
 import { SkyIconModule } from '@skyux/icon';
 import { SkyToolbarModule, SkyFluidGridModule } from '@skyux/layout';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { SkyRepeaterModule } from '@skyux/lists';
-import { λ1 as λ1_1 } from '@skyux/avatar';
 import { SkyDatePipe } from '@skyux/datetime';
 import { SkyAppResourcesPipe } from '@skyux/i18n';
 
@@ -35,7 +34,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-current-home',
     templateUrl: './dog-tile-current-home.component.html',
     styleUrls: ['./dog-tile-current-home.component.scss'],
-    imports: [λ1, λ3, λ2, SkyIconModule, λ5, SkyToolbarModule, LoadingComponent, λ4, SkyRepeaterModule, SkyFluidGridModule, λ1_1, SkyDatePipe, SkyAppResourcesPipe]
+    imports: [SkyTilesModule, SkyIconModule, SkyToolbarModule, LoadingComponent, SkyRepeaterModule, SkyFluidGridModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTileCurrentHomeComponent implements OnInit {
   private skyModalService = inject(SkyModalService);

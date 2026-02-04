@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 
-import { SkyModalInstance, λ5, λ4, λ2, λ3 } from '@skyux/modals';
+import { SkyModalInstance, SkyModalModule } from '@skyux/modals';
 
 import {
   BehaviorSubject
@@ -28,7 +28,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-modal-add-current-home',
     templateUrl: './modal-add-current-home.component.html',
     styleUrls: ['./modal-add-current-home.component.scss'],
-    imports: [λ5, λ4, SkyResponsiveHostDirective, λ2, SkyToolbarModule, SkySearchModule, LoadingComponent, SkyListModule, SkyListViewChecklistModule, λ3, NgClass, SkyAppResourcesPipe]
+    imports: [SkyModalModule, SkyResponsiveHostDirective, SkyToolbarModule, SkySearchModule, LoadingComponent, SkyListModule, SkyListViewChecklistModule, NgClass, SkyAppResourcesPipe]
 })
 export class ModalAddCurrentHomeComponent {
   private instance = inject(SkyModalInstance);

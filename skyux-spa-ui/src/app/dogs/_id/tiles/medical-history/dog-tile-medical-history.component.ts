@@ -25,7 +25,7 @@ import {
 import {
   CustomError
 } from '../../../../shared/models/custom-error';
-import { λ1, λ3, λ2, λ5, λ4 } from '@skyux/tiles';
+import { SkyTilesModule } from '@skyux/tiles';
 
 import { SkyToolbarModule } from '@skyux/layout';
 import { SkyIconModule } from '@skyux/icon';
@@ -38,7 +38,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-medical-history',
     templateUrl: './dog-tile-medical-history.component.html',
     styleUrls: ['./dog-tile-medical-history.component.scss'],
-    imports: [λ1, λ3, λ2, λ5, SkyToolbarModule, SkyIconModule, LoadingComponent, λ4, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
+    imports: [SkyTilesModule, SkyToolbarModule, SkyIconModule, LoadingComponent, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTileMedicalHistoryComponent implements OnInit {
   private skyModalService = inject(SkyModalService);
