@@ -1,19 +1,10 @@
-import {
-  Component,
-  Inject,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 
 import moment from 'moment';
 
-import {
-  SkyModalInstance
-} from '@skyux/modals';
+import { SkyModalInstance, SkyModalModule } from '@skyux/modals';
 
-import {
-  SkyCheckboxChange
-} from '@skyux/forms';
+import { SkyCheckboxChange, SkyCheckboxModule } from '@skyux/forms';
 
 import {
   BehaviorTraining
@@ -35,14 +26,23 @@ import {
 import {
   RatingDataType
 } from '../../../../shared/models/category-data-type.model';
+import { SkyResponsiveHostDirective } from '@skyux/core';
+import { SkyFluidGridModule } from '@skyux/layout';
+import { FormsModule } from '@angular/forms';
+import { SkyThemeComponentClassDirective } from '@skyux/theme';
+import { SkyAppResourcesPipe, SkyLibResourcesPipe } from '@skyux/i18n';
 
 @Component({
     selector: 'app-modal-add-behavior-training',
     templateUrl: './modal-add-behavior-training.component.html',
     styleUrls: ['./modal-add-behavior-training.component.scss'],
-    standalone: false
+    imports: [SkyModalModule, SkyResponsiveHostDirective, SkyFluidGridModule, FormsModule, SkyThemeComponentClassDirective, SkyCheckboxModule, SkyAppResourcesPipe, SkyLibResourcesPipe]
 })
 export class ModalAddBehaviorTrainingComponent implements OnInit {
+  private instance = inject(SkyModalInstance);
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   @Input()
   public ratingDataTypeEnum: RatingDataType;
@@ -74,12 +74,6 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
     value: false,
     label: 'No'
   }];
-
-  constructor (
-    private instance: SkyModalInstance,
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
 
   public ngOnInit() {
     // get rating Sources

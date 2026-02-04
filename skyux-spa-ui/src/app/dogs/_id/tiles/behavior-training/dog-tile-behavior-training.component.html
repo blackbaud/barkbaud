@@ -13,51 +13,59 @@
       </sky-toolbar-item>
     </sky-toolbar>
     <app-loading [isLoading]="isLoading">
-      <div *ngIf="behaviorTrainingCount === 0">
-        <sky-tile-content-section class="behavior-training-tile-no-behavior-training sky-deemphasized">
-          {{ 'no_behavior_training_message' | skyAppResources }}
-        </sky-tile-content-section>
-      </div>
-      <div *ngIf="behaviorTrainingCount > 0">
-      <sky-repeater>
-        <sky-repeater-item *ngFor="let behaviorTraining of behaviorTrainings">
-          <sky-repeater-item-context-menu>
-            <sky-dropdown buttonType="context-menu">
-              <sky-dropdown-menu>
-                <sky-dropdown-item>
-                  <button type="button" class="edit-btn" (click)="editBehaviorTraining(behaviorTraining)">
-                    {{ 'modal_edit_behavior_training' | skyAppResources }}
-                  </button>
-                </sky-dropdown-item>
-                <sky-dropdown-item>
-                  <button type="button" class="remove-btn" (click)="deleteBehaviorTraining(behaviorTraining)">
-                    {{ 'modal_delete_behavior_training' | skyAppResources }}
-                  </button>
-                </sky-dropdown-item>
-              </sky-dropdown-menu>
-            </sky-dropdown>
-          </sky-repeater-item-context-menu>
-          <sky-repeater-item-title class="repeater-flex">
-            <span class="sky-section-heading">
-              {{ behaviorTraining.category.name }}
-            </span>
-            <span>
-              {{ behaviorTraining.value }}
-            </span>
-          </sky-repeater-item-title>
-          <sky-repeater-item-content>
-            {{ 'add_behavior_training_source' | skyAppResources }} {{ behaviorTraining.source }}
-            <div class="pull-right Field label">
-              <span *ngIf="behaviorTraining.constituentRatingId">
-                <sky-label class="sky-margin-inline-default" labelType="info">
-                  {{ 'added_to_owner' | skyAppResources}}
-                </sky-label>
-              </span>
-            </div>
-          </sky-repeater-item-content>
-        </sky-repeater-item>
-      </sky-repeater>
-      </div>
+      @if (behaviorTrainingCount === 0) {
+        <div>
+          <sky-tile-content-section class="behavior-training-tile-no-behavior-training sky-deemphasized">
+            {{ 'no_behavior_training_message' | skyAppResources }}
+          </sky-tile-content-section>
+        </div>
+      }
+      @if (behaviorTrainingCount > 0) {
+        <div>
+          <sky-repeater>
+            @for (behaviorTraining of behaviorTrainings; track behaviorTraining) {
+              <sky-repeater-item>
+                <sky-repeater-item-context-menu>
+                  <sky-dropdown buttonType="context-menu">
+                    <sky-dropdown-menu>
+                      <sky-dropdown-item>
+                        <button type="button" class="edit-btn" (click)="editBehaviorTraining(behaviorTraining)">
+                          {{ 'modal_edit_behavior_training' | skyAppResources }}
+                        </button>
+                      </sky-dropdown-item>
+                      <sky-dropdown-item>
+                        <button type="button" class="remove-btn" (click)="deleteBehaviorTraining(behaviorTraining)">
+                          {{ 'modal_delete_behavior_training' | skyAppResources }}
+                        </button>
+                      </sky-dropdown-item>
+                    </sky-dropdown-menu>
+                  </sky-dropdown>
+                </sky-repeater-item-context-menu>
+                <sky-repeater-item-title class="repeater-flex">
+                  <span class="sky-section-heading">
+                    {{ behaviorTraining.category.name }}
+                  </span>
+                  <span>
+                    {{ behaviorTraining.value }}
+                  </span>
+                </sky-repeater-item-title>
+                <sky-repeater-item-content>
+                  {{ 'add_behavior_training_source' | skyAppResources }} {{ behaviorTraining.source }}
+                  <div class="pull-right Field label">
+                    @if (behaviorTraining.constituentRatingId) {
+                      <span>
+                        <sky-label class="sky-margin-inline-default" labelType="info">
+                          {{ 'added_to_owner' | skyAppResources}}
+                        </sky-label>
+                      </span>
+                    }
+                  </div>
+                </sky-repeater-item-content>
+              </sky-repeater-item>
+            }
+          </sky-repeater>
+        </div>
+      }
     </app-loading>
   </sky-tile-content>
 </sky-tile>

@@ -35,7 +35,6 @@ import {
 import {
   SkyCardModule,
   SkyFluidGridModule,
-  SkyPageModule,
   SkyPageSummaryModule,
   SkyTextExpandModule,
   SkyToolbarModule
@@ -65,6 +64,7 @@ import {
 import {
   SkyTilesModule
 } from '@skyux/tiles';
+import { SkyPageModule } from '@skyux/pages';
 
 /**
  * @deprecated Each SKY UX module should be imported into each feature module

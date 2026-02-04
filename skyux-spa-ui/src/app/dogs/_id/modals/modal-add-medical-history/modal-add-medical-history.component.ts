@@ -1,16 +1,8 @@
-import {
-  Component,
-  Inject,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
-import {
-  SkyCheckboxChange
-} from '@skyux/forms';
+import { SkyCheckboxChange, SkyCheckboxModule } from '@skyux/forms';
 
-import {
-  SkyModalInstance
-} from '@skyux/modals';
+import { SkyModalInstance, SkyModalModule } from '@skyux/modals';
 
 import {
   Dog,
@@ -21,14 +13,24 @@ import {
 import {
   DogService
 } from '../../../../shared/services';
+import { SkyResponsiveHostDirective } from '@skyux/core';
+import { SkyFluidGridModule } from '@skyux/layout';
+import { FormsModule } from '@angular/forms';
+
+import { SkyThemeComponentClassDirective } from '@skyux/theme';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
 
 @Component({
     selector: 'app-modal-add-medical-history',
     templateUrl: './modal-add-medical-history.component.html',
     styleUrls: ['./modal-add-medical-history.component.scss'],
-    standalone: false
+    imports: [SkyModalModule, SkyResponsiveHostDirective, SkyFluidGridModule, FormsModule, SkyThemeComponentClassDirective, SkyCheckboxModule, SkyAppResourcesPipe]
 })
 export class ModalAddMedicalHistoryComponent implements OnInit {
+  private instance = inject(SkyModalInstance);
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   public noteTypes: Array<string> = [];
 
@@ -41,12 +43,6 @@ export class ModalAddMedicalHistoryComponent implements OnInit {
   public updatedAt: string;
   public medicalHistories: MedicalHistory[];
   public addConstituentNote: boolean;
-
-   constructor (
-    private instance: SkyModalInstance,
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
 
   public ngOnInit() {
     this.dogService.getNoteTypes()

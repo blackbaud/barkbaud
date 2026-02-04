@@ -1,10 +1,7 @@
 import {
   Location
 } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import {
-  Injectable
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Observable
 } from 'rxjs';
@@ -20,13 +17,12 @@ import { BaseService } from './base.service';
 
 @Injectable()
 export class UserService extends BaseService {
+  private location = inject(Location);
+
   private user: Observable<User> | undefined;
 
-  constructor(
-    private location: Location,
-    httpClient: HttpClient
-  ) {
-    super(httpClient);
+  constructor() {
+    super();
   }
 
   public getLoginUri(route?: string): string {

@@ -1,12 +1,14 @@
 import {
   Component, Input
 } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { SkyWaitModule } from '@skyux/indicators';
 
 @Component({
     selector: 'app-loading',
     templateUrl: './loading.component.html',
     styleUrls: ['./loading.component.scss'],
-    standalone: false
+    imports: [NgClass, SkyWaitModule]
 })
 export class LoadingComponent {
   @Input()

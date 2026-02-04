@@ -18,19 +18,21 @@
 
     <app-loading
       [isLoading]="isSearching"
-    >
+      >
     </app-loading>
 
-    <sky-list *ngIf="owners"
-      [data]="owners"
-      (selectedIdsChange)="setSelected($event)"
-    >
-      <sky-list-view-checklist
-        description="address"
-        label="name"
-        selectMode="single">
-      </sky-list-view-checklist>
-    </sky-list>
+    @if (owners) {
+      <sky-list
+        [data]="owners"
+        (selectedIdsChange)="setSelected($event)"
+        >
+        <sky-list-view-checklist
+          description="address"
+          label="name"
+          selectMode="single">
+        </sky-list-view-checklist>
+      </sky-list>
+    }
   </sky-modal-content>
   <sky-modal-footer>
     <button
@@ -41,14 +43,14 @@
         'sky-btn-disabled': !ownerSelectedId
       }"
       (click)="save()"
-    >
+      >
       {{ 'btn_modal_save' | skyAppResources }}
     </button>
     <button
       class="sky-btn sky-btn-link"
       type="button"
       (click)="cancel()"
-    >
+      >
       {{ 'btn_modal_cancel' | skyAppResources }}
     </button>
   </sky-modal-footer>

@@ -1,18 +1,8 @@
-import {
-  Component,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 
-import {
-  SkyWaitService
-} from '@skyux/indicators';
+import { SkyWaitService } from '@skyux/indicators';
 
-import {
-  SkyTileDashboardConfig,
-  SkyTileDashboardMessage,
-  SkyTileDashboardMessageType
-} from '@skyux/tiles';
+import { SkyTileDashboardConfig, SkyTileDashboardMessage, SkyTileDashboardMessageType, SkyTileDashboardModule } from '@skyux/tiles';
 
 import {
   Subject
@@ -34,13 +24,22 @@ import {
   DogTileBehaviorTrainingComponent
 } from './tiles';
 
+import { SkyPageSummaryModule, SkyToolbarModule } from '@skyux/layout';
+import { RouterLink } from '@angular/router';
+import { SkyIconModule } from '@skyux/icon';
+import { SkyThemeComponentClassDirective } from '@skyux/theme';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
+
 @Component({
     selector: 'app-dog-details',
     templateUrl: './dog-details.component.html',
     styleUrls: ['./dog-details.component.scss'],
-    standalone: false
+    imports: [SkyPageSummaryModule, SkyToolbarModule, RouterLink, SkyIconModule, SkyThemeComponentClassDirective, SkyTileDashboardModule, SkyAppResourcesPipe]
 })
 export class DogDetailsComponent implements OnInit {
+  skyWaitService = inject(SkyWaitService);
+  dogService = inject(DogService);
+
   @Input()
   public id: string;
 
@@ -49,11 +48,6 @@ export class DogDetailsComponent implements OnInit {
   public dashboardStream = new Subject<SkyTileDashboardMessage>();
 
   public dog: Dog;
-
-  constructor(
-    public skyWaitService: SkyWaitService,
-    public dogService: DogService
-  ) { }
 
   public ngOnInit() {
     const providers = [

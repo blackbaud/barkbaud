@@ -1,35 +1,41 @@
 <div class="app-navbar">
   <sky-navbar>
-    <sky-navbar-item *ngFor="let n of nav">
-      <a
-        [routerLink]="n.path"
-        [routerLinkActiveOptions]="{exact: true}"
-        routerLinkActive="sky-navbar-item-active"
-      >
-        {{ n.titleKey | skyAppResources }}
-      </a>
-    </sky-navbar-item>
-    <sky-navbar-item *ngIf="user"
-      class="app-navbar-right"
-    >
-      <a
-        routerLink="/auth"
-        routerLinkActive="sky-navbar-item-active"
-      >
-        {{ user.given_name }} {{ user.family_name }}
-      </a>
-    </sky-navbar-item>
+    @for (n of nav; track n) {
+      <sky-navbar-item>
+        <a
+          [routerLink]="n.path"
+          [routerLinkActiveOptions]="{exact: true}"
+          routerLinkActive="sky-navbar-item-active"
+          >
+          {{ n.titleKey | skyAppResources }}
+        </a>
+      </sky-navbar-item>
+    }
+    @if (user) {
+      <sky-navbar-item
+        class="app-navbar-right"
+        >
+        <a
+          routerLink="/auth"
+          routerLinkActive="sky-navbar-item-active"
+          >
+          {{ user.given_name }} {{ user.family_name }}
+        </a>
+      </sky-navbar-item>
+    }
   </sky-navbar>
 </div>
 
-<div *ngIf="user"
-  [ngClass]="'sky-palette-multi-' + colorIndex"
-  class="app-info"
->
-  <div class="app-info-leid">
-    {{ user.legal_entity_name }}
+@if (user) {
+  <div
+    [ngClass]="'sky-palette-multi-' + colorIndex"
+    class="app-info"
+    >
+    <div class="app-info-leid">
+      {{ user.legal_entity_name }}
+    </div>
+    <div class="app-info-envid">
+      {{ user.environment_name }}
+    </div>
   </div>
-  <div class="app-info-envid">
-    {{ user.environment_name }}
-  </div>
-</div>
+}

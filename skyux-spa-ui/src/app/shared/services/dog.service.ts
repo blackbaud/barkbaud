@@ -1,7 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import {
-  Injectable
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   BehaviorSubject,
   Observable
@@ -31,17 +28,16 @@ import {
 
 @Injectable()
 export class DogService extends BaseService {
+  private userService = inject(UserService);
+
   private dogs: Observable<Dog[]>;
 
   private envid: string | undefined;
 
   private previousHomes = new BehaviorSubject<Owner[]>([]);
 
-  constructor(
-    httpClient: HttpClient,
-    private userService: UserService
-  ) {
-    super(httpClient);
+  constructor() {
+    super();
 
     this.userService
       .getAuthenticatedUser()

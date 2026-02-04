@@ -8,27 +8,33 @@
   <sky-tile-content>
     <app-loading
       [isLoading]="isLoading"
-    >
+      >
       <sky-repeater>
-        <ng-container *ngFor="let owner of owners">
-          <sky-repeater-item *ngIf="owner.constituent">
-            <sky-repeater-item-content>
-              <div class="pull-left">
-                <a *ngIf="owner.constituentLink"
-                  [href]="owner.constituentLink"
-                >
-                  {{ owner.constituent.name }}
-                </a>
-                <span *ngIf="!owner.constituentLink">
-                  {{ owner.constituent.name }}
-                </span>
-              </div>
-              <div class="pull-right">
-                {{ owner.fromDate | skyDate:'shortDate' }} to {{ owner.toDate | skyDate:'shortDate' }}
-              </div>
-            </sky-repeater-item-content>
-          </sky-repeater-item>
-        </ng-container>
+        @for (owner of owners; track owner) {
+          @if (owner.constituent) {
+            <sky-repeater-item>
+              <sky-repeater-item-content>
+                <div class="pull-left">
+                  @if (owner.constituentLink) {
+                    <a
+                      [href]="owner.constituentLink"
+                      >
+                      {{ owner.constituent.name }}
+                    </a>
+                  }
+                  @if (!owner.constituentLink) {
+                    <span>
+                      {{ owner.constituent.name }}
+                    </span>
+                  }
+                </div>
+                <div class="pull-right">
+                  {{ owner.fromDate | skyDate:'shortDate' }} to {{ owner.toDate | skyDate:'shortDate' }}
+                </div>
+              </sky-repeater-item-content>
+            </sky-repeater-item>
+          }
+        }
       </sky-repeater>
     </app-loading>
   </sky-tile-content>

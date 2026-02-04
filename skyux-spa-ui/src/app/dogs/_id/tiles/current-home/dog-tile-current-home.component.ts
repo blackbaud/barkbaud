@@ -1,8 +1,4 @@
-import {
-  Component,
-  Inject,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   SkyModalCloseArgs,
@@ -25,26 +21,31 @@ import {
 import {
   CustomError
 } from '../../../../shared/models/custom-error';
+import { SkyTilesModule } from '@skyux/tiles';
+
+import { SkyIconModule } from '@skyux/icon';
+import { SkyToolbarModule, SkyFluidGridModule } from '@skyux/layout';
+import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
+import { SkyRepeaterModule } from '@skyux/lists';
+import { SkyDatePipe } from '@skyux/datetime';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
 
 @Component({
-    // tslint:disable-next-line
-    selector: 'div.app-dog-tile-current-home',
+    selector: 'app-dog-tile-current-home',
     templateUrl: './dog-tile-current-home.component.html',
     styleUrls: ['./dog-tile-current-home.component.scss'],
-    standalone: false
+    imports: [SkyTilesModule, SkyIconModule, SkyToolbarModule, LoadingComponent, SkyRepeaterModule, SkyFluidGridModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTileCurrentHomeComponent implements OnInit {
+  private skyModalService = inject(SkyModalService);
+  private dogService = inject(DogService);
+  private dogId = inject(DOG_ID);
+
 
   public isLoading = true;
   public showError: boolean = false;
 
   public owner: Owner;
-
-  constructor (
-    private skyModalService: SkyModalService,
-    private dogService: DogService,
-    @Inject(DOG_ID) private dogId: string
-  ) { }
 
   public ngOnInit() {
     this.getCurrentHome();

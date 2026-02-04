@@ -1,69 +1,73 @@
-<div *ngIf="user">
-  <p>Logged in as user:</p>
-  <dl>
-    <dt>
-      Environment ID
-    </dt>
-    <dd>
-      {{ user.environment_id }}
-    </dd>
-    <dt>
-      Environment name
-    </dt>
-    <dd>
-      {{ user.environment_name }}
-    </dd>
-    <dt>
-      Legal Entity ID
-    </dt>
-    <dd>
-      {{ user.legal_entity_id }}
-    </dd>
-    <dt>
-      Legal Entity Name
-    </dt>
-    <dd>
-      {{ user.legal_entity_name }}
-    </dd>
-    <dt>
-      User ID
-    </dt>
-    <dd>
-      {{ user.user_id }}
-    </dd>
-    <dt>
-      Given name
-    </dt>
-    <dd>
-      {{ user.given_name }}
-    </dd>
-    <dt>
-      Family name
-    </dt>
-    <dd>
-      {{ user.family_name }}
-    </dd>
-  </dl>
-  <app-logout>
-  </app-logout>
-</div>
+@if (user) {
+  <div>
+    <p>Logged in as user:</p>
+    <dl>
+      <dt>
+        Environment ID
+      </dt>
+      <dd>
+        {{ user.environment_id }}
+      </dd>
+      <dt>
+        Environment name
+      </dt>
+      <dd>
+        {{ user.environment_name }}
+      </dd>
+      <dt>
+        Legal Entity ID
+      </dt>
+      <dd>
+        {{ user.legal_entity_id }}
+      </dd>
+      <dt>
+        Legal Entity Name
+      </dt>
+      <dd>
+        {{ user.legal_entity_name }}
+      </dd>
+      <dt>
+        User ID
+      </dt>
+      <dd>
+        {{ user.user_id }}
+      </dd>
+      <dt>
+        Given name
+      </dt>
+      <dd>
+        {{ user.given_name }}
+      </dd>
+      <dt>
+        Family name
+      </dt>
+      <dd>
+        {{ user.family_name }}
+      </dd>
+    </dl>
+    <app-logout>
+    </app-logout>
+  </div>
+}
 
-<div *ngIf="!user">
-  <sky-error
-    errorType="security"
-  >
-    <sky-error-title
-      replaceDefaultTitle="true"
-    >
-    You must authorize with Blackbaud to continue.
-    </sky-error-title>
-    <sky-error-action>
-      <a
-        class="sky-btn sky-btn-primary"
-        [href]="loginUri"
+@if (!user) {
+  <div>
+    <sky-error
+      errorType="security"
       >
-        {{ 'btn_login' | skyAppResources }}
-      </a>
-    </sky-error-action>
-  </sky-error>
-</div>
+      <sky-error-title
+        replaceDefaultTitle="true"
+        >
+        You must authorize with Blackbaud to continue.
+      </sky-error-title>
+      <sky-error-action>
+        <a
+          class="sky-btn sky-btn-primary"
+          [href]="loginUri"
+          >
+          {{ 'btn_login' | skyAppResources }}
+        </a>
+      </sky-error-action>
+    </sky-error>
+  </div>
+}

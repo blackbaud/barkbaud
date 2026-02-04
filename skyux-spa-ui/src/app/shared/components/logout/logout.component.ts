@@ -1,5 +1,5 @@
 import {
-  Component, Input
+  Component, Input, inject
 } from '@angular/core';
 
 import {
@@ -30,11 +30,11 @@ export class LogoutComponent {
 
   private logoutMessage: string;
 
-  constructor (
-    private skyConfirmService: SkyConfirmService,
-    skyAppResourcesService: SkyAppResourcesService,
-    private userService: UserService
-  ) {
+  private skyConfirmService = inject(SkyConfirmService);
+  private userService = inject(UserService);
+
+  constructor () {
+    const skyAppResourcesService = inject(SkyAppResourcesService);
     this.userService
       .isUserAuthenticated()
       .subscribe(authenticated => this.authenticated = authenticated);

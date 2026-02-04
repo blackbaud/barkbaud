@@ -8,11 +8,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SkyPagesModule } from './sky-pages.module';
 
-@NgModule({ declarations: [
-        AppComponent
-    ],
+@NgModule({ declarations: [],
     bootstrap: [AppComponent], imports: [BrowserAnimationsModule,
         BrowserModule,
         AppRoutingModule,
-        SkyPagesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        SkyPagesModule,
+        AppComponent], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
