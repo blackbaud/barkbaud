@@ -1,4 +1,6 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { SkyAutonumericModule } from '@skyux/autonumeric';
+import { SkyDatepickerModule } from '@skyux/datetime';
+import { Component, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import moment from 'moment';
 
@@ -36,7 +38,8 @@ import { SkyAppResourcesPipe, SkyLibResourcesPipe } from '@skyux/i18n';
     selector: 'app-modal-add-behavior-training',
     templateUrl: './modal-add-behavior-training.component.html',
     styleUrls: ['./modal-add-behavior-training.component.scss'],
-    imports: [SkyModalModule, SkyResponsiveHostDirective, SkyFluidGridModule, FormsModule, SkyThemeComponentClassDirective, SkyCheckboxModule, SkyAppResourcesPipe, SkyLibResourcesPipe]
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [SkyAutonumericModule, SkyDatepickerModule, SkyModalModule, SkyResponsiveHostDirective, SkyFluidGridModule, FormsModule, SkyThemeComponentClassDirective, SkyCheckboxModule, SkyAppResourcesPipe, SkyLibResourcesPipe]
 })
 export class ModalAddBehaviorTrainingComponent implements OnInit {
   private instance = inject(SkyModalInstance);
@@ -47,7 +50,7 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   @Input()
   public ratingDataTypeEnum: RatingDataType;
 
-  private readonly MAXINT = 2147483647;
+  private readonly MAXINT = "2147483647";
   private categoryName: string;
   private _codeTableEntriesCache: any = {};
 
@@ -65,7 +68,7 @@ export class ModalAddBehaviorTrainingComponent implements OnInit {
   public booleanCategoryValue: any;
   public codeTableCategoryValue: string;
   public ratingDataType: RatingDataType;
-  public numberValueOptions = { minimumValue: 0, maximumValue: this.MAXINT, decimalPlaces: 0 };
+  public numberValueOptions = { minimumValue: '0', maximumValue: this.MAXINT, decimalPlaces: 0 };
   public currencyValueOptions = {};
   public booleanValueOptions = [{
     value: true,

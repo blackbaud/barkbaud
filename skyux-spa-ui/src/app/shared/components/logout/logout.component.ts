@@ -10,17 +10,21 @@ import {
 } from '@skyux/modals';
 
 import {
-  SkyAppResourcesService
+  SkyAppResourcesLegacyService
 } from '@skyux/i18n';
 
 import {
   UserService
 } from '../../services';
 
+import { NgClass } from '@angular/common';
+import { SkyAppResourcesPipe } from '@skyux/i18n';
+
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.scss']
+  styleUrls: ['./logout.component.scss'],
+  imports: [NgClass, SkyAppResourcesPipe]
 })
 export class LogoutComponent {
   @Input()
@@ -34,7 +38,7 @@ export class LogoutComponent {
   private userService = inject(UserService);
 
   constructor () {
-    const skyAppResourcesService = inject(SkyAppResourcesService);
+    const skyAppResourcesService = inject(SkyAppResourcesLegacyService);
     this.userService
       .isUserAuthenticated()
       .subscribe(authenticated => this.authenticated = authenticated);

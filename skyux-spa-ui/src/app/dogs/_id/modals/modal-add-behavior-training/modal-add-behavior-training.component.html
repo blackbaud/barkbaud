@@ -1,9 +1,6 @@
-<sky-modal>
-  <sky-modal-header>
-    {{ 'modal_add_behavior_training' | skyAppResources }}
-  </sky-modal-header>
+<sky-modal [headingText]="'modal_add_behavior_training' | skyAppResources">
   <sky-modal-content>
-    <sky-fluid-grid [disableMargin]="true">
+    <sky-fluid-grid>
       <sky-row>
         <sky-column screenSmall="6" screenXSmall="6">
           <div class="sky-form-group">
@@ -62,7 +59,7 @@
                 {{ 'add_behavior_training_value' | skyAppResources }}
               </label>
               <span>
-                @switch (ratingDataTypeEnum) {
+                @switch ($any(ratingDataTypeEnum)) {
                   <!--None selected -->
                   @default {
                     <input disabled="true" class="sky-form-control" data-sky-id="behavior-training-category-value" type="text"/>

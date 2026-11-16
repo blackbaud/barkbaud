@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   SkyModalCloseArgs,
@@ -38,6 +38,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-medical-history',
     templateUrl: './dog-tile-medical-history.component.html',
     styleUrls: ['./dog-tile-medical-history.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [SkyTilesModule, SkyToolbarModule, SkyIconModule, LoadingComponent, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTileMedicalHistoryComponent implements OnInit {

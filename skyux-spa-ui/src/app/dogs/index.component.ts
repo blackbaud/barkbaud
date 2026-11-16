@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppNavComponent } from '../shared/components/nav/app-nav.component';
 import { PageComponent } from '../shared/components/page/page.component';
 import { DogsListComponent } from './dogs-list.component';
@@ -6,6 +6,7 @@ import { DogsListComponent } from './dogs-list.component';
 @Component({
     selector: 'app-dogs-route-index',
     templateUrl: './index.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppNavComponent, PageComponent, DogsListComponent]
 })
 export class DogsRouteIndexComponent {}

@@ -1,4 +1,6 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { SkyKeyInfoModule } from '@skyux/indicators';
+import { SkyAvatarModule } from '@skyux/avatar';
+import { Component, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { SkyWaitService } from '@skyux/indicators';
 
@@ -34,7 +36,8 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-details',
     templateUrl: './dog-details.component.html',
     styleUrls: ['./dog-details.component.scss'],
-    imports: [SkyPageSummaryModule, SkyToolbarModule, RouterLink, SkyIconModule, SkyThemeComponentClassDirective, SkyTileDashboardModule, SkyAppResourcesPipe]
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [SkyKeyInfoModule, SkyAvatarModule, SkyPageSummaryModule, SkyToolbarModule, RouterLink, SkyIconModule, SkyThemeComponentClassDirective, SkyTileDashboardModule, SkyAppResourcesPipe]
 })
 export class DogDetailsComponent implements OnInit {
   skyWaitService = inject(SkyWaitService);

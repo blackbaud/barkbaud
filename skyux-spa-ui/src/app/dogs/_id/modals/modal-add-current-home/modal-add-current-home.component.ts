@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { SkyModalInstance, SkyModalModule } from '@skyux/modals';
 
@@ -28,6 +28,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-modal-add-current-home',
     templateUrl: './modal-add-current-home.component.html',
     styleUrls: ['./modal-add-current-home.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [SkyModalModule, SkyResponsiveHostDirective, SkyToolbarModule, SkySearchModule, LoadingComponent, SkyListModule, SkyListViewChecklistModule, NgClass, SkyAppResourcesPipe]
 })
 export class ModalAddCurrentHomeComponent {

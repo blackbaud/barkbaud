@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterLinkActive, RouterLink } from '@angular/router';
 
@@ -22,6 +22,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-nav',
     templateUrl: './app-nav.component.html',
     styleUrls: ['./app-nav.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [SkyNavbarModule, RouterLinkActive, RouterLink, NgClass, SkyAppResourcesPipe]
 })
 export class AppNavComponent implements OnInit {

@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { SkyAvatarModule } from '@skyux/avatar';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   SkyWaitService
@@ -21,7 +22,8 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dogs-list',
     templateUrl: './dogs-list.component.html',
     styleUrls: ['./dogs-list.component.scss'],
-    imports: [SkyCardModule, SkyFluidGridModule, RouterLink, SkyTextExpandModule, SkyThemeComponentClassDirective, SkyAppResourcesPipe]
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [SkyAvatarModule, SkyCardModule, SkyFluidGridModule, RouterLink, SkyTextExpandModule, SkyThemeComponentClassDirective, SkyAppResourcesPipe]
 })
 export class DogsListComponent implements OnInit {
   private skyWaitService = inject(SkyWaitService);

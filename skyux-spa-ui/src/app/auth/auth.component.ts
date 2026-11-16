@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { LogoutComponent } from '../shared/components/logout/logout.component';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   ActivatedRoute
@@ -19,7 +20,8 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-auth',
     templateUrl: './auth.component.html',
     styleUrls: ['./auth.component.scss'],
-    imports: [SkyErrorModule, SkyAppResourcesPipe]
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [LogoutComponent, SkyErrorModule, SkyAppResourcesPipe]
 })
 export class AuthComponent {
   public loginUri: string;

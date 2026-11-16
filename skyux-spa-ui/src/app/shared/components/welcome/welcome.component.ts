@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { LogoutComponent } from '../logout/logout.component';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   UserService
@@ -21,7 +22,8 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-welcome',
     templateUrl: './welcome.component.html',
     styleUrls: ['./welcome.component.scss'],
-    imports: [AppNavComponent, SkyHeroModule, PageComponent, SkyFluidGridModule, SkyThemeComponentClassDirective, SkyAlertModule, RouterLink, SkyAppResourcesPipe]
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [LogoutComponent, AppNavComponent, SkyHeroModule, PageComponent, SkyFluidGridModule, SkyThemeComponentClassDirective, SkyAlertModule, RouterLink, SkyAppResourcesPipe]
 })
 export class WelcomeComponent implements OnInit {
   private userService = inject(UserService);

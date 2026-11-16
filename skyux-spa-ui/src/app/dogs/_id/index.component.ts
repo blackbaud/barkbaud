@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { DogDetailsComponent } from './dog-details.component';
 @Component({
     selector: 'app-dogs-id-route-index',
     templateUrl: './index.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppNavComponent, DogDetailsComponent]
 })
 export class DogsIdRouteIndexComponent implements OnInit, OnDestroy {
