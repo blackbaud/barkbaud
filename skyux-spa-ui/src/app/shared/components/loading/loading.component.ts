@@ -1,5 +1,6 @@
 import {
-  Component, Input
+  Component, Input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { SkyWaitModule } from '@skyux/indicators';
@@ -8,6 +9,7 @@ import { SkyWaitModule } from '@skyux/indicators';
     selector: 'app-loading',
     templateUrl: './loading.component.html',
     styleUrls: ['./loading.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [NgClass, SkyWaitModule]
 })
 export class LoadingComponent {

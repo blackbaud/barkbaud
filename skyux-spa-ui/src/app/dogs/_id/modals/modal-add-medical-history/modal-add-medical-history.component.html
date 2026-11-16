@@ -1,9 +1,6 @@
-<sky-modal>
-  <sky-modal-header>
-    {{ 'modal_add_medical_history' | skyAppResources }}
-  </sky-modal-header>
+<sky-modal [headingText]="'modal_add_medical_history' | skyAppResources">
   <sky-modal-content>
-    <sky-fluid-grid [disableMargin]="true">
+    <sky-fluid-grid>
       <sky-row>
         <sky-column screenSmall="6" screenXSmall="6">
           <div class="sky-form-group">

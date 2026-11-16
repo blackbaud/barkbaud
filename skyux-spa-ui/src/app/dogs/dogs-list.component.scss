@@ -1,6 +1,5 @@
 @import 'node_modules/@skyux/theme/scss/mixins';
 @import 'node_modules/@skyux/theme/scss/variables';
-@import 'node_modules/@skyux/theme/css/sky';
 
 .app-repeater-item-title {
   display: flex;
@@ -16,7 +15,9 @@
 }
 
 .app-dog-card-info {
-  @extend .sky-deemphasized;
+  color: var(--sky-text-color-deemphasized);
+  font-weight: 400;
+  font-style: italic;
   margin: 0;
   padding: 0;
   list-style: none;

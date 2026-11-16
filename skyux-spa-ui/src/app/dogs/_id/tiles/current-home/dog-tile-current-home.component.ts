@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { SkyAvatarModule } from '@skyux/avatar';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   SkyModalCloseArgs,
@@ -34,7 +35,8 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-current-home',
     templateUrl: './dog-tile-current-home.component.html',
     styleUrls: ['./dog-tile-current-home.component.scss'],
-    imports: [SkyTilesModule, SkyIconModule, SkyToolbarModule, LoadingComponent, SkyRepeaterModule, SkyFluidGridModule, SkyDatePipe, SkyAppResourcesPipe]
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [SkyAvatarModule, SkyTilesModule, SkyIconModule, SkyToolbarModule, LoadingComponent, SkyRepeaterModule, SkyFluidGridModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTileCurrentHomeComponent implements OnInit {
   private skyModalService = inject(SkyModalService);

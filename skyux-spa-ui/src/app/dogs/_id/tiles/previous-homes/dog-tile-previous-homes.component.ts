@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   DogService
@@ -19,6 +19,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-previous-homes',
     templateUrl: './dog-tile-previous-homes.component.html',
     styleUrls: ['./dog-tile-previous-homes.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [SkyTilesModule, LoadingComponent, SkyRepeaterModule, SkyDatePipe, SkyAppResourcesPipe]
 })
 export class DogTilePreviousHomesComponent implements OnInit {

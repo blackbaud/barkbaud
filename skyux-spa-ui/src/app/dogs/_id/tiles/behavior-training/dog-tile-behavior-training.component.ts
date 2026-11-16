@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   SkyConfirmInstance,
@@ -54,6 +54,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-dog-tile-behavior-training',
     templateUrl: './dog-tile-behavior-training.component.html',
     styleUrls: ['./dog-tile-behavior-training.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [SkyTilesModule, SkyToolbarModule, SkyIconModule, LoadingComponent, SkyRepeaterModule, SkyDropdownModule, SkyLabelModule, SkyAppResourcesPipe]
 })
 export class DogTileBehaviorTrainingComponent implements OnInit {

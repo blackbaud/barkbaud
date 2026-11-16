@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { SkyCheckboxChange, SkyCheckboxModule } from '@skyux/forms';
 
@@ -24,6 +24,7 @@ import { SkyAppResourcesPipe } from '@skyux/i18n';
     selector: 'app-modal-add-medical-history',
     templateUrl: './modal-add-medical-history.component.html',
     styleUrls: ['./modal-add-medical-history.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [SkyModalModule, SkyResponsiveHostDirective, SkyFluidGridModule, FormsModule, SkyThemeComponentClassDirective, SkyCheckboxModule, SkyAppResourcesPipe]
 })
 export class ModalAddMedicalHistoryComponent implements OnInit {
